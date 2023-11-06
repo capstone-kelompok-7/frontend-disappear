@@ -1,4 +1,4 @@
-﻿# Frontend Repository - Capstone Alterra Academy
+﻿# Frontend Repository - Capstone Alterra Academy 2023
 
 ## Bagaimana cara kontribusi pada repository?
 
