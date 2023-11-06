@@ -1,16 +1,20 @@
-import React from "react";
-import Button from "@/components/button";
-import Input from "@/components/input";
+import Layout from "../components/layout";
+import SideBar from "../components/sidebar/sidebar";
 
-function Index() {
+function App() {
   return (
-    <div className="container mx-auto">
-      <Button />
-      APOPPPOOOP
-      <Input
-        className="border border-red-500"
-        label="Product Name"
-      />
+    <div className="flex">
+      <SideBar />
+      <Layout>
+        <div className=" border-2">
+          {/* ISI CONTENT DISINI */}
+          <h1>ISI CONTENT DISINI</h1>
+          <div>apa</div>
+          <div>apa</div>
+          <div>apa</div>
+          <div>apa</div>
+        </div>
+      </Layout>
     </div>
   );
 }
