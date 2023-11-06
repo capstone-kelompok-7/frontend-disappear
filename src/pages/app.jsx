@@ -4,7 +4,6 @@ import SideBar from "../components/sidebar/sidebar";
 function App() {
   return (
     <div className="flex">
-      <SideBar />
       <Layout>
         <div className=" border-2">
           {/* ISI CONTENT DISINI */}
