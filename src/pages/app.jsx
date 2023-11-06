@@ -80,6 +80,7 @@ function App() {
     });
   };
 
+function Index() {
   return (
     <Layout>
       <div className="">
