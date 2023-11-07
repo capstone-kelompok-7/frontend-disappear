@@ -79,7 +79,7 @@ function App() {
       text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
     });
   };
-
+}
 function Index() {
   return (
     <Layout>
