@@ -12,35 +12,64 @@ import {
 import {
   IoBasketOutline,
   IoCashOutline,
+  IoChevronDown,
   IoExitOutline,
   IoPeopleOutline,
 } from "react-icons/io5";
 import { BiEdit } from "react-icons/bi";
 
-export default function SideBar() {
+import Dropdown from "../dropdown";
+import { Link } from "react-router-dom";
+
+export default function SideBar(props) {
+  const { isSidebarOpen } = props;
+
   return (
     <>
-      <div className="flex">
-        <div className=" w-72 h-screen bg-base-200">
-          <div className=" flex gap-x-3 items-center p-5 w-20 rounded">
-            <img
-              src="./logoDisappear.jpeg"
-              alt="logo-disappear"
-              className={` cursor-pointer duration-500 rounded`}
-            />
-
-            <h1 className={`origin-left duration-300  font-semibold text-xl`}>
+      <div className=" flex">
+        <div
+          className={` ${
+            isSidebarOpen ? "w-72" : "w-0"
+          } duration-300 h-full bg-gray-300`}
+        >
+          <div className=" flex items-center p-5 w-20  gap-5">
+            <img src="./logoDisappear.jpeg" alt="" className="rounded" />
+            <h1
+              className={` text-black origin-left duration-300 font-semibold text-xl ${
+                !isSidebarOpen && " scale-0"
+              }`}
+            >
               DISAPPEAR
             </h1>
           </div>
+          <hr className=" border-black" />
 
-          <hr />
-
-          <ul className=" pt-9">
-            <SidebarList label="Dasbor" icon={<LuLayoutPanelLeft />} />
-            <SidebarList label="Kategori" icon={<LuList />} />
-            <SidebarList label="Produk" icon={<IoBasketOutline />} />
-            <SidebarList label="Pelanggan" icon={<IoPeopleOutline />} />
+          <div
+            className={`pt-9 duration-300 origin-left ${
+              !isSidebarOpen && " scale-0"
+            }`}
+          >
+            <SidebarList
+              to="/"
+              label="Dasbor"
+              icon={<LuLayoutPanelLeft />}
+              isSidebarOpen={isSidebarOpen}
+            />
+            <SidebarList
+              label="Kategori"
+              icon={<LuList />}
+              isSidebarOpen={isSidebarOpen}
+            />
+            <SidebarList
+              label="Produk"
+              icon={<IoBasketOutline />}
+              isSidebarOpen={isSidebarOpen}
+            />
+            <SidebarList
+              label="Pelanggan"
+              icon={<IoPeopleOutline />}
+              isSidebarOpen={isSidebarOpen}
+            />
             <SidebarList
               label="Pesanan"
               icon={
@@ -57,16 +86,48 @@ export default function SideBar() {
                   />
                 </svg>
               }
+              isSidebarOpen={isSidebarOpen}
             />
-            <SidebarList label="Pembayaran" icon={<LuCircleDollarSign />} />
-            <SidebarList label="Ulasan" icon={<BiEdit />} />
-            <SidebarList label="Tantangan" icon={<LuPalmtree />} />
-            <SidebarList label="Kupon" icon={<IoCashOutline />} />
-            <SidebarList label="Artikel" icon={<LuNewspaper />} />
-            <div className=" pt-96">
-              <SidebarList label="Keluar" icon={<IoExitOutline />} />
+            <SidebarList
+              label="Pembayaran"
+              icon={<LuCircleDollarSign />}
+              isSidebarOpen={isSidebarOpen}
+            />
+            <SidebarList
+              label="Ulasan"
+              icon={<BiEdit />}
+              isSidebarOpen={isSidebarOpen}
+            />
+            <Dropdown
+              label="Tantangan"
+              icon={<LuPalmtree />}
+              iconDrop={<IoChevronDown />}
+              isSidebarOpen={isSidebarOpen}
+              sidebarItems={[
+                { to: "", label: "Tantangan" },
+                { to: "", label: "Peserta Tantangan" },
+                // Tambahkan item sidebar lainnya sesuai kebutuhan
+              ]}
+            />
+
+            <SidebarList
+              label="Kupon"
+              icon={<IoCashOutline />}
+              isSidebarOpen={isSidebarOpen}
+            />
+            <SidebarList
+              label="Artikel"
+              icon={<LuNewspaper />}
+              isSidebarOpen={isSidebarOpen}
+            />
+            <div className=" pt-80 pb-12">
+              <SidebarList
+                label="Keluar"
+                icon={<IoExitOutline />}
+                isSidebarOpen={isSidebarOpen}
+              />
             </div>
-          </ul>
+          </div>
         </div>
       </div>
     </>
