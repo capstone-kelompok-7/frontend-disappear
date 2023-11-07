@@ -17,18 +17,20 @@ import {
   IoPeopleOutline,
 } from "react-icons/io5";
 import { BiEdit } from "react-icons/bi";
-import Navbar from "./navbar";
-import Dropdown from "../dropdown";
 
-export default function SideBar() {
-  const [isSidebarOpen, setIsSidebarOpen] = useState(true);
+import Dropdown from "../dropdown";
+import { Link } from "react-router-dom";
+
+export default function SideBar(props) {
+  const { isSidebarOpen } = props;
+
   return (
     <>
       <div className=" flex">
         <div
           className={` ${
             isSidebarOpen ? "w-72" : "w-0"
-          } duration-300 h-screen bg-gray-300`}
+          } duration-300 h-full bg-gray-300`}
         >
           <div className=" flex items-center p-5 w-20  gap-5">
             <img src="./logoDisappear.jpeg" alt="" className="rounded" />
@@ -42,7 +44,11 @@ export default function SideBar() {
           </div>
           <hr className=" border-black" />
 
-          <div className=" pt-9">
+          <div
+            className={`pt-9 duration-300 origin-left ${
+              !isSidebarOpen && " scale-0"
+            }`}
+          >
             <SidebarList
               to="/"
               label="Dasbor"
@@ -97,6 +103,11 @@ export default function SideBar() {
               icon={<LuPalmtree />}
               iconDrop={<IoChevronDown />}
               isSidebarOpen={isSidebarOpen}
+              sidebarItems={[
+                { to: "", label: "Tantangan" },
+                { to: "", label: "Peserta Tantangan" },
+                // Tambahkan item sidebar lainnya sesuai kebutuhan
+              ]}
             />
 
             <SidebarList
@@ -109,7 +120,7 @@ export default function SideBar() {
               icon={<LuNewspaper />}
               isSidebarOpen={isSidebarOpen}
             />
-            <div className=" pt-80">
+            <div className=" pt-80 pb-12">
               <SidebarList
                 label="Keluar"
                 icon={<IoExitOutline />}
@@ -117,12 +128,6 @@ export default function SideBar() {
               />
             </div>
           </div>
-        </div>
-        <div className=" w-full">
-          <Navbar
-            label="Admin"
-            onClick={() => setIsSidebarOpen(!isSidebarOpen)}
-          />
         </div>
       </div>
     </>
