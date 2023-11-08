@@ -2,7 +2,7 @@ import React from "react";
 
 const LoginPage = () => {
   return (
-    <section className="bg-white">
+    <div className="w-full h-full relative overflow-hidden bg-white">
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full bg-gray-100 rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
@@ -45,7 +45,7 @@ const LoginPage = () => {
                   viewBox="0 0 30 30"
                   fill="none"
                   xmlns="http://www.w3.org/2000/svg"
-                  class="flex-grow-0 flex-shrink-0 w-[20px] h-[20px] relative"
+                  className="flex-grow-0 flex-shrink-0 w-[20px] h-[20px] relative"
                   preserveAspectRatio="xMidYMid meet"
                 >
                   <path
@@ -64,7 +64,7 @@ const LoginPage = () => {
           </div>
         </div>
       </div>
-    </section>
+    </div>
   );
 };
 
