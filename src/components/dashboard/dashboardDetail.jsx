@@ -4,7 +4,7 @@ import React from "react";
 
 const DetailCard = ({ imgSrc, name, date, amount, status }) => {
   return (
-    <div className="flex items-center p-4 mb-4 gap-20">
+    <div className="flex items-center px-4 py-2 gap-20">
       <div className="flex gap-6 items-center">
         <div className="rounded-full w-16 h-16 bg-[#C4C4C4]">
           {/* <img src={imgSrc} className="w-full h-full" /> */}
