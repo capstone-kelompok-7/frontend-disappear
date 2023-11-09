@@ -1,6 +1,6 @@
 import { useState } from "react";
-import Layout from "../components/layout";
-import Button from "../components/button";
+import Layout from "@/components/layout";
+import Button from "@/components/button";
 import { IoAddOutline } from "react-icons/io5";
 
 function VoucherApp() {
