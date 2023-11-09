@@ -9,7 +9,7 @@ export default function Layout(props) {
   const { isSidebarOpen, setIsSidebarOpen } = useSidebar();
 
   return (
-    <div className="w-full overflow-auto flex flex-row">
+    <div className="w-full overflow-auto flex flex-row bg-white">
       <SideBar isSidebarOpen={isSidebarOpen} />
       <div className="flex flex-col flex-grow">
         <div className="flex justify-between items-center shadow-md h-20 bg-white w-full">
