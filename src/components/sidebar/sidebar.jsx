@@ -54,6 +54,7 @@ export default function SideBar(props) {
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarList
+                to="/category"
                 label="Kategori"
                 icon={<LuList />}
                 isSidebarOpen={isSidebarOpen}
@@ -121,7 +122,6 @@ export default function SideBar(props) {
                   { to: "/peserta-tantangan", label: "Peserta Tantangan" },
                 ]}
               />
-
               <SidebarList
                 label="Kupon"
                 icon={<IoCashOutline />}

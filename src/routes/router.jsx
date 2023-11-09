@@ -2,6 +2,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import React from "react";
 
+import App from "../pages/App";
+import IndexCategory from "../pages/category/indexCategory";
 import Dashboard from "../pages/dashboard/dashboard";
 import LoginPage from "../pages/login/LoginPage";
 import Pelanggan from "../pages/pelanggan/pelanggan";
@@ -22,6 +24,10 @@ export default function Router() {
     {
       path: "/",
       element: <App />,
+    },
+    {
+      path: "/category",
+      element: <IndexCategory />,
     },
     {
       path: "/dashboard",
