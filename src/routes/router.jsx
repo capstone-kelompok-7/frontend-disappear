@@ -18,6 +18,8 @@ import CreateEditProducts from "@/pages/products/createEditProducts/createEditPr
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
 import Review from "../pages/review/review";
 
+import VoucherApp from "../pages/voucherIndex";
+
 export default function Router() {
   const router = createBrowserRouter([
     {
@@ -88,6 +90,10 @@ export default function Router() {
     {
       path: "/star",
       element: <Review />,
+    },
+    {
+      path: "/kupon",
+      element: <VoucherApp />,
     },
   ]);
   return <RouterProvider router={router} />;
