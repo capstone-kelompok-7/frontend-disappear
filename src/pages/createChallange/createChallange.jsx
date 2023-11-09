@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import Layout from "../../components/layout";
 import Button from "../../components/button";
+// import Input from "../../components/ui/input";
 
 const BuatTantangan = () => {
   const [gambar, setGambar] = useState(null);
@@ -163,7 +164,7 @@ const BuatTantangan = () => {
                   id="deskripsi-tantangan"
                   name="deskripsi-tantangan"
                   placeholder="Deskripsi Tantangan"
-                  className="p-4 shadow-sm mt-1 block w-full h-[12rem] sm:text-sm border border-black rounded-md"
+                  className="p-4 shadow-sm mt-1 block w-full h-[12rem] sm:text-sm border border-black rounded-md resize-none"
                 ></textarea>
               </div>
             </div>
