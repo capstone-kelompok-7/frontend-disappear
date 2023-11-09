@@ -18,4 +18,27 @@ function Input(props) {
   );
 }
 
-export default Input;
+import React from "react";
+
+function Select(props) {
+  const { label, options, value, onChange } = props;
+  return (
+    <div className="flex flex-col mb-4 text-black">
+      <label className="text-black mb-3">{label}</label>
+      <select
+        className="rounded-lg text-black p-1"
+        value={value}
+        onChange={onChange}
+      >
+        {" "}
+        {options.map((option) => (
+          <option key={option} value={option}>
+            {option}
+          </option>
+        ))}
+      </select>
+    </div>
+  );
+}
+
+export { Input, Select };
