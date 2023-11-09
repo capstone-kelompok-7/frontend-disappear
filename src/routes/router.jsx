@@ -21,6 +21,10 @@ import VoucherApp from "../pages/voucherPage/voucherIndex";
 import CreateVoucher from "@/pages/voucherPage/createVoucher";
 import EditVoucher from "../pages/voucherPage/editVoucher";
 
+import App from "../pages/indexNews";
+import DetailNews from "../pages/detailNews/detailNews";
+import CreateNews from "../pages/createNews/createNews";
+
 export default function Router() {
   const router = createBrowserRouter([
     {
@@ -103,6 +107,12 @@ export default function Router() {
     {
       path: "/kupon/edit-kupon",
       element: <EditVoucher />,
+      path: "/detail-news",
+      element: <DetailNews />,
+    },
+    {
+      path: "/create-news",
+      element: <CreateNews/>,
     },
   ]);
   return <RouterProvider router={router} />;
