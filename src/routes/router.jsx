@@ -119,6 +119,14 @@ export default function Router() {
       path: "/edit-news",
       element: <EditNews />,
     },
+    {
+      path: "/detail-news",
+      element: <DetailNews />,
+    },
+    {
+      path: "/create-news",
+      element: <CreateNews/>,
+    },
   ]);
   return <RouterProvider router={router} />;
 }
