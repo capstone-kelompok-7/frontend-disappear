@@ -18,6 +18,10 @@ import CreateEditProducts from "@/pages/products/createEditProducts/createEditPr
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
 import Review from "../pages/review/review";
 
+import App from "../pages/indexNews";
+import DetailNews from "../pages/detailNews/detailNews";
+import CreateNews from "../pages/createNews/createNews";
+
 export default function Router() {
   const router = createBrowserRouter([
     {
@@ -88,6 +92,14 @@ export default function Router() {
     {
       path: "/star",
       element: <Review />,
+    },
+    {
+      path: "/detail-news",
+      element: <DetailNews />,
+    },
+    {
+      path: "/create-news",
+      element: <CreateNews/>,
     },
   ]);
   return <RouterProvider router={router} />;
