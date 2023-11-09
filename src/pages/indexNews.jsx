@@ -29,21 +29,19 @@ function App() {
         <h1 className="font-bold">Artikel</h1>
         <p>Dashborad/Artikel</p>
       </div>
-      <div className="mt-9 mx-[41px] border-t-2 border-l-2 p-4">
-        <div className="flex space-x-3 justify-between">
-          <div className="flex space-x-3">
-            <button className="flex items-center space-x-2 border bg-slate-500 hover:bg-slate-200 text-white hover:text-black hover:border-black p-4 rounded-lg">
-              <AiOutlinePlus />
-              <div>Buat Artikel</div>
-            </button>
-            <div className="flex items-center">
-              <input
-                type="text"
-                placeholder="Cari Artikel"
-                className="border pl-4 p-4 px-14 rounded-lg"
-              />
-              <FiSearch className="absolute ml-56" />
-            </div>
+      <div className="mt-9 mx-[41px] border-t-2 border-l-2 p-4 flex space-x-3 justify-between">
+        <div className="flex space-x-3">
+          <button className="flex items-center space-x-2 border bg-slate-500 hover:bg-slate-200 text-white hover:text-black hover:border-black p-4 rounded-lg">
+            <AiOutlinePlus />
+            <div>Buat Artikel</div>
+          </button>
+          <div className="flex items-center">
+            <input
+              type="text"
+              placeholder="Cari Artikel"
+              className="border pl-4 p-4 px-14 rounded-lg"
+            />
+            <FiSearch className="absolute ml-56" />
           </div>
           <div className="flex items-center space-x-3">
             <p>Artikel Untuk</p>
@@ -53,15 +51,22 @@ function App() {
             />
           </div>
         </div>
-        <div>
-          {artikel.map((item) => (
-            <div key={item.id}>
-              <h2>{item.title}</h2>
-              <p>{item.content}</p>
-              <img src={item.image_url} alt="" />
-            </div>
-          ))}
+        <div className="flex items-center space-x-3">
+          <p>Artikel Untuk</p>
+          <SlCalender size={20} />
+          <Select
+            options={["30 Hari Terakhir", "7 Hari Terakhir", "Hari ini"]}
+          />
         </div>
+      </div>
+      <div>
+        {artikel.map((item) => (
+          <div key={item.id}>
+            <h2>{item.title}</h2>
+            <p>{item.content}</p>
+            <img src={item.image_url} alt="" />
+          </div>
+        ))}
       </div>
     </Layout>
   );
