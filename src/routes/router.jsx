@@ -19,8 +19,9 @@ import DetailProducts from "@/pages/products/detailProducts/detailProducts";
 import Review from "../pages/review/review";
 
 import App from "../pages/indexNews";
-import DetailNews from "../pages/detailNews/detailNews";
-import CreateNews from "../pages/createNews/createNews";
+import DetailNews from "../pages/Artikel/detailNews";
+import CreateNews from "../pages/Artikel/createNews";
+import EditNews from "@/pages/Artikel/editNews";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -99,7 +100,11 @@ export default function Router() {
     },
     {
       path: "/create-news",
-      element: <CreateNews/>,
+      element: <CreateNews />,
+    },
+    {
+      path: "/edit-news",
+      element: <EditNews />,
     },
   ]);
   return <RouterProvider router={router} />;
