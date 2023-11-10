@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Layout from "../../components/layout";
-import Button from "../../components/button";
-// import Input from "../../components/ui/input";
+import Layout from "@/components/layout";
+import Button from "@/components/button";
+import Breadcrumbs from "@/components/breadcrumbs";
 
-const BuatTantangan = () => {
+function EditPesertaChallange() {
   const [gambar, setGambar] = useState(null);
 
   const onGambarChange = (e) => {
@@ -12,14 +12,12 @@ const BuatTantangan = () => {
 
   const submitForm = (e) => {
     e.preventDefault();
-    // Lakukan proses pengiriman form disini
   };
 
   return (
     <Layout>
-      <div className="my-6 mx-10 px-[15px] py-5 bg-white rounded-[5px] shadow-md flex justify-between">
-        <h1 className="font-bold">Edit Peserta Tantangan</h1>
-        <p>Dashborad / Edit Peserta Tantangan</p>
+      <div className="my-6">
+        <Breadcrumbs pages="Edit Peserta Tantangan" />
       </div>
 
       <div className="my-6 mx-[100px] px-[25px] py-5 flex justify-center bg-[#FFFFFF] shadow-md border-2">
@@ -167,6 +165,6 @@ const BuatTantangan = () => {
       </div>
     </Layout>
   );
-};
+}
 
-export default BuatTantangan;
+export default EditPesertaChallange;
