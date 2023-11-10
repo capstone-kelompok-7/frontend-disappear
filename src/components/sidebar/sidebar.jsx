@@ -1,7 +1,9 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
+import { Link } from "react-router-dom";
 import React, { useState } from "react";
 
-import SidebarList from "./sidebarList";
-
+import { BiEdit } from "react-icons/bi";
 import {
   LuCircleDollarSign,
   LuLayoutPanelLeft,
@@ -16,10 +18,9 @@ import {
   IoExitOutline,
   IoPeopleOutline,
 } from "react-icons/io5";
-import { BiEdit } from "react-icons/bi";
 
+import SidebarList from "./sidebarList";
 import Dropdown from "../dropdown";
-import { Link } from "react-router-dom";
 
 export default function SideBar(props) {
   const { isSidebarOpen } = props;
@@ -47,11 +48,11 @@ export default function SideBar(props) {
           <div
             className={`pt-9 duration-300 origin-left ${
               !isSidebarOpen && " scale-0"
-            } flex flex-col justify-between h-[89vh]`}
+            } flex flex-col justify-between flex-grow h-screen`}
           >
             <div>
               <SidebarList
-                to="/"
+                to="/dashboard"
                 label="Dasbor"
                 icon={<LuLayoutPanelLeft />}
                 isSidebarOpen={isSidebarOpen}
@@ -121,7 +122,7 @@ export default function SideBar(props) {
                 isSidebarOpen={isSidebarOpen}
               />
             </div>
-            <div className="pb-10">
+            <div className=" pb-32">
               <SidebarList
                 label="Keluar"
                 icon={<IoExitOutline />}
