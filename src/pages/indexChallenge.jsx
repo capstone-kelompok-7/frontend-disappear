@@ -1,9 +1,19 @@
 import { useState } from "react";
-import Layout from "../components/layout";
-import { AiOutlinePlus } from "react-icons/ai";
-import { VscTriangleDown } from "react-icons/vsc";
+import { useNavigate } from "react-router-dom";
+
+import Layout from "@/components/layout";
+import { FiSearch } from "react-icons/fi";
+import Button from "@/components/button";
+import Breadcrumbs from "@/components/breadcrumbs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 function App() {
+  const navigate = useNavigate();
   const [isOpen, setIsOpen] = useState(false);
 
   const toggleDropdown = () => {
@@ -13,24 +23,53 @@ function App() {
   return (
     <div className="flex">
       <Layout>
-        <div className="mt-6 mb-6 mx-10 px-[15px] py-5 bg-white rounded-[5px] shadow-md flex justify-between">
-          <h1 className="font-bold">Tantangan</h1>
-          <p>Dashborad / Tantangan</p>
+        <div className="my-6">
+          <Breadcrumbs pages="Tantangan" />
         </div>
 
         <div className="mt-6 mb-6 mx-10 px-[15px] py-5 shadow-md bg-white rounded-[5px]">
-          <div className="flex justify-between pb-7">
-            <button className="flex items-center space-x-2 border bg-neutral-400 text-white p-3 rounded-lg">
-              <AiOutlinePlus />
-              <div>Buat Tantangan</div>
-            </button>
-            <div className="flex space-x-3">
-              <div className="my-auto">
-                <button className="flex border text-black hover:bg-slate-400 hover:text-white p-4 items-center space-x-40 rounded-lg">
-                  <div>Filter</div>
-                  <VscTriangleDown />
-                </button>
+          <div className="flex items-center pb-7 gap-6">
+            <Button
+              className="flex items-center space-x-2 border bg-neutral-400 text-white p-3 rounded-lg"
+              label="Buat Tantangan"
+              icon="+"
+              onClick={() => navigate("/create-challenge")}
+            />
+
+            <div className="justify-items-start">
+              <div className="flex items-center">
+                <input
+                  type="text"
+                  placeholder="Cari Artikel"
+                  className="border p-3 rounded-lg"
+                />
+                <FiSearch className="absolute ml-44" />
               </div>
+            </div>
+
+            <div className="ml-auto">
+              <DropdownMenu>
+                <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border gap-20">
+                  <p>Filter</p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="10"
+                    height="5"
+                    viewBox="0 0 10 5"
+                    fill="none"
+                  >
+                    <path
+                      d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
+                      fill="#373737"
+                    />
+                  </svg>
+                </DropdownMenuTrigger>
+
+                <DropdownMenuContent>
+                  <DropdownMenuItem>Kadaluwarsa</DropdownMenuItem>
+                  <DropdownMenuItem>Belum Kadaluwarsa</DropdownMenuItem>
+                </DropdownMenuContent>
+              </DropdownMenu>
             </div>
           </div>
           <div className="w-full mx-auto">
