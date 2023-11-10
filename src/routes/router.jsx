@@ -36,7 +36,6 @@ export default function Router() {
     {
       path: "/edit-news",
       element: <EditNews />,
-      element: <CreateNews/>,
     },
   ]);
   return <RouterProvider router={router} />;
