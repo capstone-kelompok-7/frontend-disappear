@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import Layout from "../../components/layout";
-import Button from "../../components/button";
-// import Input from "../../components/ui/input";
+import Layout from "@/components/layout";
+import Button from "@/components/button";
+import Breadcrumbs from "@/components/breadcrumbs";
 
-const BuatTantangan = () => {
+function CreateChallenge() {
   const [gambar, setGambar] = useState(null);
 
   const onGambarChange = (e) => {
@@ -17,9 +17,8 @@ const BuatTantangan = () => {
 
   return (
     <Layout>
-      <div className="my-6 mx-10 px-[15px] py-5 bg-white rounded-[5px] shadow-md flex justify-between">
-        <h1 className="font-bold">Buat Tantangan</h1>
-        <p>Dashborad / Buat Tantangan</p>
+      <div className="my-6">
+        <Breadcrumbs pages="Buat Tantangan" />
       </div>
 
       <div className="my-6 mx-[100px] px-[25px] py-5 flex justify-center bg-[#FFFFFF] shadow-md border-2">
@@ -36,7 +35,6 @@ const BuatTantangan = () => {
                 <input
                   type="date"
                   name="deadline-tantangan"
-                  id="deadline-tantangan"
                   className="mt-1 block w-full rounded-md border border-black shadow-sm py-1 px-4"
                 />
               </div>
@@ -51,7 +49,6 @@ const BuatTantangan = () => {
                 <input
                   type="date"
                   name="deadline-tantangan"
-                  id="deadline-tantangan"
                   className="mt-1 block w-full rounded-md border border-black shadow-sm py-1 px-4"
                 />
               </div>
@@ -69,7 +66,6 @@ const BuatTantangan = () => {
               <input
                 type="text"
                 name="nama-tantangan"
-                id="nama-tantangan"
                 placeholder="Nama Tantangan"
                 className="border border-black mt-1 block w-full rounded-md shadow-sm py-1 px-4"
               />
@@ -85,7 +81,6 @@ const BuatTantangan = () => {
               <input
                 type="text"
                 name="exp"
-                id="exp"
                 placeholder="EXP"
                 className="border border-black mt-1 block w-full rounded-md shadow-sm py-1 px-4"
               />
@@ -188,6 +183,6 @@ const BuatTantangan = () => {
       </div>
     </Layout>
   );
-};
+}
 
-export default BuatTantangan;
+export default CreateChallenge;
