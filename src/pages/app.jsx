@@ -10,7 +10,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { IoChevronDown } from "react-icons/io5";
 
 function App() {
   const data = [

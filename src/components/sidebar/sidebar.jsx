@@ -12,7 +12,6 @@ import {
   LuPalmtree,
 } from "react-icons/lu";
 import {
-  IoBasketOutline,
   IoCashOutline,
   IoChevronDown,
   IoExitOutline,
@@ -63,6 +62,7 @@ export default function SideBar(props) {
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarList
+                to="/produk"
                 label="Produk"
                 icon={<IoBasketOutline />}
                 isSidebarOpen={isSidebarOpen}
@@ -108,6 +108,7 @@ export default function SideBar(props) {
                 sidebarItems={[
                   { to: "", label: "Tantangan" },
                   { to: "", label: "Peserta Tantangan" },
+                  // Tambahkan item sidebar lainnya sesuai kebutuhan
                 ]}
               />
 
