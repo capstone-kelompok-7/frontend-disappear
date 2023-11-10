@@ -1,4 +1,4 @@
-function Input(props) {
+function Inputt(props) {
   const { label, type, className, placeholder, hidden } = props;
 
   return (
@@ -37,4 +37,4 @@ function Select(props) {
   );
 }
 
-export { Input, Select };
+export { Inputt, Select };
