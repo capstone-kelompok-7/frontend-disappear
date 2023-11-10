@@ -1,8 +1,10 @@
+/* eslint-disable no-unused-vars */
+/* eslint-disable react/prop-types */
 import React from "react";
 
-import Navbar from "./sidebar/navbar";
 import { useSidebar } from "../utils/states/sidebarContext";
 import SideBar from "./sidebar/sidebar";
+import Navbar from "./sidebar/navbar";
 
 export default function Layout(props) {
   const { children } = props;
