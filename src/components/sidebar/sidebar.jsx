@@ -122,7 +122,7 @@ export default function SideBar(props) {
                 isSidebarOpen={isSidebarOpen}
               />
             </div>
-            <div className=" pb-32">
+            <div className=" pt-32">
               <SidebarList
                 label="Keluar"
                 icon={<IoExitOutline />}

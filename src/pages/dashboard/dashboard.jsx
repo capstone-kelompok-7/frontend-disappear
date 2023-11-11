@@ -57,7 +57,7 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      <div className="mx-10 my-5 h-full">
+      <div className=" my-5 h-full">
         <h1 className="font-bold text-3xl">Dasbor</h1>
 
         {/* Icon Section */}
