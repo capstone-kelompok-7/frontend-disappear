@@ -3,6 +3,8 @@ import React from "react";
 
 import App from "../pages/App";
 import Dashboard from "../pages/dashboard/dashboard";
+import LoginPage from "../pages/login/LoginPage";
+
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -11,8 +13,13 @@ export default function Router() {
       element: <App />,
     },
     {
+
       path: "/dashboard",
       element: <Dashboard />,
+    },
+    {
+      path: "/login",
+      element: <LoginPage />,
     },
   ]);
   return <RouterProvider router={router} />;
