@@ -9,8 +9,8 @@ const DashboardIcon = ({ iconSrc, title, value, className }) => {
         <img src={iconSrc} alt="" className="w-10" />
       </div>
       <div>
-        <p className="text-xl ">{title}</p>
-        <p className="text-2xl  font-bold">{value}</p>
+        <p className="text-lg">{title}</p>
+        <p className="text-xl font-bold">{value}</p>
       </div>
     </div>
   );

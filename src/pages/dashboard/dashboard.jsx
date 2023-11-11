@@ -61,7 +61,7 @@ export default function Dashboard() {
         <h1 className="font-bold text-3xl">Dasbor</h1>
 
         {/* Icon Section */}
-        <div className="flex gap-10 mt-5">
+        <div className="flex gap-8 mt-5">
           <DashboardIcon
             iconSrc={IconWallet}
             title="Pendapatan Terakhir"
