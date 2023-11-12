@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import Breadcrumbs from "@/components/breadcrumbs";
+import { Input } from "@/components/input";
 
 function CreateChallenge() {
   const [gambar, setGambar] = useState(null);
@@ -12,7 +13,6 @@ function CreateChallenge() {
 
   const submitForm = (e) => {
     e.preventDefault();
-    // Lakukan proses pengiriman form disini
   };
 
   return (
@@ -26,30 +26,20 @@ function CreateChallenge() {
           <div className="mb-10">
             <div className="flex">
               <div className="flex-col w-1/2 pr-8">
-                <label
-                  htmlFor="deadline-tantangan"
-                  className="block text-sm font-medium"
-                >
-                  Deadline Tantangan
-                </label>
-                <input
+                <Input
+                  label="Mulai"
                   type="date"
                   name="deadline-tantangan"
-                  className="mt-1 block w-full rounded-md border border-black shadow-sm py-1 px-4"
+                  className="block w-full rounded-md border border-black shadow-sm py-1 px-4"
                 />
               </div>
 
               <div className="flex-col w-1/2 pl-8">
-                <label
-                  htmlFor="deadline-tantangan"
-                  className="block text-sm font-medium"
-                >
-                  Deadline Tantangan
-                </label>
-                <input
+                <Input
+                  label="Berakhir"
                   type="date"
                   name="deadline-tantangan"
-                  className="mt-1 block w-full rounded-md border border-black shadow-sm py-1 px-4"
+                  className="block w-full rounded-md border border-black shadow-sm py-1 px-4"
                 />
               </div>
             </div>
@@ -57,32 +47,22 @@ function CreateChallenge() {
 
           <div className="mb-10 flex">
             <div className="flex-col w-1/2 pr-8">
-              <label
-                htmlFor="nama-tantangan"
-                className="block text-sm font-medium"
-              >
-                Nama Tantangan
-              </label>
-              <input
+              <Input
                 type="text"
                 name="nama-tantangan"
                 placeholder="Nama Tantangan"
-                className="border border-black mt-1 block w-full rounded-md shadow-sm py-1 px-4"
+                label="Nama Tantangan"
+                className="border border-black w-full rounded-md shadow-sm py-1 px-4"
               />
             </div>
 
             <div className="flex-col w-1/2 pl-8">
-              <label
-                htmlFor="nama-tantangan"
-                className="block text-sm font-medium"
-              >
-                EXP
-              </label>
-              <input
+              <Input
                 type="text"
                 name="exp"
                 placeholder="EXP"
-                className="border border-black mt-1 block w-full rounded-md shadow-sm py-1 px-4"
+                label="EXP"
+                className="border border-black w-full rounded-md shadow-sm py-1 px-4"
               />
             </div>
           </div>
@@ -91,11 +71,11 @@ function CreateChallenge() {
             <div className="flex-col w-1/2 pr-8">
               <label
                 htmlFor="gambar-tantangan"
-                className="block text-sm font-medium text-black"
+                className="block font-bold text-black"
               >
                 Unggah File
               </label>
-              <div className="mt-1 flex items-center">
+              <div className="mt-3 flex items-center">
                 <div className="flex w-full items-center justify-center border border-black rounded-md">
                   <label className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue">
                     {!gambar ? (
@@ -137,7 +117,7 @@ function CreateChallenge() {
                         />
                       </>
                     )}
-                    <input
+                    <Input
                       type="file"
                       className="hidden"
                       onChange={onGambarChange}
@@ -150,7 +130,7 @@ function CreateChallenge() {
             <div className="flex-col w-1/2 pl-8">
               <label
                 htmlFor="deskripsi-tantangan"
-                className="block text-sm font-medium text-black"
+                className="block font-bold text-black"
               >
                 Deskripsi
               </label>
@@ -159,7 +139,7 @@ function CreateChallenge() {
                   id="deskripsi-tantangan"
                   name="deskripsi-tantangan"
                   placeholder="Deskripsi Tantangan"
-                  className="p-4 shadow-sm mt-1 block w-full h-[12rem] sm:text-sm border border-black rounded-md resize-none"
+                  className="p-4 shadow-sm mt-3 block w-full h-[12rem] sm:text-sm border border-black rounded-md resize-none"
                 ></textarea>
               </div>
             </div>

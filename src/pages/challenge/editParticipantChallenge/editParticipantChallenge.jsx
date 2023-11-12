@@ -2,8 +2,9 @@ import React, { useState } from "react";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import Breadcrumbs from "@/components/breadcrumbs";
+import { Input } from "@/components/input";
 
-function EditPesertaChallange() {
+function editPesertaChallange() {
   const [gambar, setGambar] = useState(null);
 
   const onGambarChange = (e) => {
@@ -22,46 +23,33 @@ function EditPesertaChallange() {
 
       <div className="my-6 mx-[100px] px-[25px] py-5 flex justify-center bg-[#FFFFFF] shadow-md border-2">
         <form onSubmit={submitForm} className="w-full">
-          <div className="mb-10">
+          <div className="mb-9">
             <div className="flex">
               <div className="flex-col w-1/4 pr-8">
-                <label
-                  htmlFor="deadline-tantangan"
-                  className="block text-sm font-medium"
-                >
-                  Username Instagram
-                </label>
-                <input
+                <Input
                   type="text"
-                  name="deadline-tantangan"
-                  className="mt-1 block w-full rounded-md border border-black shadow-sm py-1 px-4"
+                  name="usernameInstagram"
+                  label="Username Instagram"
+                  className="w-full rounded-md border border-black shadow-sm py-1 px-4"
                 />
               </div>
 
               <div className="flex-col w-1/4 pr-8">
-                <label
-                  htmlFor="deadline-tantangan"
-                  className="block text-sm font-medium"
-                >
-                  EXP Tantangan
-                </label>
-                <input
+                <Input
                   type="text"
-                  name="deadline-tantangan"
-                  className="mt-1 block w-full rounded-md border border-black shadow-sm py-1 px-4"
+                  name="expTantangan"
+                  label="EXP Tantangan"
+                  className="w-full rounded-md border border-black shadow-sm py-1 px-4"
                 />
               </div>
 
-              <div className="flex-col w-1/2 pl-8 self-center justify-items-stretch">
-                <label
-                  htmlFor="deadline-tantangan"
-                  className="block text-sm font-medium"
-                >
+              <div className="flex-col w-1/2 pl-8">
+                <label htmlFor="status" className="block font-bold text-black">
                   Status
                 </label>
                 <select
                   label="Select Version"
-                  className="mt-1 border border-black px-4 py-1 rounded-md w-full"
+                  className="mt-3 border border-black px-4 py-1 rounded-md w-full"
                 >
                   <option>Valid</option>
                   <option>Tidak Valid</option>
@@ -72,17 +60,11 @@ function EditPesertaChallange() {
 
           <div className="flex">
             <div className="flex-col w-1/2 pr-8 mb-10">
-              <label
-                htmlFor="deadline-tantangan"
-                className="block text-sm font-medium"
-              >
-                Deadline Tantangan
-              </label>
-              <input
+              <Input
+                label="Berpartisipasi"
                 type="date"
-                name="deadline-tantangan"
-                id="deadline-tantangan"
-                className="mt-1 block w-full rounded-md border border-black shadow-sm py-1 px-4"
+                name="berpartisipasi"
+                className=" block w-full rounded-md border border-black shadow-sm py-1 px-4"
               />
             </div>
 
@@ -108,11 +90,11 @@ function EditPesertaChallange() {
             <div className="flex-col w-1/2 pr-8">
               <label
                 htmlFor="gambar-tantangan"
-                className="block text-sm font-medium text-black"
+                className="block font-bold text-black"
               >
                 Bukti Berpartisipasi
               </label>
-              <div className="mt-1 flex items-center">
+              <div className="mt-3 mb-4 flex items-center">
                 <div className="flex w-full items-center justify-center border border-black rounded-md">
                   <label className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue">
                     {!gambar ? (
@@ -151,7 +133,7 @@ function EditPesertaChallange() {
                         />
                       </>
                     )}
-                    <input
+                    <Input
                       type="file"
                       className="hidden"
                       onChange={onGambarChange}
@@ -167,4 +149,4 @@ function EditPesertaChallange() {
   );
 }
 
-export default EditPesertaChallange;
+export default editPesertaChallange;
