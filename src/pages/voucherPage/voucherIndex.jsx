@@ -1,7 +1,13 @@
-import { useState } from "react";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
+import { Link } from "react-router-dom";
 import { IoAddOutline } from "react-icons/io5";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 function VoucherApp() {
   return (
@@ -19,22 +25,39 @@ function VoucherApp() {
 
       <div className="mx-8 my-5 py-5 px-11 rounded-md shadow-lg border-2">
         <div className="flex justify-between items-center">
-          <div>
+          <Link to="/buat-kupon">
             <Button
               label="Tambahkan Kupon"
               icon={<IoAddOutline />}
               className="bg-[#909090] text-white py-3 px-5 rounded-lg"
             />
-          </div>
-          <div className="w-[168px]">
-            <select className="select select-bordered w-full max-w-xs">
-              <option disabled selected>
-                Filter
-              </option>
-              <option>Han Solo</option>
-              <option>Greedo</option>
-            </select>
-          </div>
+          </Link>
+          
+          <DropdownMenu>
+              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border gap-20">
+                <p>Filter</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="10"
+                  height="5"
+                  viewBox="0 0 10 5"
+                  fill="none"
+                >
+                  <path
+                    d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
+                    fill="#373737"
+                  />
+                </svg>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent>
+                <DropdownMenuItem>Bronze</DropdownMenuItem>
+                <DropdownMenuItem>Silver</DropdownMenuItem>
+                <DropdownMenuItem>Gold</DropdownMenuItem>
+                <DropdownMenuItem>Kadluwarsa</DropdownMenuItem>
+                <DropdownMenuItem>Belum Kadaluwarsa</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
         </div>
 
         <div className="pt-5 ">

@@ -95,6 +95,10 @@ export default function Router() {
       path: "/kupon",
       element: <VoucherApp />,
     },
+    {
+      path: "/buat-kupon",
+      element: <CreateVoucher />,
+    },
   ]);
   return <RouterProvider router={router} />;
 }
