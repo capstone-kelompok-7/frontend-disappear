@@ -5,7 +5,7 @@ import App from "../pages/App";
 import Dashboard from "../pages/dashboard/dashboard";
 import LoginPage from "../pages/login/LoginPage";
 
-import App from "@/pages/indexChallenge";
+import IndexChallenge from "@/pages/indexChallenge";
 import CreateChallenge from "@/pages/createChallenge/createChallenge";
 import DetailChalenge from "@/pages/detailChallenge/detailChallenge";
 import ParticipantChallange from "@/pages/participantChallenge";
@@ -24,6 +24,12 @@ export default function Router() {
     {
       path: "/login",
       element: <LoginPage />,
+    },
+    {
+      path: "/challenge",
+      element: <IndexChallenge />,
+    },
+    {
       path: "/create-challenge",
       element: <CreateChallenge />,
     },
