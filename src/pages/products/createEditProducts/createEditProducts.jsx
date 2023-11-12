@@ -6,9 +6,37 @@ import { Input } from "@/components/ui/input";
 import Dropzone from "@/components/dropzone";
 import { Textarea } from "@/components/ui/textarea";
 import Button from "@/components/button";
+import Select from "react-select";
 
 export default function CreateEditProducts() {
   const [isEdit, setIsEdit] = useState(true);
+
+  const options = [
+    { value: "chocolate", label: "Chocolate" },
+    { value: "strawberry", label: "Strawberry" },
+    { value: "vanilla", label: "Vanilla" },
+    { value: "semangka", label: "Semangka" },
+  ];
+
+  const colorStyles = {
+    control: (styles) => ({ ...styles, backgroundColor: "white" }),
+    multiValue: (styles) => {
+      return {
+        ...styles,
+        backgroundColor: "#ccc",
+        borderRadius: "9999px",
+        borderWidth: "1px",
+        borderColor: "#000",
+        fontSize: "12px",
+        paddingLeft: "10px",
+        paddingRight: "10px",
+      };
+    },
+  };
+
+  function handleChange(selectedOption) {
+    console.log("handleChange", selectedOption);
+  }
 
   return (
     <>
@@ -27,10 +55,11 @@ export default function CreateEditProducts() {
               </div>
               <div className="mt-5">
                 <label>Kategori Produk</label>
-                <Input
-                  placeholder="Kategori Produk"
-                  type="text"
-                  className=" mt-4"
+                <Select
+                  options={options}
+                  onChange={handleChange}
+                  isMulti
+                  styles={colorStyles}
                 />
               </div>
               <div className="mt-5">
