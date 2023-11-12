@@ -33,7 +33,7 @@ function App() {
               className="flex items-center space-x-2 border bg-neutral-400 text-white p-3 rounded-lg"
               label="Buat Tantangan"
               icon="+"
-              onClick={() => navigate("/create-challenge")}
+              onClick={() => navigate("/buat-tantangan")}
             />
 
             <div className="justify-items-start">

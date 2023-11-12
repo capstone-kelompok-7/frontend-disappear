@@ -2,7 +2,7 @@ import { BiEdit } from "react-icons/bi";
 import { SlCalender } from "react-icons/sl";
 
 import Breadcrumbs from "@/components/breadcrumbs";
-import { Select } from "../components/input";
+import { Select } from "@/components/input";
 import Layout from "@/components/layout";
 import {
   DropdownMenu,
