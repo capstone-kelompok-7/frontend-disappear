@@ -1,6 +1,8 @@
-import React from "react";
-import Tabel from "../components/table/table"; // Import komponen tabel yang telah dibuat
+import { useState } from "react";
+import Tabel from "../components/table/table";
 import Layout from "../components/layout";
+import { Input } from "@/components/ui/input";
+import Button from "@/components/button";
 import Breadcrumbs from "@/components/breadcrumbs";
 import {
   DropdownMenu,
