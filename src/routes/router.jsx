@@ -5,11 +5,11 @@ import App from "../pages/App";
 import Dashboard from "../pages/dashboard/dashboard";
 import LoginPage from "../pages/login/LoginPage";
 
-import IndexChallenge from "@/pages/indexChallenge";
-import CreateChallenge from "@/pages/createChallenge/createChallenge";
-import DetailChalenge from "@/pages/detailChallenge/detailChallenge";
-import ParticipantChallange from "@/pages/participantChallenge";
-import EditParticipantChallenge from "@/pages/editParticipantChallenge/editParticipantChallenge";
+import IndexChallenge from "@/pages/challenge/indexChallenge";
+import CreateChallenge from "@/pages/challenge/createChallenge/createChallenge";
+import DetailChalenge from "@/pages/challenge/detailChallenge/detailChallenge";
+import ParticipantChallange from "@/pages/challenge/participantChallenge/participantChallenge";
+import EditParticipantChallenge from "@/pages/challenge/editParticipantChallenge/editParticipantChallenge";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -26,23 +26,23 @@ export default function Router() {
       element: <LoginPage />,
     },
     {
-      path: "/challenge",
+      path: "/tantangan",
       element: <IndexChallenge />,
     },
     {
-      path: "/create-challenge",
+      path: "/buat-tantangan",
       element: <CreateChallenge />,
     },
     {
-      path: "/detail-challenge",
+      path: "/detail-tantangan",
       element: <DetailChalenge />,
     },
     {
-      path: "/participant-challenge",
+      path: "/peserta-tantangan",
       element: <ParticipantChallange />,
     },
     {
-      path: "/edit-participant-challenge",
+      path: "/edit-peserta-tantangan",
       element: <EditParticipantChallenge />,
     },
   ]);
