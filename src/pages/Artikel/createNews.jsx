@@ -1,22 +1,37 @@
 import React, { useState } from "react";
 import { IoMdCloudUpload } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
+import draftToHtml from "draftjs-to-html";
+import "react-draft-wysiwyg/dist/react-draft-wysiwyg.css";
+
 import Layout from "../../components/layout";
 import { Inputt } from "../../components/input";
-import TextEditor from "@/components/texteditor/tipTap";
-import { Link } from "react-router-dom";
 
 function CreateNews() {
+  const [editorState, setEditorState] = useState(EditorState.createEmpty());
+
+  const onEditorStateChange = (newEditorState) => {
+    setEditorState(newEditorState);
+  };
+
+  const handleTambahArtikel = () => {
+    // Logika untuk menangani tombol "Tambah Artikel"
+    console.log("Tambah Artikel");
+  };
+
+  const handleBatal = () => {
+    // Logika untuk menangani tombol "Batal"
+    console.log("Batal");
+  };
+
   return (
     <Layout>
-      <form>
-        <div className="mt-5 text-xl">
-          <Link to="/artikel">
-            <button className="flex items-center space-x-2">
-              <IoArrowBack />
-              <div className="font-bold">Artikel</div>
-            </button>
-          </Link>
+      <form action="">
+        <div className="mx-10 mt-5 text-xl">
+          <button className="flex items-center space-x-2">
+            <IoArrowBack />
+            <div className="font-bold">Artikel</div>
+          </button>
         </div>
         <div className="mt-5 mx-8 border-t-2 border-l-2 border-b-2">
           <div className="mt-5 ml-5">
@@ -45,7 +60,6 @@ function CreateNews() {
                     className="border rounded-sm border-black p-[4px]"
                     type="file"
                     accept="image/*"
-                    name="image"
                     hidden
                   />
                   <IoMdCloudUpload className="mr-2" />
@@ -61,20 +75,25 @@ function CreateNews() {
           </div>
           <div className="mt-6 ml-4">
             <label className="text-black font-bold">Konten</label>
-            <div>
-              <TextEditor />
-            </div>
+            <Editor
+              editorState={editorState}
+              wrapperClassName="demo-wrapper mt-4 overflow-hidden"
+              editorClassName="demo-editor border border-black"
+              onEditorStateChange={onEditorStateChange}
+            />
           </div>
           <div className="mt-6 ml-4 mb-7 flex space-x-3">
             <button
-              type="submit"
-              className="bg-slate-600 text-white px-4 py-2 rounded"
+              type="button"
+              className="bg-green-500 text-white px-4 py-2 rounded"
+              onClick={handleTambahArtikel}
             >
               Tambah Artikel
             </button>
             <button
               type="button"
-              className="border border-black text-black px-4 rounded"
+              className="bg-red-500 text-white px-4 rounded"
+              onClick={handleBatal}
             >
               Batal
             </button>

@@ -6,6 +6,8 @@ import { SidebarProvider } from "./utils/states/sidebarContext";
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <App />
+    <SidebarProvider>
+      <Router />
+    </SidebarProvider>
   </React.StrictMode>
 );
