@@ -22,12 +22,13 @@ import App from "../pages/indexNews";
 import DetailNews from "../pages/Artikel/detailNews";
 import CreateNews from "../pages/Artikel/createNews";
 import EditNews from "@/pages/Artikel/editNews";
+import IndexNews from "../pages/indexNews";
 
 export default function Router() {
   const router = createBrowserRouter([
     {
-      path: "/",
-      element: <App />,
+      path: "/artikel",
+      element: <IndexNews />,
     },
     {
       path: "/category",
