@@ -41,4 +41,4 @@ function Select(props) {
   );
 }
 
-export { Inputt, Select };
+export { Input, Select };
