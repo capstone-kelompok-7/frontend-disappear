@@ -30,6 +30,8 @@ function CreateNews() {
               name="title"
               label="Judul"
               placeholder="Judul Artikel"
+              value={formData.title}
+              onChange={handleChange}
             />
             <div className="flex flex-col mb-4 w-full">
               <label className="text-black font-bold mb-3">Unggah File</label>
@@ -49,6 +51,11 @@ function CreateNews() {
                   <IoMdCloudUpload className="mr-2" />
                   Pilih File
                 </label>
+                {uploadedFileName && (
+                  <p className="text-base ml-2 text-gray-600">
+                    {uploadedFileName}
+                  </p>
+                )}
               </div>
             </div>
           </div>
