@@ -80,13 +80,6 @@ function IndexNews() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
-          <div className="flex items-center space-x-3">
-            <p>Artikel Untuk</p>
-            <SlCalender size={20} />
-            <Select
-              options={["30 Hari Terakhir", "7 Hari Terakhir", "Hari ini"]}
-            />
-          </div>
         </div>
         <div className="max-h-[38rem] overflow-y-auto">
           {artikel.map((item) => (
