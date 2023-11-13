@@ -1,12 +1,20 @@
 import { useState, useEffect } from "react";
-import Layout from "../components/layout";
 import { AiOutlinePlus } from "react-icons/ai";
 import { FiSearch } from "react-icons/fi";
 import { SlCalender } from "react-icons/sl";
-import { Select } from "../components/input";
-import { getArtikel } from "../utils/api/artikel/apiArtikel";
 
-function App() {
+import Breadcrumbs from "@/components/breadcrumbs";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
+import Layout from "../components/layout";
+import { getArtikel } from "../utils/api/artikel/apiArtikel";
+import CardArtikel from "@/components/cardartikel/cardArtikel";
+
+function IndexNews() {
   const [artikel, setArtikel] = useState([]);
 
   useEffect(() => {
@@ -25,12 +33,11 @@ function App() {
 
   return (
     <Layout>
-      <div className="mx-[41px] flex mt-7 border-spacing-x-2 shadow-md p-4 justify-between items-center">
-        <h1 className="font-bold">Artikel</h1>
-        <p>Dashborad/Artikel</p>
+      <div>
+        <Breadcrumbs pages="Artikel" />
       </div>
-      <div className="mt-9 mx-[41px] border-t-2 border-l-2 p-4">
-        <div className="flex space-x-3 justify-between">
+      <div className="mt-9 border-t-2 border-l-2 px-4 pt-4">
+        <div className="flex justify-between">
           <div className="flex space-x-3">
             <button className="flex items-center space-x-2 border bg-slate-500 hover:bg-slate-200 text-white hover:text-black hover:border-black p-4 rounded-lg">
               <AiOutlinePlus />
@@ -45,21 +52,44 @@ function App() {
               <FiSearch className="absolute ml-56" />
             </div>
           </div>
-          <div className="flex items-center space-x-3">
-            <p>Artikel Untuk</p>
-            <SlCalender size={20} />
-            <Select
-              options={["30 Hari Terakhir", "7 Hari Terakhir", "Hari ini"]}
-            />
+          <div className="flex space-x-3">
+            <DropdownMenu>
+              <div className="flex items-center space-x-3">
+                <p>Artikel Untuk</p>
+                <SlCalender />
+              </div>
+              <DropdownMenuTrigger className="flex justify-between items-center py-3 px-3 gap-20 font-bold">
+                <p>Filter</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="10"
+                  height="5"
+                  viewBox="0 0 10 5"
+                  fill="none"
+                >
+                  <path
+                    d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
+                    fill="#373737"
+                  />
+                </svg>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="font-bold">
+                <DropdownMenuItem>Bulan ini</DropdownMenuItem>
+                <DropdownMenuItem>Seminggu ini</DropdownMenuItem>
+                <DropdownMenuItem>Hari ini</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
         </div>
-        <div>
+        <div className="max-h-[38rem] overflow-y-auto">
           {artikel.map((item) => (
-            <div key={item.id}>
-              <h2>{item.title}</h2>
-              <p>{item.content}</p>
-              <img src={item.image_url} alt="" />
-            </div>
+            <CardArtikel
+              created_at={item.created_at}
+              key={item.id}
+              title={item.title}
+              content={item.content}
+              image_url={item.image_url}
+            />
           ))}
         </div>
       </div>
@@ -67,4 +97,4 @@ function App() {
   );
 }
 
-export default App;
+export default IndexNews;
