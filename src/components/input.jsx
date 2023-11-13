@@ -1,5 +1,6 @@
 function Inputt(props) {
-  const { label, type, className, placeholder, hidden } = props;
+  const { label, type, className, placeholder, hidden, name, value, onChange } =
+    props;
 
   return (
     <div className="flex flex-col mb-4 w-full">
@@ -9,6 +10,9 @@ function Inputt(props) {
         type={type}
         placeholder={placeholder}
         hidden={hidden}
+        name={name}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );
