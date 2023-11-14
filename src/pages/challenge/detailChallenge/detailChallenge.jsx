@@ -1,7 +1,7 @@
 import React from "react";
 import { BsArrowLeft } from "react-icons/bs";
 
-import Layout from "@/components/layout";
+import Layout from "../../../components/layout";
 import { Link } from "react-router-dom";
 
 export default function DetailChallange() {
@@ -20,8 +20,8 @@ export default function DetailChallange() {
         <div className="flex justify-between">
           <h1 className="font-bold text-[40px]">Tantangan Menanam Pohon</h1>
           <div>
-            <div className="bg-zinc-300 rounded-xl py-1 px-6 font-semibold ">
-              <p>Belum Kadaluwarsa</p>
+            <div className="bg-[#039900] rounded-xl py-1 px-6 font-semibold ">
+              <p className="text-white">Belum Kadaluwarsa</p>
             </div>
           </div>
         </div>

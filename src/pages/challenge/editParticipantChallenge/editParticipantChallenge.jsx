@@ -78,9 +78,9 @@ function editPesertaChallange() {
               </div>
               <div className="pr-3">
                 <Button
-                  label="Tambah"
+                  label="Edit"
                   type="submit"
-                  className="bg-zinc-400 rounded-[5px] border border-black px-2.5 py-1.5 shadow"
+                  className="bg-[#25745A] rounded-[5px] px-3 py-2 shadow text-white"
                 />
               </div>
             </div>
