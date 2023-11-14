@@ -11,8 +11,84 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Tabel from "@/components/table/table";
+import { BiDotsHorizontal } from "react-icons/bi";
 
 export default function IndexProducts() {
+  const data = [
+    {
+      Foto: 1,
+      NamaProduk: "Totebag",
+      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
+      Gram: 20,
+      Stok: 140,
+      Diskon: 50000,
+      EXP: 15,
+      Harga: 35000,
+    },
+    {
+      Foto: 1,
+      NamaProduk: "Totebag",
+      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
+      Gram: 20,
+      Stok: 140,
+      Diskon: 50000,
+      EXP: 15,
+      Harga: 35000,
+    },
+    {
+      Foto: 1,
+      NamaProduk: "Totebag",
+      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
+      Gram: 20,
+      Stok: 140,
+      Diskon: 50000,
+      EXP: 15,
+      Harga: 35000,
+    },
+    {
+      Foto: 1,
+      NamaProduk: "Totebag",
+      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
+      Gram: 20,
+      Stok: 140,
+      Diskon: 50000,
+      EXP: 15,
+      Harga: 35000,
+    },
+    {
+      Foto: 1,
+      NamaProduk: "Totebag",
+      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
+      Gram: 20,
+      Stok: 140,
+      Diskon: 50000,
+      EXP: 15,
+      Harga: 35000,
+    },
+    {
+      Foto: 1,
+      NamaProduk: "Totebag",
+      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
+      Gram: 20,
+      Stok: 140,
+      Diskon: 50000,
+      EXP: 15,
+      Harga: 35000,
+    },
+  ];
+
+  const columns = [
+    { Header: "Foto", accessor: "Foto" },
+    { Header: "Nama Produk", accessor: "NamaProduk" },
+    { Header: "Kategori", accessor: "Kategori" },
+    { Header: "Gram", accessor: "Gram" },
+    { Header: "Stok", accessor: "Stok" },
+    { Header: "Diskon", accessor: "Diskon" },
+    { Header: "EXP", accessor: "EXP" },
+    { Header: "Harga", accessor: "Harga" },
+  ];
+
   return (
     <>
       <Layout>
@@ -86,6 +162,9 @@ export default function IndexProducts() {
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
+        </div>
+        <div className="mt-5">
+          <Tabel columns={columns} data={data} />
         </div>
         <Link to="/detail-produk" className=" py-3 px-3">
           Detail Produk
