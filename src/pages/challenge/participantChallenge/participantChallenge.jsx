@@ -1,5 +1,6 @@
 import { BiEdit } from "react-icons/bi";
 import { SlCalender } from "react-icons/sl";
+import { Link } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Select } from "@/components/input";
@@ -10,8 +11,73 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Tabel from "@/components/table/table";
 
 function App() {
+  const data = [
+    {
+      No: 1,
+      UsernameInstagram: "dimas829",
+      TanggalBerpartisipasi: "26-10-2023",
+      EXP: 150,
+      Status: "Tidak Valid",
+      Aksi: "",
+    },
+    {
+      No: 2,
+      UsernameInstagram: "dimas829",
+      TanggalBerpartisipasi: "26-10-2023",
+      EXP: 100,
+      Status: "Valid",
+      Aksi: "",
+    },
+    {
+      No: 3,
+      UsernameInstagram: "dimas829",
+      TanggalBerpartisipasi: "26-10-2023",
+      EXP: 100,
+      Status: "Menunggu Validasi",
+      Aksi: "",
+    },
+    {
+      No: 4,
+      UsernameInstagram: "dimas829",
+      TanggalBerpartisipasi: "26-10-2023",
+      EXP: 100,
+      Status: "Valid",
+      Aksi: "",
+    },
+    {
+      No: 5,
+      UsernameInstagram: "dimas829",
+      TanggalBerpartisipasi: "26-10-2023",
+      EXP: 150,
+      Status: "Tidak Valid",
+      Aksi: "",
+    },
+  ];
+
+  const columns = [
+    { Header: "No", accessor: "No" },
+    { Header: "Username Instagram", accessor: "UsernameInstagram" },
+    { Header: "Tanggal Berpartisipasi", accessor: "TanggalBerpartisipasi" },
+    { Header: "EXP Tantangan", accessor: "EXP" },
+    { Header: "Status", accessor: "Status" },
+    {
+      Header: "Aksi",
+      accessor: "Aksi",
+      Cell: () => (
+        <div className="flex">
+          <div className="mx-auto">
+            <Link to="/edit-peserta-tantangan">
+              <BiEdit className="bg-neutral-700 rounded-[5px] text-white w-[38px] h-[38px]" />
+            </Link>
+          </div>
+        </div>
+      ),
+    },
+  ];
+
   return (
     <div className="flex">
       <Layout>
@@ -57,97 +123,7 @@ function App() {
               </DropdownMenu>
             </div>
           </div>
-
-          <div className="w-full mx-auto">
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white shadow-md border border-neutral-500">
-                <thead>
-                  <tr className="bg-[#C7C7C7] text-black">
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      NO
-                    </th>
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      USERNAME INSTAGRAM
-                    </th>
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      TANGGAL BERPARTISIPASI
-                    </th>
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      EXP TANTANGAN
-                    </th>
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      STATUS
-                    </th>
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      AKSI
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-[#FFFFFF]">
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      01
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      dimas829
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      26-10-2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      150
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      Valid
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      <BiEdit className="bg-neutral-700 text-white w-[38px] h-[38px]" />
-                    </td>
-                  </tr>
-                  <tr className="bg-[#ECECEC]">
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      02
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      dimas829
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      26-10-2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      100
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      Tidak Valid
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      <BiEdit className="bg-neutral-700 text-white w-[38px] h-[38px]" />
-                    </td>
-                  </tr>
-                  <tr className="bg-[#FFFFFF]">
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      03
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      dimas829
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      26-10-2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      150
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      Menunggu Validasi
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      <BiEdit className="bg-neutral-700 text-white w-[38px] h-[38px]" />
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Tabel columns={columns} data={data} />
         </div>
       </Layout>
     </div>

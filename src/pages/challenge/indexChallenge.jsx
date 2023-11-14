@@ -11,9 +11,73 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import DropdownTable from "@/components/dropdownTable/dropdownTable";
+import Tabel from "@/components/table/table";
 
 function IndexChallenge() {
   const navigate = useNavigate();
+
+  const data = [
+    {
+      No: 1,
+      NamaTantangan: "Tantangan menanam pohon",
+      TanggalMulai: "24-10-2023",
+      TanggalBerakhir: "31-10-2023",
+      EXP: 150,
+      Status: "Kadaluwarsa",
+    },
+    {
+      No: 2,
+      NamaTantangan: "Tantangan menanam pohon",
+      TanggalMulai: "24-10-2023",
+      TanggalBerakhir: "31-10-2023",
+      EXP: 100,
+      Status: "Belum Kadaluwarsa",
+    },
+    {
+      No: 3,
+      NamaTantangan: "Tantangan menanam pohon",
+      TanggalMulai: "24-10-2023",
+      TanggalBerakhir: "31-10-2023",
+      EXP: 100,
+      Status: "Belum Kadaluwarsa",
+    },
+    {
+      No: 4,
+      NamaTantangan: "Tantangan menanam pohon",
+      TanggalMulai: "24-10-2023",
+      TanggalBerakhir: "31-10-2023",
+      EXP: 100,
+      Status: "Kadaluwarsa",
+    },
+    {
+      No: 5,
+      NamaTantangan: "Tantangan menanam pohon",
+      TanggalMulai: "24-10-2023",
+      TanggalBerakhir: "31-10-2023",
+      EXP: 150,
+      Status: "Belum Kadaluwarsa",
+    },
+  ];
+
+  const columns = [
+    { Header: "No", accessor: "No" },
+    { Header: "Nama Tantangan", accessor: "NamaTantangan" },
+    { Header: "Tanggal Mulai", accessor: "TanggalMulai" },
+    { Header: "Tanggal Berakhir", accessor: "TanggalBerakhir" },
+    { Header: "EXP", accessor: "EXP" },
+    {
+      Header: "Status",
+      accessor: "Status",
+      Cell: ({ row }) => (
+        <div className="flex items-center">
+          <p>{row.original.Status}</p>
+          <div className="ml-auto">
+            <DropdownTable />
+          </div>
+        </div>
+      ),
+    },
+  ];
 
   return (
     <div className="flex">
@@ -25,7 +89,7 @@ function IndexChallenge() {
         <div className="mt-6 mb-6 mx-10 px-[15px] py-5 shadow-md bg-white rounded-[5px]">
           <div className="flex items-center pb-7 gap-6">
             <Button
-              className="flex items-center space-x-2 border bg-neutral-400 text-white p-3 rounded-lg"
+              className="flex items-center space-x-2 border bg-[#25745A] text-white p-3 rounded-lg"
               label="Buat Tantangan"
               icon="+"
               onClick={() => navigate("/buat-tantangan")}
@@ -67,105 +131,7 @@ function IndexChallenge() {
               </DropdownMenu>
             </div>
           </div>
-          <div className="w-full mx-auto">
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white shadow-md border border-neutral-500">
-                <thead>
-                  <tr className="bg-[#C7C7C7] text-black">
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      NO
-                    </th>
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      NAMA TANTANGAN
-                    </th>
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      TANGGAL MULAI
-                    </th>
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      TANGGAL BERAKHIR
-                    </th>
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      EXP
-                    </th>
-                    <th className="px-6 py-3 text-left font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      STATUS
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-[#FFFFFF]">
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      01
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      Tantangan menanam pohon
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      24-10-2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      31-10-2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      150
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      Belum Kadaluwarsa
-                      <div className="relative inline-block">
-                        <DropdownTable />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="bg-[#ECECEC]">
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      02
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      Tantangan menanam pohon
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      24-10-2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      31-10-2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      150
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      Belum Kadaluwarsa
-                      <div className="relative inline-block">
-                        <DropdownTable />
-                      </div>
-                    </td>
-                  </tr>
-                  <tr className="bg-[#FFFFFF]">
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      03
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      Tantangan menanam pohon
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      24-10-2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      31-10-2023
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      100
-                    </td>
-                    <td className="px-6 py-4 whitespace-nowrap border border-neutral-500">
-                      Belum Kadaluwarsa
-                      <div className="relative inline-block">
-                        <DropdownTable />
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Tabel columns={columns} data={data} />
         </div>
       </Layout>
     </div>
