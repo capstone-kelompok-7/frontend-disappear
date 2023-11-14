@@ -17,8 +17,9 @@ import IndexProducts from "@/pages/products/indexProducts";
 import CreateEditProducts from "@/pages/products/createEditProducts/createEditProducts";
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
 import Review from "../pages/review/review";
-
-import VoucherApp from "../pages/voucherIndex";
+import VoucherApp from "../pages/voucherPage/voucherIndex";
+import CreateVoucher from "@/pages/voucherPage/createVoucher";
+import EditVoucher from "../pages/voucherPage/editVoucher";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -96,8 +97,12 @@ export default function Router() {
       element: <VoucherApp />,
     },
     {
-      path: "/buat-kupon",
+      path: "/buatkupon",
       element: <CreateVoucher />,
+    },
+    {
+      path: "/editkupon",
+      element: <EditVoucher />,
     },
   ]);
   return <RouterProvider router={router} />;

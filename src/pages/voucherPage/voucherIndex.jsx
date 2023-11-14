@@ -8,94 +8,99 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import Tabel from "@/components/table/table";
+import { VscKebabVertical } from "react-icons/vsc";
+import Breadcrumbs from "@/components/breadcrumbs";
 
 function VoucherApp() {
+  const data = [
+    {
+      No: 1,
+      NamaKupon: "Hadiah dari Level Gold",
+      Kode: "L00G1",
+      Kategori: "GOLD",
+      Diskon: 5000,
+      TanggalMulai: "10-10-2023",
+      TanggalBerakhir: "15-10-2023",
+      Status: {
+        text: "Kadaluwarsa",
+        icon: (
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <VscKebabVertical />
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+              <DropdownMenuItem>Edit</DropdownMenuItem>
+              <DropdownMenuItem>Hapus</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        ),
+      },
+    },
+  ];
+
+  const columns = [
+    { Header: "NO", accessor: "No" },
+    { Header: "NAMA KUPON", accessor: "NamaKupon" },
+    { Header: "KODE", accessor: "Kode" },
+    { Header: "KATEGORI", accessor: "Kategori" },
+    { Header: "DISKON", accessor: "Diskon" },
+    { Header: "TANGGAL MULAI", accessor: "TanggalMulai" },
+    { Header: "TANGGAL BERAKHIR", accessor: "TanggalBerakhir" },
+    {
+      Header: "STATUS",
+      accessor: "Status",
+      Cell: ({ value }) => (
+        <div className="flex items-center">
+          <span className="ml-2">{value.text}</span> {value.icon}
+        </div>
+      ),
+    },
+  ];
+
   return (
     <Layout>
-      <div className="flex justify-between items-center shadow-lg m-8 py-5 px-11 rounded-md">
-        <div>
-          <h1 className="font-bold text-3xl">Voucher</h1>
-        </div>
-        <div className="">
-          <p className="text-sm font-medium text-[#797979]">
-            Dashboard / Kupon
-          </p>
-        </div>
-      </div>
+      <Breadcrumbs pages="Kupon" />
 
-      <div className="mx-8 my-5 py-5 px-11 rounded-md shadow-lg border-2">
-        <div className="flex justify-between items-center">
-          <Link to="/buat-kupon">
+      <div className=" my-5 py-5 px-11 rounded-md shadow-lg border-2">
+        <div className="flex justify-between items-center pb-5">
+          <Link to="/buatkupon">
             <Button
               label="Tambahkan Kupon"
               icon={<IoAddOutline />}
               className="bg-[#909090] text-white py-3 px-5 rounded-lg"
             />
           </Link>
-          
+
           <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border gap-20">
-                <p>Filter</p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="5"
-                  viewBox="0 0 10 5"
-                  fill="none"
-                >
-                  <path
-                    d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
-                    fill="#373737"
-                  />
-                </svg>
-              </DropdownMenuTrigger>
+            <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border gap-20">
+              <p>Filter</p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="10"
+                height="5"
+                viewBox="0 0 10 5"
+                fill="none"
+              >
+                <path
+                  d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
+                  fill="#373737"
+                />
+              </svg>
+            </DropdownMenuTrigger>
 
-              <DropdownMenuContent>
-                <DropdownMenuItem>Bronze</DropdownMenuItem>
-                <DropdownMenuItem>Silver</DropdownMenuItem>
-                <DropdownMenuItem>Gold</DropdownMenuItem>
-                <DropdownMenuItem>Kadluwarsa</DropdownMenuItem>
-                <DropdownMenuItem>Belum Kadaluwarsa</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+            <DropdownMenuContent>
+              <DropdownMenuItem>Bronze</DropdownMenuItem>
+              <DropdownMenuItem>Silver</DropdownMenuItem>
+              <DropdownMenuItem>Gold</DropdownMenuItem>
+              <DropdownMenuItem>Kadaluwarsa</DropdownMenuItem>
+              <DropdownMenuItem>Belum Kadaluwarsa</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
 
-        <div className="pt-5 ">
-          <table className="table table-zebra ">
-            {/* head */}
-            <thead>
-              <tr>
-                <th></th>
-                <th>Name</th>
-                <th>Job</th>
-                <th>Favorite Color</th>
-              </tr>
-            </thead>
-            <tbody>
-              {/* row 1 */}
-              <tr>
-                <th>1</th>
-                <td>Cy Ganderton</td>
-                <td>Quality Control Specialist</td>
-                <td>Blue</td>
-              </tr>
-              {/* row 2 */}
-              <tr>
-                <th>2</th>
-                <td>Hart Hagerty</td>
-                <td>Desktop Support Technician</td>
-                <td>Purple</td>
-              </tr>
-              {/* row 3 */}
-              <tr>
-                <th>3</th>
-                <td>Brice Swyre</td>
-                <td>Tax Accountant</td>
-                <td>Red</td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+        <Tabel columns={columns} data={data} />
       </div>
     </Layout>
   );
