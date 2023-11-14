@@ -95,7 +95,7 @@ export default function IndexProducts() {
         <Breadcrumbs pages="Produk" />
         <div className=" flex justify-between items-center mt-10">
           <Link
-            to="/buat-produk"
+            to="/produk/buat-produk"
             className=" font-medium text-sm rounded-md text-white bg-gray-500 px-3 py-3 flex items-center justify-between gap-3"
           >
             <svg
@@ -166,7 +166,7 @@ export default function IndexProducts() {
         <div className="mt-5">
           <Tabel columns={columns} data={data} />
         </div>
-        <Link to="/detail-produk" className=" py-3 px-3">
+        <Link to="/produk/detail-produk" className=" py-3 px-3">
           Detail Produk
         </Link>
       </Layout>

@@ -8,7 +8,6 @@ import IndexProducts from "@/pages/products/indexProducts";
 import CreateEditProducts from "@/pages/products/createEditProducts/createEditProducts";
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
 
-
 export default function Router() {
   const router = createBrowserRouter([
     {
@@ -16,7 +15,6 @@ export default function Router() {
       element: <App />,
     },
     {
-
       path: "/dashboard",
       element: <Dashboard />,
     },
@@ -29,15 +27,15 @@ export default function Router() {
       element: <IndexProducts />,
     },
     {
-      path: "/buat-Produk",
+      path: "/produk/buat-Produk",
       element: <CreateEditProducts />,
     },
     {
-      path: "/edit-produk",
+      path: "/produk/edit-produk",
       element: <CreateEditProducts />,
     },
     {
-      path: "/detail-produk",
+      path: "/produk/detail-produk",
       element: <DetailProducts />,
     },
   ]);
