@@ -90,7 +90,7 @@ export default function CreateEditProducts() {
               </div>
             </div>
             <div className="w-full">
-              <Dropzone className=" border-dashed bg-gray-300 border-black w-full border-2 rounded" />
+              <Dropzone className=" border-dashed bg-gray-300 border-black w-full border-2 rounded cursor-pointer" />
             </div>
           </div>
           <div className="mt-5">

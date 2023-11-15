@@ -10,7 +10,7 @@ export default function DetailProducts() {
   const navigate = useNavigate();
 
   function toRoute() {
-    navigate("/edit-produk");
+    navigate("/produk/edit-produk");
   }
   return (
     <>
