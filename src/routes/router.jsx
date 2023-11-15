@@ -6,7 +6,7 @@ import Dashboard from "../pages/dashboard/dashboard";
 import LoginPage from "../pages/login/LoginPage";
 
 import IndexChallenge from "@/pages/challenge/indexChallenge";
-import CreateChallenge from "@/pages/challenge/createChallenge/createChallenge";
+import CreateEditChallenge from "@/pages/challenge/createEditChallenge/createEditChallenge";
 import DetailChalenge from "@/pages/challenge/detailChallenge/detailChallenge";
 import ParticipantChallange from "@/pages/challenge/participantChallenge/participantChallenge";
 import EditParticipantChallenge from "@/pages/challenge/editParticipantChallenge/editParticipantChallenge";
@@ -30,11 +30,15 @@ export default function Router() {
       element: <IndexChallenge />,
     },
     {
-      path: "/buat-tantangan",
-      element: <CreateChallenge />,
+      path: "/tantangan/buat-tantangan",
+      element: <CreateEditChallenge />,
     },
     {
-      path: "/detail-tantangan",
+      path: "/tantangan/edit-tantangan",
+      element: <CreateEditChallenge />,
+    },
+    {
+      path: "/tantangan/detail-tantangan",
       element: <DetailChalenge />,
     },
     {
@@ -42,7 +46,7 @@ export default function Router() {
       element: <ParticipantChallange />,
     },
     {
-      path: "/edit-peserta-tantangan",
+      path: "/peserta-tantangan/edit-peserta-tantangan",
       element: <EditParticipantChallenge />,
     },
   ]);

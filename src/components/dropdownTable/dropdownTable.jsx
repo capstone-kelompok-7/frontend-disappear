@@ -27,11 +27,11 @@ function DropdownTable({ status }) {
         </svg>
       </DropdownMenuTrigger>
       <DropdownMenuContent>
-        <Link to="/buat-tantangan">
+        <Link to="/tantangan/edit-tantangan">
           <DropdownMenuItem>Edit</DropdownMenuItem>
         </Link>
         <DropdownMenuItem>Hapus</DropdownMenuItem>
-        <Link to="/detail-tantangan">
+        <Link to="/tantangan/detail-tantangan">
           <DropdownMenuItem>Lihat</DropdownMenuItem>
         </Link>
       </DropdownMenuContent>

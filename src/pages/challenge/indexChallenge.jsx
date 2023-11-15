@@ -92,7 +92,7 @@ function IndexChallenge() {
               className="flex items-center space-x-2 border bg-[#25745A] text-white p-3 rounded-lg"
               label="Buat Tantangan"
               icon="+"
-              onClick={() => navigate("/buat-tantangan")}
+              onClick={() => navigate("/tantangan/buat-tantangan")}
             />
 
             <div className="justify-items-start">

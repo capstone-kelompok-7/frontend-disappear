@@ -69,7 +69,7 @@ function App() {
       Cell: () => (
         <div className="flex">
           <div className="mx-auto">
-            <Link to="/edit-peserta-tantangan">
+            <Link to="/peserta-tantangan/edit-peserta-tantangan">
               <BiEdit className="bg-neutral-700 rounded-[5px] text-white w-[38px] h-[38px]" />
             </Link>
           </div>
