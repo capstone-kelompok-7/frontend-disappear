@@ -2,7 +2,8 @@ import React, { useState } from "react";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import Breadcrumbs from "@/components/breadcrumbs";
-import { Input } from "@/components/input";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 function CreateChallenge() {
   const [gambar, setGambar] = useState(null);
@@ -26,20 +27,22 @@ function CreateChallenge() {
           <div className="mb-10">
             <div className="flex">
               <div className="flex-col w-1/2 pr-8">
+                <label className="font-semibold">Mulai</label>
                 <Input
                   label="Mulai"
                   type="date"
                   name="deadline-tantangan"
-                  className="block w-full rounded-md border border-black shadow-sm py-1 px-4"
+                  className="block w-full rounded-md border border-black shadow-sm py-1 px-4 mt-3"
                 />
               </div>
 
               <div className="flex-col w-1/2 pl-8">
+                <label className="font-semibold">Berakhir</label>
                 <Input
                   label="Berakhir"
                   type="date"
                   name="deadline-tantangan"
-                  className="block w-full rounded-md border border-black shadow-sm py-1 px-4"
+                  className="block w-full rounded-md border border-black shadow-sm py-1 px-4 mt-3"
                 />
               </div>
             </div>
@@ -47,22 +50,24 @@ function CreateChallenge() {
 
           <div className="mb-10 flex">
             <div className="flex-col w-1/2 pr-8">
+              <label className="font-semibold">Nama Tantangan</label>
               <Input
                 type="text"
                 name="nama-tantangan"
                 placeholder="Nama Tantangan"
                 label="Nama Tantangan"
-                className="border border-black w-full rounded-md shadow-sm py-1 px-4"
+                className="border border-black rounded-md shadow-sm py-1 px-4 mt-3"
               />
             </div>
 
             <div className="flex-col w-1/2 pl-8">
+              <label className="font-semibold">EXP</label>
               <Input
                 type="text"
                 name="exp"
                 placeholder="EXP"
                 label="EXP"
-                className="border border-black w-full rounded-md shadow-sm py-1 px-4"
+                className="border border-black rounded-md shadow-sm py-1 px-4 mt-3"
               />
             </div>
           </div>
@@ -71,7 +76,7 @@ function CreateChallenge() {
             <div className="flex-col w-1/2 pr-8">
               <label
                 htmlFor="gambar-tantangan"
-                className="block font-bold text-black"
+                className="block font-semibold text-black"
               >
                 Unggah File
               </label>
@@ -130,17 +135,17 @@ function CreateChallenge() {
             <div className="flex-col w-1/2 pl-8">
               <label
                 htmlFor="deskripsi-tantangan"
-                className="block font-bold text-black"
+                className="block font-semibold text-black"
               >
                 Deskripsi
               </label>
               <div className="grow flex flex-col overflow-auto">
-                <textarea
+                <Textarea
                   id="deskripsi-tantangan"
                   name="deskripsi-tantangan"
                   placeholder="Deskripsi Tantangan"
                   className="p-4 shadow-sm mt-3 block w-full h-[12rem] sm:text-sm border border-black rounded-md resize-none"
-                ></textarea>
+                />
               </div>
             </div>
           </div>
