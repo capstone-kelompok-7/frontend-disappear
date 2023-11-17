@@ -1,22 +1,35 @@
-import React from "react";
 import Layout from "../../components/layout";
-import { AiOutlinePlus } from "react-icons/ai";
-import "daisyui/dist/full.css";
-import { BiEdit } from "react-icons/bi";
-import { RiDeleteBin5Line } from "react-icons/ri";
-import Modal from "react-modal";
-import { useState } from "react";
 import Breadcrumbs from "@/components/breadcrumbs";
+import { FiSearch } from "react-icons/fi";
+import { BiEdit } from "react-icons/bi";
 import Button from "@/components/button";
 import { Input } from "@/components/ui/input";
-import { FiSearch } from "react-icons/fi";
+import Modal from "react-modal";
+import { useState } from "react";
+import PopUp from "./popUp";
+import Tabel from "@/components/table/table";
+import Delete from "./delete";
+import { RiDeleteBinLine } from "react-icons/ri";
+import { PiDotsThreeVerticalBold } from "react-icons/pi";
+import {
+  DropdownMenu,
+  DropdownMenuContent,
+  DropdownMenuItem,
+  DropdownMenuTrigger,
+} from "@/components/ui/dropdown-menu";
 
 Modal.setAppElement("#root");
 
-export default function IndexCategory() {
+export default function IndexPopup() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [inputName, setInputName] = useState("");
+  const [file, setFile] = useState(null);
+  const [popupLabel, setPopupLabel] = useState("");
 
-  const openModal = () => {
+  const openModal = (label, data = null) => {
+    setPopupLabel(label);
+    setInputName(data ? data.Nama : "");
+    setFile(null);
     setIsModalOpen(true);
   };
 
@@ -24,149 +37,143 @@ export default function IndexCategory() {
     setIsModalOpen(false);
   };
 
-  return (
-    <div className="flex">
-      <Layout>
-        <Breadcrumbs pages="Category" />
+  const handlePopup = (popupName, file) => {
+    closeModal();
+  };
 
-        <div className="mt-6 mb-6 mx-10 px-[15px] py-5 shadow-md bg-white rounded-[3px]">
-          <div className="flex items-center pb-7 gap-6">
-            <div>
-              <Button
-                label="Tambah Kategori"
-                icon={<AiOutlinePlus />}
-                onClick={openModal}
-                className="flex items-center space-x-2 border bg-neutral-400 text-white p-2 rounded-[3px]"
-              />
-            </div>
-            <div className="justify-items-start">
-              <div className="flex items-center w-64">
-                <Input
-                  type="text"
-                  placeholder="Cari Kategori"
-                  className="p-3 rounded-[3px]"
-                />
-                <FiSearch className="absolute ml-56 " />
+  const onNameChange = (value) => {
+    setInputName(value);
+  };
+
+  const onFileChange = (selectedFile) => {
+    setFile(selectedFile);
+  };
+
+  const handleDelete = () => {
+    Delete({
+      title: "Yakin mau hapus data?",
+      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+    });
+  };
+
+  const data = [
+    {
+      No: 1,
+      Foto: " ",
+      Nama: "Aksesoris",
+      JumlahProduk: "80",
+    },
+    {
+      No: 2,
+      Foto: " ",
+      Nama: "Tas",
+      JumlahProduk: "80",
+    },
+    {
+      No: 3,
+      Foto: " ",
+      Nama: "Alat Makan",
+      JumlahProduk: "80",
+    },
+  ];
+
+  const columns = [
+    { Header: "No", accessor: "No" },
+    { Header: "Foto", accessor: "Foto" },
+    { Header: "Nama", accessor: "Nama" },
+    {
+      Header: "Jumlah Produk",
+      accessor: "JumlahProduk",
+      Cell: ({ row }) => (
+        <div className="JumlahProduk-cell flex items-center justify-between">
+          <div className="text-center">{row.original.JumlahProduk}</div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <div className="three-dots">
+                <PiDotsThreeVerticalBold />
               </div>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+              <DropdownMenuItem
+                onClick={() => openModal("Edit Kategori", data[0])}
+                style={{ cursor: "pointer" }}
+              >
+                <BiEdit />
+                Edit Kategori
+              </DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDelete}>
+                <RiDeleteBinLine />
+                Delete Kategori
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
+        </div>
+      ),
+    },
+  ];
+
+  return (
+    <>
+      <Layout>
+        <Breadcrumbs pages="Kategori Produk" />
+
+        <div className=" flex flex-col min-h-screen flex-grow overflow-y-auto mx-5 mt-6 px-[15px] py-5 shadow-md rounded-[3px]">
+          <div className="flex items-center pb-7 gap-6">
+            <Button
+              label="Tambah Kategori"
+              icon={
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                >
+                  <path
+                    d="M18 12.75H6C5.59 12.75 5.25 12.41 5.25 12C5.25 11.59 5.59 11.25 6 11.25H18C18.41 11.25 18.75 11.59 18.75 12C18.75 12.41 18.41 12.75 18 12.75Z"
+                    fill="white"
+                  />
+                  <path
+                    d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V6C11.25 5.59 11.59 5.25 12 5.25C12.41 5.25 12.75 5.59 12.75 6V18C12.75 18.41 12.41 18.75 12 18.75Z"
+                    fill="white"
+                  />
+                </svg>
+              }
+              onClick={() => openModal("Tambahkan Kategori!")}
+              className="flex items-center space-x-2 border bg-[#25745A] text-white p-2 rounded-[3px]"
+            />
+
+            <div className="flex items-center w-64 relative">
+              <Input
+                type="text"
+                placeholder="Cari Kategori"
+                className="p-3 rounded-[3px] pr-10"
+              />
+              <FiSearch className="absolute right-3 top-3" />
             </div>
           </div>
 
-          <div className="w-full mx-auto">
-            <div className="overflow-x-auto">
-              <table className="min-w-full bg-white shadow-md rounded border border-neutral-500">
-                <thead>
-                  <tr className="bg-[#C7C7C7] text-black">
-                    <th className="px-6 py-3 text-center font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      NO
-                    </th>
-                    <th className="px-6 py-3 text-center font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      FOTO
-                    </th>
-                    <th className="px-6 py-3 text-center font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      NAMA
-                    </th>
-                    <th className="px-6 py-3 text-center font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      JUMLAH PRODUK
-                    </th>
-                    <th className="px-6 py-3 text-center font-semibold text-black uppercase tracking-wider border border-neutral-500">
-                      AKSI
-                    </th>
-                  </tr>
-                </thead>
-                <tbody>
-                  <tr className="bg-[#FFFFFF]">
-                    <td className="px-6 py-4 text-center whitespace-nowrap border border-neutral-500">
-                      01
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap border border-neutral-500"></td>
-                    <td className="px-6 py-4 text-left whitespace-nowrap border border-neutral-500">
-                      Aksesoris
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap border border-neutral-500">
-                      200
-                    </td>
-                    <td className="px-6 py-4 text-center whitespace-nowrap border border-neutral-500">
-                      <div className="flex justify-center items-center gap-x-3">
-                        <div className="flex justify-center items-center relative gap-2.5 p-2.5 rounded-[2px] icon-white bg-[#414141]">
-                          <BiEdit className="text-white" />
-                        </div>
-                        <div className="flex justify-center items-center relative gap-2.5 p-2.5 rounded-[2px] bg-[#414141]">
-                          <RiDeleteBin5Line className="text-white" />
-                        </div>
-                      </div>
-                    </td>
-                  </tr>
-                </tbody>
-              </table>
-            </div>
-          </div>
+          <Tabel columns={columns} data={data} />
         </div>
       </Layout>
 
-      <Modal
+      <PopUp
         isOpen={isModalOpen}
-        onRequestClose={closeModal}
-        contentLabel="Tambah Kategori Modal"
-        style={{
-          overlay: {
-            backgroundColor: "rgba(0, 0, 0, 0.5)",
-          },
-          content: {
-            background: "none",
-            border: "none",
-            overflow: "hidden",
-          },
-        }}
-      >
-        <div className="flex items-center justify-center font-poppins">
-          <div className="max-w-md w-full p-6 space-y-6 rounded-xl shadow-lg bg-white">
-            <div className="bg-white flex flex-col gap-4 w-full h-[400px] items-center px-12 py-20 rounded">
-              <div className="text-3xl font-semibold tracking-[0.32] leading-[19.6px]">
-                Tambahkan Kategori!
-              </div>
-              <div className="flex flex-col gap-4 w-full h-40 mt-10">
-                <div>
-                  <Input
-                    type="string"
-                    id="namakategori"
-                    label="Nama Kategori"
-                    placeholder="Nama Kategori"
-                    required
-                    className="w-full rounded-[2px] font-poppins"
-                  />
-                </div>
-                <div>
-                  <Input
-                    type="file"
-                    id="berkaskategori"
-                    label="Berkas Kategori"
-                    placeholder="Berkas Kategori"
-                    required
-                    className="w-full mt-3 rounded-[2px] font-poppins"
-                  />
-                </div>
-              </div>
-
-              <div className="flex flex-row justify-between items-start gap-x-10 mt-10">
-                <div className="border-solid shadow-[0px_2px_4px_0px_rgba(0,_0,_0,_0.15)] bg-white flex flex-col h-10 items-center text-center pl-6 py-2 border-black border rounded-full">
-                  <Button
-                    className="text-xl font-semibold font-['Inter'] tracking-[0.2] leading-[19.6px] mr-8"
-                    label="Batal"
-                    onClick={closeModal}
-                  />
-                </div>
-                <div className="border-solid shadow-[0px_2px_4px_0px_rgba(0,_0,_0,_0.15)] bg-[#949494] flex flex-col h-10 items-center py-2  rounded-full">
-                  <Button
-                    type="submit"
-                    className="text-xl text-white font-['Inter'] tracking-[0.2] leading-[19.6px] mx-8"
-                    label="Tambah"
-                  />
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </Modal>
-    </div>
+        closeModal={closeModal}
+        popupLabel={popupLabel}
+        placeholder={
+          popupLabel === "Tambahkan Kategori!" ? "Nama Kategori" : "Nama data"
+        }
+        cancelButtonLabel="Batal"
+        confirmButtonLabel={
+          popupLabel === "Tambahkan Kategori!" ? "Tambah" : "Edit"
+        }
+        onAddPopup={handlePopup}
+        onNameChange={onNameChange}
+        onFileChange={onFileChange}
+        popupName={inputName}
+      />
+    </>
   );
 }
