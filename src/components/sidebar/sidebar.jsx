@@ -78,6 +78,7 @@ export default function SideBar(props) {
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarList
+                to="/pelanggan"
                 label="Pelanggan"
                 icon={<IoPeopleOutline />}
                 isSidebarOpen={isSidebarOpen}

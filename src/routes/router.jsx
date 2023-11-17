@@ -4,7 +4,8 @@ import React from "react";
 import App from "../pages/App";
 import Dashboard from "../pages/dashboard/dashboard";
 import LoginPage from "../pages/login/LoginPage";
-
+import Pelanggan from "../pages/pelanggan/pelanggan";
+import PelangganDetail from "../pages/pelanggan/pelangganDetail";
 import IndexChallenge from "@/pages/challenge/indexChallenge";
 import CreateEditChallenge from "@/pages/challenge/createEditChallenge/createEditChallenge";
 import DetailChallenge from "@/pages/challenge/detailChallenge/detailChallenge";
@@ -27,6 +28,15 @@ export default function Router() {
     {
       path: "/login",
       element: <LoginPage />,
+    },
+
+    {
+      path: "/pelanggan",
+      element: <Pelanggan />,
+    },
+    {
+      path: "/pelanggandetail",
+      element: <PelangganDetail />,
     },
     {
       path: "/tantangan",

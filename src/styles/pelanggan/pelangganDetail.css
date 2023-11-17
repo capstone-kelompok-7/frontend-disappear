@@ -1,0 +1,272 @@
+.head-pelanggan{
+    font-weight: bold;
+    font-size: larger;
+    width: 85%;
+    margin: 2rem auto;
+}
+
+
+/* profile box */
+
+.profile-sect{
+    width: 30%;
+    height: 9.5rem;
+    float: left;
+    margin-left: 8%;
+    border-radius: 2%;
+}
+
+.profile-sect .profile-pict{
+    padding-top: 2rem;
+    padding-left: 1.5rem;
+    font-size: 6rem;
+    float: left;
+}
+
+.profile-sect .profile-info{
+    padding-top: 2rem;
+    padding-right: 2rem;
+    
+    float: right;
+}
+
+.profile-email{
+    font-family: 'inter';
+    font-size: 15px;
+    margin-top: 0.2rem;
+}
+.last-login{
+    font-family: 'inter';
+    font-size: 13px;
+    margin-top: 0.2rem;
+    color: #6E6E6E;
+}
+.profile-name{
+    font-family: 'inter';
+    font-weight: bold;
+    font-size: 20px;
+}
+
+/*exp box */
+.exp-bar{
+    width: 50%;
+    float: right;
+    margin-right: 8%;
+    height: 9.5rem;
+    display: flex; 
+    justify-content: center; 
+    border-radius: 5px;
+}
+
+.progress-bar{
+    width: 85%;
+    padding-top: 3.5rem;
+    position: relative;
+}
+
+.progress-dot {
+    top: 35%;
+    height: 20px;
+    width: 20px;
+    background-color: #e5e7eb;
+    border-radius: 50%;
+    position: absolute;
+    display: inline-block;
+    transition: background-color 0.3s;
+  }
+  
+  .dot-active {
+    background-color: #4b5563; 
+  }
+
+  .exp-notation {
+    position: absolute;
+    top: 15%; 
+    color: #000;
+    font-weight: bold;
+    font-family: inter;
+    white-space: nowrap; /* agar teks tidak patah ke baris baru */
+    transform: translateX(-50%); /* agar teks tetap terpusat dengan progress */
+}
+
+  .level-status{
+    margin-top: 0.5rem;
+    margin-left: -1rem;
+    font-weight: bold;
+    font-family: inter;
+    display: flex;
+    gap: 20.5rem;
+  }
+
+  .gold-exp{
+    margin-left: -3.5rem;
+  }
+  .silver-exp{
+    margin-left: -4.7rem;
+  }
+
+  .exp-minimum{
+    white-space: nowrap;
+    margin-left: -1rem;
+    font-family: inter;
+    display: flex;
+    gap: 20.5rem;
+  }
+
+.silver-minimum{
+    margin-left: -5rem;
+}
+
+.gold-minimum{
+    margin-left: -5rem;
+}
+
+/* user info box */
+.user-info{
+    width: 30%;
+    height: 18rem;
+    float: left;
+    margin-left: 8%;
+    border-radius: 2%;
+    margin-top: 2rem;
+}
+
+.head-user{
+    padding-top: 1rem;
+    padding-left: 1.5rem;
+    font-weight: bold;
+    font-family: 'inter';
+    font-size: 20px;
+}
+
+.columns-user{
+    padding-left: 1.5rem;
+    margin-top: 1.5rem;
+    font-family: 'inter';
+    float: left;
+}
+
+.columns-user p{
+    margin-bottom: 2rem;
+}
+
+.data-user{
+    padding-right: 2rem;
+    margin-top: 1.5rem;
+    font-family: 'inter';
+    float: right;
+}
+
+.data-user p{
+    margin-bottom: 2rem;
+}
+
+
+/* user activity box */
+.user-activity{
+    width: 50%;
+    float: right;
+    margin-top: 2rem;
+    margin-right: 8%;
+    height: 9.5rem;
+    border-radius: 2%;
+}
+
+.head-activity{
+    font-size: 20px;
+    font-weight: bold;
+    font-family: inter;
+}
+
+.pesanan-activity{
+    margin-top: 1.5rem;
+    width: 40%;
+    height: 150%;
+    border-radius: 5px;
+    font-family: inter;
+    float: left;
+}
+
+.total-pesanan{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    font-weight: bold;
+    font-size: 50px;
+}
+
+.pesanan-text{
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.pesanan-sukses{
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 12px;
+    color: #787878;
+}
+
+.pesanan-gagal{
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 12px;
+    color: #787878;
+}
+
+
+.tantangan-activity{
+    margin-top: 1.5rem;
+    margin-right: 4rem;
+    width: 40%;
+    height: 150%;
+    border-radius: 5px;
+    font-family: inter;
+    float: right;
+}
+
+.total-tantangan{
+    display: flex;
+    justify-content: center;
+    margin-top: 2rem;
+    font-weight: bold;
+    font-size: 50px;
+}
+
+.tantangan-text{
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 20px;
+}
+
+.tantangan-sukses{
+    margin-top: 0.5rem;
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 12px;
+    color: #787878;
+}
+
+.tantangan-gagal{
+    display: flex;
+    justify-content: center;
+    font-weight: 500;
+    font-size: 12px;
+    color: #787878;
+}
+
+.button-hapus{
+font-family: inter;
+font-size: 14px;
+color: white;
+float: right;
+margin-right: 11.5rem;
+margin-top: 10rem;
+}
