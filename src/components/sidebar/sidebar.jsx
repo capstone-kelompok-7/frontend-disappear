@@ -116,9 +116,8 @@ export default function SideBar(props) {
                 iconDrop={<IoChevronDown />}
                 isSidebarOpen={isSidebarOpen}
                 sidebarItems={[
-                  { to: "", label: "Tantangan" },
-                  { to: "", label: "Peserta Tantangan" },
-                  // Tambahkan item sidebar lainnya sesuai kebutuhan
+                  { to: "/tantangan", label: "Tantangan" },
+                  { to: "/peserta-tantangan", label: "Peserta Tantangan" },
                 ]}
               />
 
