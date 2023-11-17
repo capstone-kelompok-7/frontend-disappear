@@ -7,7 +7,7 @@ import LoginPage from "../pages/login/LoginPage";
 
 import IndexChallenge from "@/pages/challenge/indexChallenge";
 import CreateEditChallenge from "@/pages/challenge/createEditChallenge/createEditChallenge";
-import DetailChalenge from "@/pages/challenge/detailChallenge/detailChallenge";
+import DetailChallenge from "@/pages/challenge/detailChallenge/detailChallenge";
 import ParticipantChallange from "@/pages/challenge/participantChallenge/participantChallenge";
 import EditParticipantChallenge from "@/pages/challenge/editParticipantChallenge/editParticipantChallenge";
 
@@ -39,7 +39,7 @@ export default function Router() {
     },
     {
       path: "/tantangan/detail-tantangan",
-      element: <DetailChalenge />,
+      element: <DetailChallenge />,
     },
     {
       path: "/peserta-tantangan",

@@ -2,7 +2,14 @@ import React, { useState } from "react";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import Breadcrumbs from "@/components/breadcrumbs";
-import { Input } from "@/components/input";
+import { Input } from "@/components/ui/input";
+import {
+  Select,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 
 function editPesertaChallange() {
   const [gambar, setGambar] = useState(null);
@@ -26,45 +33,53 @@ function editPesertaChallange() {
           <div className="mb-9">
             <div className="flex">
               <div className="flex-col w-1/4 pr-8">
+                <label className="font-semibold">Username Instagram</label>
                 <Input
                   type="text"
                   name="usernameInstagram"
                   label="Username Instagram"
-                  className="w-full rounded-md border border-black shadow-sm py-1 px-4"
+                  className="w-full rounded-md border border-black shadow-sm py-1 px-4 mt-3"
                 />
               </div>
 
               <div className="flex-col w-1/4 pr-8">
+                <label className="font-semibold">EXP Tantangan</label>
                 <Input
                   type="text"
                   name="expTantangan"
                   label="EXP Tantangan"
-                  className="w-full rounded-md border border-black shadow-sm py-1 px-4"
+                  className="w-full rounded-md border border-black shadow-sm py-1 px-4 mt-3"
                 />
               </div>
 
               <div className="flex-col w-1/2 pl-8">
-                <label htmlFor="status" className="block font-bold text-black">
+                <label
+                  htmlFor="status"
+                  className="block font-semibold text-black"
+                >
                   Status
                 </label>
-                <select
-                  label="Select Version"
-                  className="mt-3 border border-black px-4 py-1 rounded-md w-full"
-                >
-                  <option>Valid</option>
-                  <option>Tidak Valid</option>
-                </select>
+                <Select>
+                  <SelectTrigger className="w-full border border-black mt-3">
+                    <SelectValue placeholder="Status" />
+                  </SelectTrigger>
+                  <SelectContent className="border border-black">
+                    <SelectItem value="valid">Valid</SelectItem>
+                    <SelectItem value="tidakValid">Tidak Valid</SelectItem>
+                  </SelectContent>
+                </Select>
               </div>
             </div>
           </div>
 
           <div className="flex">
             <div className="flex-col w-1/2 pr-8 mb-10">
+              <label className="font-semibold">Berpartisipasi</label>
               <Input
                 label="Berpartisipasi"
                 type="date"
                 name="berpartisipasi"
-                className=" block w-full rounded-md border border-black shadow-sm py-1 px-4"
+                className=" block w-full rounded-md border border-black shadow-sm py-1 px-4 mt-3"
               />
             </div>
 
@@ -90,7 +105,7 @@ function editPesertaChallange() {
             <div className="flex-col w-1/2 pr-8">
               <label
                 htmlFor="gambar-tantangan"
-                className="block font-bold text-black"
+                className="block font-semibold text-black"
               >
                 Bukti Berpartisipasi
               </label>
