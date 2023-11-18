@@ -75,4 +75,3 @@ module.exports = {
   },
   plugins: [require("tailwindcss-animate"),"flowbite/plugin", require("daisyui")]
 };
-;

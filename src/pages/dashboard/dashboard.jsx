@@ -55,13 +55,6 @@ export default function Dashboard() {
     aspectRatio: 2,
   };
 
-  const handleDelete = () => {
-    Delete({
-      title: "Yakin mau hapus data?", // You can customize the title
-      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!", // You can customize the text
-    });
-  };
-
   return (
     <Layout>
       <div className=" my-5 h-full">
