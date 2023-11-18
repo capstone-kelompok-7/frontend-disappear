@@ -6,7 +6,10 @@ module.exports = {
     "./components/**/*.{js,jsx}",
     "./app/**/*.{js,jsx}",
     "./src/**/*.{js,jsx}",
+<<<<<<< HEAD
     "node_modules/flowbite-react/**/*.{js,jsx,ts,tsx}",
+=======
+>>>>>>> 3678b39c150c8d64517a1347091d1e31239a21a7
   ],
   theme: {
     container: {
