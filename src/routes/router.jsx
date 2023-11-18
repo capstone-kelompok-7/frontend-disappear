@@ -17,7 +17,6 @@ import IndexProducts from "@/pages/products/indexProducts";
 import CreateEditProducts from "@/pages/products/createEditProducts/createEditProducts";
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
 import Review from "../pages/review/review";
-import App from "../pages/App";
 
 export default function Router() {
   const router = createBrowserRouter([
