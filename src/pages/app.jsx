@@ -10,6 +10,9 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { IoChevronDown } from "react-icons/io5";
+import Delete from "../components/delete/delete";
+import { RiDeleteBin5Line } from "react-icons/ri";
 
 function App() {
   const data = [
@@ -70,6 +73,13 @@ function App() {
     { Header: "Level", accessor: "Level" },
   ];
 
+  const handleDelete = () => {
+    Delete({
+      title: "Yakin mau hapus data?",
+      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+    });
+  };
+
   return (
     <Layout>
       <div className="">
@@ -111,6 +121,11 @@ function App() {
           </div>
         </div>
       </div>
+
+      <div onClick={handleDelete}>
+        <RiDeleteBin5Line />
+      </div>
+
       <Tabel columns={columns} data={data} />
     </Layout>
   );

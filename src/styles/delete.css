@@ -1,0 +1,42 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:wght@400;700&display=swap");
+
+.rounded .swal2-confirm {
+  border-radius: 55px;
+  width: 180px;
+  height: auto;
+  padding: 10px 25px;
+  margin-right: 10px;
+  font-weight: bold;
+  margin-bottom: 10px;
+  margin-left: 25px;
+}
+.rounded .swal2-cancel {
+  border-radius: 55px;
+  border: 1px solid #000;
+  background-color: #fff;
+  color: #000;
+  width: 180px;
+  height: auto;
+  padding: 10px 25px;
+  font-weight: bold;
+  margin-bottom: 10px;
+}
+.rounded-popup {
+  border-radius: 10px;
+  background-color: #fff;
+  padding: 10px;
+  width: 550px;
+  height: 430px;
+}
+.swal2-popup {
+  font-size: 18px;
+  font-family: "Poppins", sans-serif;
+}
+.swal2-title {
+  font-size: 25px;
+  font-family: "Poppins", sans-serif;
+}
+.swal2-content {
+  font-size: 12px;
+  font-family: "Poppins", sans-serif;
+}

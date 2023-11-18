@@ -2,6 +2,8 @@
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import React from "react";
 
+import App from "../pages/App";
+import IndexCategory from "../pages/category/indexCategory";
 import Dashboard from "../pages/dashboard/dashboard";
 import LoginPage from "../pages/login/LoginPage";
 import Pelanggan from "../pages/pelanggan/pelanggan";
@@ -15,13 +17,16 @@ import IndexProducts from "@/pages/products/indexProducts";
 import CreateEditProducts from "@/pages/products/createEditProducts/createEditProducts";
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
 import Review from "../pages/review/review";
-import App from "../pages/App";
 
 export default function Router() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <App />,
+    },
+    {
+      path: "/category",
+      element: <IndexCategory />,
     },
     {
       path: "/dashboard",
