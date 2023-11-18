@@ -1,17 +1,22 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import Button from "@/components/button";
-
 import Layout from "@/components/layout";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
+import React, { useState } from "react";
+import DatePicker from "react-datepicker";
+import "react-datepicker/dist/react-datepicker.css";
 
 
 function CreateVoucher() {
+  const { toast } = useToast();
+  const [startDate, setStartDate] = useState(new Date());
+
   return (
     <Layout>
-      
-        <Breadcrumbs pages="Buat Kupon" /> 
-     
+      <Breadcrumbs pages="Buat Kupon" />
 
       <div className="my-5 py-5 px-11 rounded-md shadow-lg border-2 ">
         {/* baris 1 */}
@@ -22,7 +27,13 @@ function CreateVoucher() {
           </div>
           <div className="w-full">
             <label htmlFor="">Mulai</label>
-            <Input type="text" placeholder="DD-MM-YYYY" />
+            <div className="w-full">
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                className="w-full p-2 border focus:border-2 border-gray-200 rounded-md focus:outline-none focus:border-black" 
+              />
+            </div>
           </div>
         </div>
         {/* baris 2 */}
@@ -32,9 +43,14 @@ function CreateVoucher() {
             <Input type="text" placeholder="Kode Kupon" />
           </div>
           <div className="w-full">
-            
             <label htmlFor="">Berhenti</label>
-            <Input type="text" placeholder="DD-MM-YYYY" />
+            <div className="w-full">
+              <DatePicker
+                selected={startDate}
+                onChange={(date) => setStartDate(date)}
+                className="w-full p-2 border focus:border-2 border-gray-200 rounded-md focus:outline-none focus:border-black" 
+              />
+            </div>
           </div>
         </div>
         {/* baris 3 */}
@@ -61,19 +77,43 @@ function CreateVoucher() {
         </div>
         {/* baris 5 */}
         <label htmlFor="">Deskripsi Kupon</label>
-        <Textarea classname="h-36" placeholder="Deskripsi Kupon"/>
+        <Textarea classname="h-36" placeholder="Deskripsi Kupon" />
 
         <div className="flex gap-2 justify-end py-5">
-        <Button
+          <Button
             label="Batal"
             className="border-[#25745A] text-[#25745A] border-2 py-2 px-3 rounded-lg"
+            onClick={() => {
+              toast({
+                variant: "destructive",
+                title: (
+                  <div className="flex items-center">
+                    <CrossCircledIcon />
+                    <span className="ml-2">Gagal Menambahkan Kupon!</span>
+                  </div>
+                ),
+                description:
+                  "Oh, noo! Sepertinya ada masalah saat proses perubahan data, nih. Periksa koneksimu dan coba lagi, yuk!",
+              });
+            }}
           />
           <Button
             label="Buat Voucher"
             className="bg-[#25745A] text-white py-2 px-3 rounded-lg"
+            onClick={() => {
+              toast({
+                title: (
+                  <div className="flex items-center">
+                    <CheckCircledIcon />
+                    <span className="ml-2">Berhasil Menambahkan Kupon!</span>
+                  </div>
+                ),
+                description:
+                  "Data kupon telah berhasil ditambahkan, nih. Silahkan nikmati fitur lainnya!",
+              });
+            }}
           />
         </div>
-        
       </div>
     </Layout>
   );

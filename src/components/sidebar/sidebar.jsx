@@ -123,6 +123,7 @@ export default function SideBar(props) {
                 ]}
               />
               <SidebarList
+                to="/kupon"
                 label="Kupon"
                 icon={<IoCashOutline />}
                 isSidebarOpen={isSidebarOpen}

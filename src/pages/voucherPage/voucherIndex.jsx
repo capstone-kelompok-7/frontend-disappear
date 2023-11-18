@@ -1,3 +1,4 @@
+import React from "react";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import { Link } from "react-router-dom";
@@ -11,8 +12,34 @@ import {
 import Tabel from "@/components/table/table";
 import { VscKebabVertical } from "react-icons/vsc";
 import Breadcrumbs from "@/components/breadcrumbs";
+import Swal from 'sweetalert2';
+import "@/styles/voucher/sweetalert2.min.css"
 
 function VoucherApp() {
+
+  const handleDeleteClick = () => {
+    Swal.fire({
+      title: 'Yakin mau hapus data?',
+      text: 'Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!',
+      icon: 'error',
+      showCancelButton: true,
+      cancelButtonText: 'Batal',
+      confirmButtonText: 'Hapus',
+      customClass: {
+        confirmButton: 'sweetalert-button-confirm',
+        cancelButton: 'sweetalert-button-cancel',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+        Swal.fire(
+          'Terhapus!',
+          'Data telah dihapus.',
+          'success'
+        );
+      }
+    });
+  };
+
   const data = [
     {
       No: 1,
@@ -31,8 +58,10 @@ function VoucherApp() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem>Edit</DropdownMenuItem>
-              <DropdownMenuItem>Hapus</DropdownMenuItem>
+              <Link to="/kupon/edit-kupon">
+                <DropdownMenuItem>Edit</DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem onClick={handleDeleteClick}>Hapus</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         ),
@@ -100,7 +129,7 @@ function VoucherApp() {
           </DropdownMenu>
         </div>
 
-        <Tabel columns={columns} data={data}/>
+        <Tabel columns={columns} data={data} />
       </div>
     </Layout>
   );
