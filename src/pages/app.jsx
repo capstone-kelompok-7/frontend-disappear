@@ -11,7 +11,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { IoChevronDown } from "react-icons/io5";
-import Delete from "./category/delete";
+import Delete from "../components/delete/delete";
 import { RiDeleteBin5Line } from "react-icons/ri";
 
 function App() {

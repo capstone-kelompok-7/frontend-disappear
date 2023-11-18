@@ -8,7 +8,7 @@ import Modal from "react-modal";
 import { useState } from "react";
 import PopUp from "./popUp";
 import Tabel from "@/components/table/table";
-import Delete from "./delete";
+import Delete from "../../components/delete/delete";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import {
