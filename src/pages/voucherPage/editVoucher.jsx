@@ -68,7 +68,7 @@ function EditVoucher() {
             className="border-[#25745A] text-[#25745A] border-2 py-2 px-3 rounded-lg"
           />
           <Button
-            label="Buat Voucher"
+            label="Simpan Perubahan"
             className="bg-[#25745A] text-white py-2 px-3 rounded-lg"
           />
         </div>

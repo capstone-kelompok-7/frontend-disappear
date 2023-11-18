@@ -62,14 +62,18 @@ function CreateVoucher() {
         {/* baris 5 */}
         <label htmlFor="">Deskripsi Kupon</label>
         <Textarea classname="h-36" placeholder="Deskripsi Kupon"/>
-        
 
-        <div className="grid justify-items-end py-5">
+        <div className="flex gap-2 justify-end py-5">
+        <Button
+            label="Batal"
+            className="border-[#25745A] text-[#25745A] border-2 py-2 px-3 rounded-lg"
+          />
           <Button
-            label="Buat Kupon"
+            label="Buat Voucher"
             className="bg-[#25745A] text-white py-2 px-3 rounded-lg"
           />
         </div>
+        
       </div>
     </Layout>
   );
