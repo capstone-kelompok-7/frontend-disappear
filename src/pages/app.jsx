@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Tabel from "../components/table/table";
 import Layout from "../components/layout";
 import { Input } from "@/components/ui/input";
@@ -13,6 +12,7 @@ import {
 import { IoChevronDown } from "react-icons/io5";
 import Delete from "../components/delete/delete";
 import { RiDeleteBin5Line } from "react-icons/ri";
+import Star from "@/components/review/star";
 
 function App() {
   const data = [
@@ -79,13 +79,14 @@ function App() {
       text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
     });
   };
-}
-function Index() {
+
+  const apiStarValue = 5;
   return (
     <Layout>
       <div className="">
         {/* ISI CONTENT DISINI */}
         <Breadcrumbs pages="Halaman" />
+        <Star starValue={apiStarValue} />
         <h1>ISI CONTENT DISINI</h1>
         <div className="grid w-full max-w-sm items-center gap-1.5">
           <label htmlFor="picture">Picture</label>
@@ -132,4 +133,4 @@ function Index() {
   );
 }
 
-export default Index;
+export default App;
