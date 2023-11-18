@@ -97,11 +97,11 @@ export default function Router() {
       element: <VoucherApp />,
     },
     {
-      path: "/buatkupon",
+      path: "/kupon/buat-kupon",
       element: <CreateVoucher />,
     },
     {
-      path: "/editkupon",
+      path: "/kupon/edit-kupon",
       element: <EditVoucher />,
     },
   ]);

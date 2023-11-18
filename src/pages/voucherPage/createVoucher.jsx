@@ -1,7 +1,9 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import Button from "@/components/button";
+
 import Layout from "@/components/layout";
 import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 
 function CreateVoucher() {
@@ -30,6 +32,7 @@ function CreateVoucher() {
             <Input type="text" placeholder="Kode Kupon" />
           </div>
           <div className="w-full">
+            
             <label htmlFor="">Berhenti</label>
             <Input type="text" placeholder="DD-MM-YYYY" />
           </div>
@@ -58,13 +61,13 @@ function CreateVoucher() {
         </div>
         {/* baris 5 */}
         <label htmlFor="">Deskripsi Kupon</label>
-        <Input type="text" placeholder="Deskripsi Kupon" className="h-36" />
+        <Textarea classname="h-36" placeholder="Deskripsi Kupon"/>
         
 
         <div className="grid justify-items-end py-5">
           <Button
             label="Buat Kupon"
-            className="bg-[#909090] text-white py-2 px-3 rounded-lg"
+            className="bg-[#25745A] text-white py-2 px-3 rounded-lg"
           />
         </div>
       </div>

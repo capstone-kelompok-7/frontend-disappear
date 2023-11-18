@@ -65,11 +65,11 @@ function VoucherApp() {
 
       <div className=" my-5 py-5 px-11 rounded-md shadow-lg border-2">
         <div className="flex justify-between items-center pb-5">
-          <Link to="/buatkupon">
+          <Link to="/kupon/buat-kupon">
             <Button
               label="Tambahkan Kupon"
               icon={<IoAddOutline />}
-              className="bg-[#909090] text-white py-3 px-5 rounded-lg"
+              className="bg-[#25745A] text-white py-3 px-5 rounded-lg"
             />
           </Link>
 
@@ -100,7 +100,7 @@ function VoucherApp() {
           </DropdownMenu>
         </div>
 
-        <Tabel columns={columns} data={data} />
+        <Tabel columns={columns} data={data}/>
       </div>
     </Layout>
   );
