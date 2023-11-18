@@ -1,7 +1,7 @@
+/* eslint-disable no-unused-vars */
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import React from "react";
 
-import App from "../pages/App";
 import Dashboard from "../pages/dashboard/dashboard";
 import LoginPage from "../pages/login/LoginPage";
 import Pelanggan from "../pages/pelanggan/pelanggan";
@@ -14,6 +14,8 @@ import EditParticipantChallenge from "@/pages/challenge/editParticipantChallenge
 import IndexProducts from "@/pages/products/indexProducts";
 import CreateEditProducts from "@/pages/products/createEditProducts/createEditProducts";
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
+import Review from "../pages/review/review";
+import App from "../pages/App";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -77,6 +79,10 @@ export default function Router() {
     {
       path: "/produk/detail-produk",
       element: <DetailProducts />,
+    },
+    {
+      path: "/star",
+      element: <Review />,
     },
   ]);
   return <RouterProvider router={router} />;
