@@ -75,7 +75,6 @@
   }
 }
 
-
 .ProseMirror {
   @apply border border-black h-[25rem] rounded-sm overflow-auto;
 }

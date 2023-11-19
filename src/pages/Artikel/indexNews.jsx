@@ -10,26 +10,26 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import Layout from "../components/layout";
-import { getArtikel } from "../utils/api/artikel/apiArtikel";
-import CardArtikel from "@/components/cardartikel/cardArtikel";
+import Layout from "../../components/layout";
+import { Link } from "react-router-dom";
 
 function IndexNews() {
-  const [artikel, setArtikel] = useState([]);
+  // integrasinya
 
-  useEffect(() => {
-    fetchArtikel();
-  }, []);
+  // const [artikel, setArtikel] = useState([]);
 
-  async function fetchArtikel() {
-    try {
-      const result = await getArtikel();
-      setArtikel(result.data);
-      console.log(result.data);
-    } catch (error) {
-      toast.error(error.message);
-    }
-  }
+  // useEffect(() => {
+  //   fetchArtikel();
+  // }, []);
+
+  // async function fetchArtikel() {
+  //   try {
+  //     const result = await getArtikel();
+  //     setArtikel(result.data);
+  //   } catch (error) {
+  //     toast.error(error.message);
+  //   }
+  // }
 
   return (
     <Layout>
@@ -39,10 +39,12 @@ function IndexNews() {
       <div className="mt-9 border-t-2 border-l-2 px-4 pt-4">
         <div className="flex justify-between">
           <div className="flex space-x-3">
-            <button className="flex items-center space-x-2 border bg-slate-500 hover:bg-slate-200 text-white hover:text-black hover:border-black p-4 rounded-lg">
-              <AiOutlinePlus />
-              <div>Buat Artikel</div>
-            </button>
+            <Link to="/create-news">
+              <button className="flex items-center space-x-2 border bg-slate-500 hover:bg-slate-200 text-white hover:text-black hover:border-black p-4 rounded-lg">
+                <AiOutlinePlus />
+                <div>Buat Artikel</div>
+              </button>
+            </Link>
             <div className="flex items-center">
               <input
                 type="text"
@@ -81,17 +83,19 @@ function IndexNews() {
             </DropdownMenu>
           </div>
         </div>
-        <div className="max-h-[38rem] overflow-y-auto">
-          {artikel.map((item) => (
+        {/* implementasi apinya */}
+
+        {/* <div className="max-h-[38rem] overflow-y-auto">
+          {artikel.map((data) => (
             <CardArtikel
-              created_at={item.created_at}
-              key={item.id}
-              title={item.title}
-              content={item.content}
-              image_url={item.image_url}
+              created_at={data.created_at}
+              key={data.id}
+              title={data.title}
+              content={data.content}
+              image_url={data.image_url}
             />
           ))}
-        </div>
+        </div> */}
       </div>
     </Layout>
   );
