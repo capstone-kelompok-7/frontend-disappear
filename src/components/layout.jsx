@@ -5,6 +5,7 @@ import React from "react";
 import { useSidebar } from "../utils/states/sidebarContext";
 import SideBar from "./sidebar/sidebar";
 import Navbar from "./sidebar/navbar";
+import { Toaster } from "./ui/toaster";
 
 export default function Layout(props) {
   const { children } = props;
@@ -21,6 +22,7 @@ export default function Layout(props) {
           />
         </div>
         <div className="flex flex-col flex-grow mx-12">{children}</div>
+        <Toaster />
       </div>
     </div>
   );
