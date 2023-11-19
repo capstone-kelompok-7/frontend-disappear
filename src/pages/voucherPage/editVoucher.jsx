@@ -27,13 +27,7 @@ function EditVoucher() {
           </div>
           <div className="w-full">
             <label htmlFor="">Mulai</label>
-            <div className="w-full">
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                className="w-full p-2 border focus:border-2 border-gray-200 rounded-md focus:outline-none focus:border-black" 
-              />
-            </div>
+            <Input type="date" />
           </div>
         </div>
         {/* baris 2 */}
@@ -44,13 +38,7 @@ function EditVoucher() {
           </div>
           <div className="w-full">
             <label htmlFor="">Berhenti</label>
-            <div className="w-full">
-              <DatePicker
-                selected={startDate}
-                onChange={(date) => setStartDate(date)}
-                className="w-full p-2 border focus:border-2 border-gray-200 rounded-md focus:outline-none focus:border-black" 
-              />
-            </div>
+            <Input type="date" />
           </div>
         </div>
         {/* baris 3 */}
