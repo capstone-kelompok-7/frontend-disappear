@@ -12,8 +12,6 @@ import {
 import Tabel from "@/components/table/table";
 import { VscKebabVertical } from "react-icons/vsc";
 import Breadcrumbs from "@/components/breadcrumbs";
-import Swal from 'sweetalert2';
-import "@/styles/voucher/sweetalert2.min.css"
 import Delete from "@/components/delete/delete";
 
 function VoucherApp() {
