@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import React from "react";
 
@@ -21,11 +20,20 @@ import VoucherApp from "../pages/voucherPage/voucherIndex";
 import CreateVoucher from "@/pages/voucherPage/createVoucher";
 import EditVoucher from "../pages/voucherPage/editVoucher";
 
+import DetailNews from "../pages/Artikel/detailNews";
+import CreateNews from "../pages/Artikel/createNews";
+import EditNews from "@/pages/Artikel/editNews";
+import IndexNews from "../pages/Artikel/indexNews";
+
 export default function Router() {
   const router = createBrowserRouter([
     {
       path: "/",
       element: <App />,
+    },
+    {
+      path: "/category",
+      element: <IndexCategory />,
     },
     {
       path: "/category",
@@ -103,6 +111,22 @@ export default function Router() {
     {
       path: "/kupon/edit-kupon",
       element: <EditVoucher />,
+    },
+    {
+      path: "/create-news",
+      element: <CreateNews />,
+    },
+    {
+      path: "/edit-news",
+      element: <EditNews />,
+    },
+    {
+      path: "/detail-news",
+      element: <DetailNews />,
+    },
+    {
+      path: "/artikel",
+      element: <IndexNews />,
     },
   ]);
   return <RouterProvider router={router} />;

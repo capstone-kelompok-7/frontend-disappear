@@ -79,7 +79,8 @@ function App() {
       text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
     });
   };
-
+}
+function Index() {
   return (
     <Layout>
       <div className="">
@@ -131,4 +132,4 @@ function App() {
   );
 }
 
-export default App;
+export default Index;

@@ -1,7 +1,6 @@
-import React from "react";
-
-function Input(props) {
-  const { label, type, className, placeholder, hidden } = props;
+function Inputt(props) {
+  const { label, type, className, placeholder, hidden, name, value, onChange } =
+    props;
 
   return (
     <div className="flex flex-col mb-4 w-full">
@@ -11,10 +10,15 @@ function Input(props) {
         type={type}
         placeholder={placeholder}
         hidden={hidden}
+        name={name}
+        value={value}
+        onChange={onChange}
       />
     </div>
   );
 }
+
+import React from "react";
 
 function Select(props) {
   const { label, options, value, onChange } = props;
@@ -37,4 +41,4 @@ function Select(props) {
   );
 }
 
-export { Input, Select };
+export { Inputt, Select };
