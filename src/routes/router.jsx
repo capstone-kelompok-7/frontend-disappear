@@ -18,11 +18,10 @@ import CreateEditProducts from "@/pages/products/createEditProducts/createEditPr
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
 import Review from "../pages/review/review";
 
-import App from "../pages/indexNews";
 import DetailNews from "../pages/Artikel/detailNews";
 import CreateNews from "../pages/Artikel/createNews";
 import EditNews from "@/pages/Artikel/editNews";
-import IndexNews from "../pages/indexNews";
+import IndexNews from "../pages/Artikel/indexNews";
 
 export default function Router() {
   const router = createBrowserRouter([

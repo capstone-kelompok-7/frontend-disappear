@@ -6,6 +6,9 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
+import DOMPurify from "dompurify";
+import { Link } from "react-router-dom";
+
 function CardArtikel({ title, content, image_url, created_at }) {
   const truncateContent = (text, maxWords) => {
     const words = text.split(" ");
@@ -14,12 +17,19 @@ function CardArtikel({ title, content, image_url, created_at }) {
       : text;
   };
 
+  const truncatedContent = truncateContent(content, 50);
+
+  const cleanContent = DOMPurify.sanitize(truncatedContent);
+
   return (
     <div className="flex border-y-4 p-4 mt-4 mb-4 shadow-md space-x-8 items-center">
       <div className="flex-grow">
         <p>{created_at}</p>
         <h2 className="text-xl font-bold mb-2">{title}</h2>
-        <p className="text-black">{truncateContent(content, 100)}</p>
+        <p
+          className="text-black"
+          dangerouslySetInnerHTML={{ __html: cleanContent }}
+        />
         <div className="flex justify-end p-4">
           <DropdownMenu>
             <DropdownMenuTrigger>
@@ -61,7 +71,7 @@ function CardArtikel({ title, content, image_url, created_at }) {
           </DropdownMenu>
         </div>
       </div>
-      <div className="items-center flex ma">
+      <div className="items-center flex">
         <img
           className="w-[50rem] h-[15rem] rounded-md object-cover object-center"
           src={image_url}
