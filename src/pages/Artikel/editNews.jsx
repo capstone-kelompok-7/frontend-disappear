@@ -7,7 +7,7 @@ import { Inputt } from "../../components/input";
 import TextEditor from "@/components/texteditor/tipTap";
 import { Link } from "react-router-dom";
 
-function CreateNews() {
+function EditNews() {
   return (
     <Layout>
       <form>
@@ -79,4 +79,4 @@ function CreateNews() {
   );
 }
 
-export default CreateNews;
+export default EditNews;

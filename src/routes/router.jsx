@@ -16,6 +16,10 @@ import IndexProducts from "@/pages/products/indexProducts";
 import CreateEditProducts from "@/pages/products/createEditProducts/createEditProducts";
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
 import Review from "../pages/review/review";
+import CreateNews from "@/pages/Artikel/createNews";
+import DetailNews from "@/pages/Artikel/detailNews";
+import EditNews from "@/pages/Artikel/editNews";
+import IndexNews from "@/pages/Artikel/indexNews";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -26,6 +30,22 @@ export default function Router() {
     {
       path: "/category",
       element: <IndexCategory />,
+    },
+    {
+      path: "/artikel",
+      element: <IndexNews />,
+    },
+    {
+      path: "/create-news",
+      element: <CreateNews />,
+    },
+    {
+      path: "/edit-news",
+      element: <EditNews />,
+    },
+    {
+      path: "/detail-news",
+      element: <DetailNews />,
     },
     {
       path: "/dashboard",
