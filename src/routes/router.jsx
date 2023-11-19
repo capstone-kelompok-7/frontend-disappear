@@ -49,7 +49,7 @@ export default function Router() {
       element: <Pelanggan />,
     },
     {
-      path: "/pelanggandetail",
+      path: "/pelanggan/pelanggandetail",
       element: <PelangganDetail />,
     },
     {
