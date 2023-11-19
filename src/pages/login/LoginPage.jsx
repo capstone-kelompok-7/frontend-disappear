@@ -1,46 +1,43 @@
 import React, { useState } from "react";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/button";
+import Label from "@/components/label";
+import rectangle from "@/assets/Rectangle292.png";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="w-full h-full relative overflow-hidden bg-white">
+    <div className="w-full h-full flex items-start">
+      <div className="w-1/2 h-screen relative overflow-hidden">
+        <img src={rectangle} className="w-full h-full" alt="" />
+      </div>
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
-        <div className="w-full bg-gray-100 rounded-lg shadow md:mt-0 sm:max-w-md xl:p-0">
+        <div className="w-full">
           <div className="p-6 space-y-4 md:space-y-6 sm:p-8">
-            <h1 className="text-xl font-bold leading-tight tracking-tight text-gray-900 md:text-2xl text-center">
-              MASUK AKUN
+            <h1 className="flex-grow-0 flex-shrink-0 text-[50px] font-bold text-center text-[#25745a]">
+              Selamat Datang!
             </h1>
             <form className="space-y-4 md:space-y-6" action="#">
               <div>
-                <label
-                  htmlFor="email"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Email
-                </label>
+                <Label htmlFor="email">Email</Label>
                 <Input
                   type="email"
                   name="email"
                   id="email"
                   placeholder="Masukkan email anda"
+                  className="bg-neutral-100"
                   required
                 />
               </div>
               <div style={{ position: "relative" }}>
-                <label
-                  htmlFor="password"
-                  className="block mb-2 text-sm font-medium text-gray-900"
-                >
-                  Kata Sandi
-                </label>
+                <Label htmlFor="password">Kata Sandi</Label>
                 <Input
                   type={showPassword ? "text" : "password"}
                   name="password"
                   id="password"
                   placeholder="Masukkan kata sandi anda"
+                  className="bg-neutral-100"
                   required
                 />
                 <svg
@@ -63,9 +60,25 @@ const LoginPage = () => {
                   ></path>
                 </svg>
               </div>
+              <div class="flex items-center justify-between">
+                <div class="flex items-start">
+                  <div class="flex items-center h-5">
+                    <Input
+                      id="remember"
+                      type="checkbox"
+                      className="w-4 h-4 left-[-1px] top-[-1px] rounded-sm border border-[#25745a]"
+                    ></Input>
+                  </div>
+                  <div class="ml-3 text-sm">
+                    <Label for="remember" className="text-[#808080]">
+                      Ingat Saya
+                    </Label>
+                  </div>
+                </div>
+              </div>
               <Button
                 type="submit"
-                className="w-full text-dark bg-[#767676] focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center justify-center"
+                className="w-full text-dark bg-[#25745a] text-white focus:ring-4 focus:outline-none focus:ring-primary-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center flex items-center justify-center"
                 label="Masuk"
               ></Button>
             </form>
