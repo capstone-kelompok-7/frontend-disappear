@@ -26,7 +26,7 @@ function EditNews() {
           <hr className="border border-black mt-5" />
           <div className="mt-6 ml-4 flex space-x-3">
             <Inputt
-              className="border rounded-sm border-black p-2"
+              className="border rounded-sm border-black p-2 bg-white"
               type="text"
               name="title"
               label="Judul"

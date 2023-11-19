@@ -6,7 +6,7 @@ import { Link } from "react-router-dom";
 function DetailNews() {
   return (
     <Layout>
-      <div className="mx-[41px] mt-5 text-xl">
+      <div className="mt-5 text-xl">
         <Link to="/artikel">
           <button className="flex items-center space-x-2">
             <IoArrowBack />
@@ -14,7 +14,7 @@ function DetailNews() {
           </button>
         </Link>
       </div>
-      <div className="mt-9 mx-[70px] border-t-2 border-l-2 p-4 flex">
+      <div className="mt-5 mx-8 border-t-2 border-l-2 p-4 flex">
         <div>
           <h1>apa</h1>
           <h1>apa</h1>

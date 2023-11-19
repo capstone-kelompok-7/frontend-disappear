@@ -111,8 +111,6 @@ export default function Router() {
     {
       path: "/kupon/edit-kupon",
       element: <EditVoucher />,
-      path: "/detail-news",
-      element: <DetailNews />,
     },
     {
       path: "/create-news",
@@ -127,36 +125,8 @@ export default function Router() {
       element: <DetailNews />,
     },
     {
-      path: "/create-news",
-      element: <CreateNews />,
-    },
-    {
-      path: "/edit-news",
-      element: <EditNews />,
-    },
-    {
-      path: "/detail-news",
-      element: <DetailNews />,
-    },
-    {
-      path: "/create-news",
-      element: <CreateNews />,
-    },
-    {
-      path: "/edit-news",
-      element: <EditNews />,
-    },
-    {
-      path: "/detail-news",
-      element: <DetailNews />,
-    },
-    {
-      path: "/create-news",
-      element: <CreateNews />,
-    },
-    {
-      path: "/edit-news",
-      element: <EditNews />,
+      path: "/artikel",
+      element: <IndexNews />,
     },
   ]);
   return <RouterProvider router={router} />;

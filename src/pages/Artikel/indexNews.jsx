@@ -49,7 +49,7 @@ function IndexNews() {
               <input
                 type="text"
                 placeholder="Cari Artikel"
-                className="border pl-4 p-4 px-14 rounded-lg"
+                className="border pl-4 p-4 px-14 rounded-lg bg-white"
               />
               <FiSearch className="absolute ml-56" />
             </div>

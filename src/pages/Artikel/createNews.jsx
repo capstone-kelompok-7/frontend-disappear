@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { IoMdCloudUpload } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
 import Layout from "../../components/layout";
-import { Inputt } from "../../components/input";
+import { Inputt } from "@/components/input";
 import TextEditor from "@/components/texteditor/tipTap";
 import { Link } from "react-router-dom";
 
@@ -25,7 +25,7 @@ function CreateNews() {
           <hr className="border border-black mt-5" />
           <div className="mt-6 ml-4 flex space-x-3">
             <Inputt
-              className="border rounded-sm border-black p-2"
+              className="border rounded-sm border-black p-2 bg-white"
               type="text"
               name="title"
               label="Judul"
