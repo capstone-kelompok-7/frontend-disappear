@@ -14,30 +14,15 @@ import { VscKebabVertical } from "react-icons/vsc";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Swal from 'sweetalert2';
 import "@/styles/voucher/sweetalert2.min.css"
+import Delete from "@/components/delete/delete";
 
 function VoucherApp() {
 
   const handleDeleteClick = () => {
-    Swal.fire({
-      title: 'Yakin mau hapus data?',
-      text: 'Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!',
-      icon: 'error',
-      showCancelButton: true,
-      cancelButtonText: 'Batal',
-      confirmButtonText: 'Hapus',
-      customClass: {
-        confirmButton: 'sweetalert-button-confirm',
-        cancelButton: 'sweetalert-button-cancel',
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        Swal.fire(
-          'Terhapus!',
-          'Data telah dihapus.',
-          'success'
-        );
-      }
-    });
+    Delete({
+      title: "Yakin mau hapus data?",
+      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+    })
   };
 
   const data = [
