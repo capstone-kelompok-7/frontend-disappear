@@ -1,4 +1,4 @@
-function Input(props) {
+function Inputt(props) {
   const { label, type, className, placeholder, hidden, name, value, onChange } =
     props;
 
