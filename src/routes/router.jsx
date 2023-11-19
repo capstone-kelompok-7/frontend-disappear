@@ -1,4 +1,3 @@
-/* eslint-disable no-unused-vars */
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import React from "react";
 
@@ -29,8 +28,12 @@ import IndexNews from "../pages/Artikel/indexNews";
 export default function Router() {
   const router = createBrowserRouter([
     {
-      path: "/artikel",
-      element: <IndexNews />,
+      path: "/",
+      element: <App />,
+    },
+    {
+      path: "/category",
+      element: <IndexCategory />,
     },
     {
       path: "/category",
