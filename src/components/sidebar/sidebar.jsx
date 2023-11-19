@@ -129,6 +129,7 @@ export default function SideBar(props) {
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarList
+                to="/artikel"
                 label="Artikel"
                 icon={<LuNewspaper />}
                 isSidebarOpen={isSidebarOpen}

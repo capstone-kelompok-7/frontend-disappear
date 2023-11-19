@@ -21,11 +21,10 @@ import VoucherApp from "../pages/voucherPage/voucherIndex";
 import CreateVoucher from "@/pages/voucherPage/createVoucher";
 import EditVoucher from "../pages/voucherPage/editVoucher";
 
-import App from "../pages/indexNews";
 import DetailNews from "../pages/Artikel/detailNews";
 import CreateNews from "../pages/Artikel/createNews";
 import EditNews from "@/pages/Artikel/editNews";
-import IndexNews from "../pages/indexNews";
+import IndexNews from "../pages/Artikel/indexNews";
 
 export default function Router() {
   const router = createBrowserRouter([

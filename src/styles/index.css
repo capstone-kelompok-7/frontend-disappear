@@ -75,6 +75,29 @@
 }
 @tailwind utilities;
 
-.demo-wrapper {
-  height: 25rem;
+.ProseMirror {
+  @apply border border-black h-[25rem] rounded-sm overflow-auto;
+}
+
+.ProseMirror p {
+  @apply mb-1;
+}
+
+.ProseMirror h1,
+.ProseMirror h2,
+.ProseMirror h3 {
+  @apply mt-6 mb-2 font-bold;
+}
+
+.ProseMirror ul,
+.ProseMirror ol {
+  @apply ml-6 mb-4 list-disc;
+}
+
+.ProseMirror li {
+  @apply mb-2;
+}
+
+.ProseMirror blockquote {
+  @apply border-l-4 pl-4 italic text-gray-600;
 }
