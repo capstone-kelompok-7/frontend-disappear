@@ -1,6 +1,7 @@
 @tailwind base;
 @tailwind components;
- 
+@tailwind utilities;
+
 @layer base {
   :root {
     --background: 0 0% 100%;
@@ -73,7 +74,6 @@
     @apply bg-background text-foreground;
   }
 }
-@tailwind utilities;
 
 .ProseMirror {
   @apply border border-black h-[25rem] rounded-sm overflow-auto;
