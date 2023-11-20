@@ -6,12 +6,20 @@ import Breadcrumbs from "@/components/breadcrumbs";
 import Button from "@/components/button";
 import { IoArrowBack } from "react-icons/io5";
 import Star from "@/components/review/star";
+import Delete from "@/components/delete/delete";
 
 export default function DetailProducts() {
   const navigate = useNavigate();
 
   function toRoute() {
     navigate("/produk/edit-produk");
+  }
+
+  function handleDelete() {
+    Delete({
+      title: "Yakin mau hapus data?",
+      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+    });
   }
 
   let apiStarValue = 4;
@@ -80,6 +88,7 @@ export default function DetailProducts() {
           </div>
           <div className="m-4 flex justify-end">
             <Button
+              onClick={handleDelete}
               label="Hapus Produk"
               className="bg-white text-red-600 border rounded border-red-600 py-4 px-6 text-sm font-medium"
             />

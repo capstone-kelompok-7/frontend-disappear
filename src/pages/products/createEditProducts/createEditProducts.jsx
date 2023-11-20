@@ -7,6 +7,7 @@ import Dropzone from "@/components/dropzone";
 import { Textarea } from "@/components/ui/textarea";
 import Button from "@/components/button";
 import Select from "react-select";
+import { Link } from "react-router-dom";
 
 export default function CreateEditProducts() {
   const [isEdit, setIsEdit] = useState(true);
@@ -99,10 +100,12 @@ export default function CreateEditProducts() {
           </div>
 
           <div className=" gap-4 flex items-center justify-end mt-5">
-            <Button
-              label="Batal"
+            <Link
+              to="/produk"
               className=" bg-white px-10 py-3 rounded text-primary-green border border-primary-green"
-            />
+            >
+              Batal
+            </Link>
             <Button
               type="submit"
               label="Publish Produk"

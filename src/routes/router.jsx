@@ -36,10 +36,6 @@ export default function Router() {
       element: <IndexCategory />,
     },
     {
-      path: "/category",
-      element: <IndexCategory />,
-    },
-    {
       path: "/dashboard",
       element: <Dashboard />,
     },
@@ -93,7 +89,7 @@ export default function Router() {
       element: <CreateEditProducts />,
     },
     {
-      path: "/produk/detail-produk",
+      path: "/produk/:id",
       element: <DetailProducts />,
     },
     {
