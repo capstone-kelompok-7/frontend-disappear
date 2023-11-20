@@ -60,19 +60,17 @@ const LoginPage = () => {
                   ></path>
                 </svg>
               </div>
-              <div class="flex items-center justify-between">
-                <div class="flex items-start">
-                  <div class="flex items-center h-5">
+              <div className="flex items-center justify-between">
+                <div className="flex items-start">
+                  <div className="flex items-center h-5">
                     <Input
                       id="remember"
                       type="checkbox"
                       className="w-4 h-4 border border-[#25745a] rounded bg-white"
                     />
                   </div>
-                  <div class="ml-3 text-sm">
-                    <Label for="remember" className="text-[#808080]">
-                      Ingat Saya
-                    </Label>
+                  <div className="ml-3 text-sm">
+                    <Label htmlFor="remember">Ingat Saya</Label>
                   </div>
                 </div>
               </div>
