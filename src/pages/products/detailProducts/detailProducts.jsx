@@ -5,6 +5,8 @@ import Layout from "@/components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Button from "@/components/button";
 import { IoArrowBack } from "react-icons/io5";
+import Star from "@/components/review/star";
+import Delete from "@/components/delete/delete";
 
 export default function DetailProducts() {
   const navigate = useNavigate();
@@ -12,6 +14,15 @@ export default function DetailProducts() {
   function toRoute() {
     navigate("/produk/edit-produk");
   }
+
+  function handleDelete() {
+    Delete({
+      title: "Yakin mau hapus data?",
+      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+    });
+  }
+
+  let apiStarValue = 4;
   return (
     <>
       <Layout>
@@ -53,7 +64,7 @@ export default function DetailProducts() {
                 <p className=" text-xs font-semibold">20 gram</p>
               </div>
               <div className="flex my-3 items-center">
-                <p>*****</p>
+                <Star starValue={apiStarValue} />
                 <p className=" text-xs font-medium">
                   (4.0 Partisipasi Pelanggan)
                 </p>
@@ -77,12 +88,13 @@ export default function DetailProducts() {
           </div>
           <div className="m-4 flex justify-end">
             <Button
+              onClick={handleDelete}
               label="Hapus Produk"
-              className="bg-white text-black border rounded border-black py-4 px-6 text-sm font-medium"
+              className="bg-white text-red-600 border rounded border-red-600 py-4 px-6 text-sm font-medium"
             />
             <Button
               label="Edit Produk"
-              className="bg-black text-white border rounded py-4 px-6 text-sm font-medium ml-5"
+              className="bg-primary-green text-white border rounded py-4 px-7 text-sm font-medium ml-5"
               onClick={toRoute}
             />
           </div>

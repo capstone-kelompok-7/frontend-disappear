@@ -7,6 +7,7 @@ import Dropzone from "@/components/dropzone";
 import { Textarea } from "@/components/ui/textarea";
 import Button from "@/components/button";
 import Select from "react-select";
+import { Link } from "react-router-dom";
 
 export default function CreateEditProducts() {
   const [isEdit, setIsEdit] = useState(true);
@@ -41,7 +42,7 @@ export default function CreateEditProducts() {
   return (
     <>
       <Layout>
-        <Breadcrumbs pages={!isEdit ? "Edit Produk" : "Buat Produk"} />
+        <Breadcrumbs pages={!isEdit ? "Edit Produk" : "Tambah Produk"} />
         <form className="bg-white rounded border my-5 p-5 flex flex-col">
           <div className="flex w-full justify-between gap-14">
             <div className=" w-full">
@@ -97,11 +98,20 @@ export default function CreateEditProducts() {
             <label>Deskripsi Produk</label>
             <Textarea placeholder="Deskripsi Produk" className=" h-52 mt-4" />
           </div>
-          <Button
-            type="submit"
-            label="Publish Produk"
-            className="bg-gray-500 px-3 py-2 mt-5 rounded text-white self-end"
-          />
+
+          <div className=" gap-4 flex items-center justify-end mt-5">
+            <Link
+              to="/produk"
+              className=" bg-white px-10 py-3 rounded text-primary-green border border-primary-green"
+            >
+              Batal
+            </Link>
+            <Button
+              type="submit"
+              label="Publish Produk"
+              className=" bg-primary-green px-3 py-3 rounded border text-white"
+            />
+          </div>
         </form>
       </Layout>
     </>

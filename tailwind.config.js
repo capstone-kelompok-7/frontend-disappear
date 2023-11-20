@@ -18,6 +18,8 @@ module.exports = {
     },
     extend: {
       colors: {
+        "primary-green": "#25745A",
+        "secondary-green": "#39AD85",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
@@ -73,5 +75,12 @@ module.exports = {
       },
     },
   },
-  plugins: [require("tailwindcss-animate"),"flowbite/plugin", require("daisyui")]
+  plugins: [
+    require("tailwindcss-animate"),
+    "flowbite/plugin",
+    require("daisyui"),
+  ],
+  daisyui: {
+    themes: ["light"],
+  },
 };
