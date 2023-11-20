@@ -33,6 +33,9 @@ import ConfirmPayment from "@/pages/payment/confirmPayment";
 
 import Pesanan from "../pages/order/order";
 
+import IndexUlasan from "@/pages/ulasan/indexUlasan";
+import DetailUlasan from "@/pages/ulasan/detailUlasan/detailUlasan";
+
 export default function Router() {
   const router = createBrowserRouter([
     {
@@ -143,6 +146,14 @@ export default function Router() {
     {
       path: "/pembayaran/konfirmasi-pembayaran",
       element: <ConfirmPayment />,
+    },
+    {
+      path: "/ulasan",
+      element: <IndexUlasan />,
+    },
+    {
+      path: "/ulasan/lihat-ulasan",
+      element: <DetailUlasan />,
     },
   ]);
   return <RouterProvider router={router} />;
