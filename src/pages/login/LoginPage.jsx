@@ -8,7 +8,7 @@ const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
 
   return (
-    <div className="w-full h-full flex items-start">
+    <div className="w-full h-full flex items-start bg-white">
       <div className="w-1/2 h-screen relative overflow-hidden">
         <img src={rectangle} className="w-full h-full" alt="" />
       </div>
@@ -66,8 +66,8 @@ const LoginPage = () => {
                     <Input
                       id="remember"
                       type="checkbox"
-                      className="w-4 h-4 left-[-1px] top-[-1px] rounded-sm border border-[#25745a]"
-                    ></Input>
+                      className="w-4 h-4 border border-[#25745a] rounded bg-white"
+                    />
                   </div>
                   <div class="ml-3 text-sm">
                     <Label for="remember" className="text-[#808080]">
