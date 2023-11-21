@@ -1,0 +1,17 @@
+.search-order{
+ width: 23rem;
+ height: 3.1rem;
+}
+.search-icon{
+    position: absolute;
+    margin-left: 21rem;
+}
+.order-sort {
+    flex: 1; 
+    display: flex;
+    justify-content: flex-end;
+  }
+  
+  .order-sort p {
+    margin-left: auto;
+  }
