@@ -7,22 +7,19 @@ function Tabel({ columns, data }) {
     useTable({ columns, data });
 
   return (
-    <table
-      {...getTableProps()}
-      className="min-w-full bg-white shadow-md rounded- border border-neutral-500"
-    >
+    <table {...getTableProps()} className="min-w-full shadow-md">
       <thead>
         {headerGroups.map((headerGroup, index) => (
           <tr
             key={index}
             {...headerGroup.getHeaderGroupProps()}
-            className="bg-[#C7C7C7] text-black"
+            className="bg-primary-green text-white"
           >
             {headerGroup.headers.map((column, columnIndex) => (
               <th
                 key={columnIndex}
                 {...column.getHeaderProps()}
-                className="px-6 py-3 text-center font-semibold text-black uppercase tracking-wider border border-neutral-500"
+                className="px-6 py-3 text-center font-semibold text-white uppercase tracking-wider border border-[#ACACAC]"
               >
                 {column.render("Header")}
               </th>
@@ -44,7 +41,7 @@ function Tabel({ columns, data }) {
                   <td
                     key={cellIndex}
                     {...cell.getCellProps()}
-                    className="px-6 py-4 whitespace-nowrap border border-neutral-500"
+                    className="table-cell px-6 py-4 whitespace-nowrap border border-[#ACACAC]"
                   >
                     {cell.render("Cell")}
                   </td>
