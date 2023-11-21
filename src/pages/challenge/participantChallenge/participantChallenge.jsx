@@ -1,9 +1,14 @@
-import { BiEdit } from "react-icons/bi";
-import { SlCalender } from "react-icons/sl";
+import { MdOutlineCalendarMonth } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
-import { Select } from "@/components/input";
+import {
+  Select,
+  SelectValue,
+  SelectTrigger,
+  SelectContent,
+  SelectItem,
+} from "@/components/ui/select";
 import Layout from "@/components/layout";
 import {
   DropdownMenu,
@@ -13,47 +18,52 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Tabel from "@/components/table/table";
 
-function App() {
+export default function IndexPesertaTantangan() {
   const data = [
     {
       No: 1,
-      UsernameInstagram: "dimas829",
+      UsernameInstagram: (
+        <Link to="/peserta-tantangan/edit-peserta-tantangan">dimas829</Link>
+      ),
       TanggalBerpartisipasi: "26-10-2023",
       EXP: 150,
       Status: "Tidak Valid",
-      Aksi: "",
     },
     {
       No: 2,
-      UsernameInstagram: "dimas829",
+      UsernameInstagram: (
+        <Link to="/peserta-tantangan/edit-peserta-tantangan">dimas829</Link>
+      ),
       TanggalBerpartisipasi: "26-10-2023",
       EXP: 100,
       Status: "Valid",
-      Aksi: "",
     },
     {
       No: 3,
-      UsernameInstagram: "dimas829",
+      UsernameInstagram: (
+        <Link to="/peserta-tantangan/edit-peserta-tantangan">dimas829</Link>
+      ),
       TanggalBerpartisipasi: "26-10-2023",
       EXP: 100,
       Status: "Menunggu Validasi",
-      Aksi: "",
     },
     {
       No: 4,
-      UsernameInstagram: "dimas829",
+      UsernameInstagram: (
+        <Link to="/peserta-tantangan/edit-peserta-tantangan">dimas829</Link>
+      ),
       TanggalBerpartisipasi: "26-10-2023",
       EXP: 100,
       Status: "Valid",
-      Aksi: "",
     },
     {
       No: 5,
-      UsernameInstagram: "dimas829",
+      UsernameInstagram: (
+        <Link to="/peserta-tantangan/edit-peserta-tantangan">dimas829</Link>
+      ),
       TanggalBerpartisipasi: "26-10-2023",
       EXP: 150,
       Status: "Tidak Valid",
-      Aksi: "",
     },
   ];
 
@@ -63,19 +73,6 @@ function App() {
     { Header: "Tanggal Berpartisipasi", accessor: "TanggalBerpartisipasi" },
     { Header: "EXP Tantangan", accessor: "EXP" },
     { Header: "Status", accessor: "Status" },
-    {
-      Header: "Aksi",
-      accessor: "Aksi",
-      Cell: () => (
-        <div className="flex">
-          <div className="mx-auto">
-            <Link to="/peserta-tantangan/edit-peserta-tantangan">
-              <BiEdit className="bg-neutral-700 rounded-[5px] text-white w-[38px] h-[38px]" />
-            </Link>
-          </div>
-        </div>
-      ),
-    },
   ];
 
   return (
@@ -91,11 +88,22 @@ function App() {
               <p className="font-semibold text-3xl">Semua Peserta</p>
             </div>
 
-            <div className="flex items-center space-x-3">
+            <div className="flex space-x-4">
               <div className="flex items-center space-x-3">
                 <p>Data Untuk</p>
-                <SlCalender size={20} />
-                <Select options={["Bulan ini", "Minggu ini", "Hari ini"]} />
+                <div className="flex items-center">
+                  <MdOutlineCalendarMonth size={30} />
+                  <Select>
+                    <SelectTrigger className="border-none pr-0">
+                      <SelectValue placeholder="Bulan ini" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="BulanIni">Bulan ini</SelectItem>
+                      <SelectItem value="MingguIni">Minggu ini</SelectItem>
+                      <SelectItem value="HariIni">Hari ini</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
               </div>
 
               <DropdownMenu>
@@ -129,5 +137,3 @@ function App() {
     </div>
   );
 }
-
-export default App;
