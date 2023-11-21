@@ -91,6 +91,7 @@ export default function SideBar(props) {
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarList
+                to="/pembayaran"
                 label="Pembayaran"
                 icon={<LuCircleDollarSign />}
                 isSidebarOpen={isSidebarOpen}
