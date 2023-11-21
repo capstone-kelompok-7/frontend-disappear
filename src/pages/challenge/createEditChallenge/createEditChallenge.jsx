@@ -155,7 +155,7 @@ function CreateChallenge() {
               <Button
                 label="Batal"
                 type="submit"
-                className="rounded-[5px] border border-black px-2.5 py-1.5 shadow"
+                className="rounded-[5px] border border-primary-green px-2.5 py-1.5 shadow text-primary-green"
               />
             </div>
             <Button
