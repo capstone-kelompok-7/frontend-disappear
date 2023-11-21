@@ -22,31 +22,37 @@ export default function Ulasan() {
   const data = [
     {
       No: 1,
-      NamaProduk: "Totebag",
+      NamaProduk: <Link to="/ulasan/lihat-ulasan">Totebag</Link>,
       Penilaian: "4.7",
       TotalReview: 200,
     },
     {
       No: 2,
-      NamaProduk: "Alat makan ramah lingkungan",
+      NamaProduk: (
+        <Link to="/ulasan/lihat-ulasan">Alat makan ramah lingkungan</Link>
+      ),
       Penilaian: "4.7",
       TotalReview: 150,
     },
     {
       No: 3,
-      NamaProduk: "botol minuman stainless steel",
+      NamaProduk: (
+        <Link to="/ulasan/lihat-ulasan">botol minuman stainless steel</Link>
+      ),
       Penilaian: "5.0",
       TotalReview: 45,
     },
     {
       No: 4,
-      NamaProduk: "Alat makan ramah lingkungan",
+      NamaProduk: (
+        <Link to="/ulasan/lihat-ulasan">Alat makan ramah lingkungan</Link>
+      ),
       Penilaian: "4.7",
       TotalReview: 78,
     },
     {
       No: 5,
-      NamaProduk: "Totebag",
+      NamaProduk: <Link to="/ulasan/lihat-ulasan">Totebag</Link>,
       Penilaian: "5.0 ",
       TotalReview: 50,
     },
