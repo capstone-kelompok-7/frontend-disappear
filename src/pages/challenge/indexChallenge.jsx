@@ -1,21 +1,30 @@
-import { useNavigate } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { FiSearch } from "react-icons/fi";
+import Breadcrumbs from "@/components/breadcrumbs";
+import { BiDotsVerticalRounded, BiEdit, BiTrash } from "react-icons/bi";
+import { IoEyeSharp } from "react-icons/io5";
 
 import Layout from "@/components/layout";
-import { FiSearch } from "react-icons/fi";
 import Button from "@/components/button";
-import Breadcrumbs from "@/components/breadcrumbs";
 import {
   DropdownMenu,
   DropdownMenuContent,
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import DropdownTable from "@/components/dropdownTable/dropdownTable";
 import Tabel from "@/components/table/table";
 import { Input } from "@/components/ui/input";
+import Delete from "@/components/delete/delete";
 
 function IndexChallenge() {
   const navigate = useNavigate();
+
+  const handleDelete = () => {
+    Delete({
+      title: "Yakin mau hapus data?",
+      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+    });
+  };
 
   const data = [
     {
@@ -70,11 +79,36 @@ function IndexChallenge() {
       Header: "Status",
       accessor: "Status",
       Cell: ({ row }) => (
-        <div className="flex items-center">
+        <div className="flex justify-between items-center">
           <p>{row.original.Status}</p>
-          <div className="ml-auto">
-            <DropdownTable />
-          </div>
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <BiDotsVerticalRounded />
+            </DropdownMenuTrigger>
+            <DropdownMenuContent>
+              <Link to="/tantangan/detail-tantangan">
+                <DropdownMenuItem className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white">
+                  <IoEyeSharp />
+                  <p>Lihat</p>
+                </DropdownMenuItem>
+              </Link>
+
+              <Link to="/tantangan/edit-tantangan">
+                <DropdownMenuItem className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white">
+                  <BiTrash />
+                  <p>Edit</p>
+                </DropdownMenuItem>
+              </Link>
+
+              <DropdownMenuItem
+                className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
+                onClick={handleDelete}
+              >
+                <BiEdit />
+                <p>Hapus</p>
+              </DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ),
     },
@@ -113,21 +147,19 @@ function IndexChallenge() {
               onClick={() => navigate("/tantangan/buat-tantangan")}
             />
 
-            <div className="justify-items-start">
-              <div className="flex items-center">
+            <div className="flex ml-auto gap-4">
+              <div className="flex items-center w-80">
                 <Input
                   type="text"
                   placeholder="Cari Tantangan"
                   className="p-3"
                 />
-                <FiSearch className="absolute ml-36" />
+                <FiSearch className="absolute ml-72" />
               </div>
-            </div>
 
-            <div className="ml-auto">
               <DropdownMenu>
                 <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border gap-20">
-                  <p>Filter</p>
+                  <p className="opacity-70">Filter</p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="10"
