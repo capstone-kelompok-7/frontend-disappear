@@ -1,5 +1,13 @@
+import Breadcrumbs from "@/components/breadcrumbs";
+import Layout from "@/components/layout";
 import React from "react";
 
 export default function ConfirmPayment() {
-  return <div>Confirm Payment</div>;
+  return (
+    <>
+      <Layout>
+        <Breadcrumbs pages="Pembayaran" />
+      </Layout>
+    </>
+  );
 }
