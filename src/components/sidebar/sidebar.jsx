@@ -85,6 +85,7 @@ export default function SideBar(props) {
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarList
+                to="/pesanan"
                 label="Pesanan"
                 icon={<PiNoteDuotone />}
                 isSidebarOpen={isSidebarOpen}
