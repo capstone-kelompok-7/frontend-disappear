@@ -9,6 +9,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { Link } from "react-router-dom";
 
 function Pelanggan() {
   const data = [
@@ -71,7 +72,9 @@ function Pelanggan() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem>Detail</DropdownMenuItem>
+              <Link to="/pelanggan/pelanggandetail">
+                <DropdownMenuItem>Detail</DropdownMenuItem>
+              </Link>
               <DropdownMenuItem>Hapus</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>

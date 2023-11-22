@@ -25,6 +25,8 @@ import CreateNews from "../pages/Artikel/createNews";
 import EditNews from "@/pages/Artikel/editNews";
 import IndexNews from "../pages/Artikel/indexNews";
 
+import Pesanan from "../pages/order/order";
+
 export default function Router() {
   const router = createBrowserRouter([
     {
@@ -49,7 +51,7 @@ export default function Router() {
       element: <Pelanggan />,
     },
     {
-      path: "/pelanggandetail",
+      path: "/pelanggan/pelanggandetail",
       element: <PelangganDetail />,
     },
     {
@@ -123,6 +125,10 @@ export default function Router() {
     {
       path: "/artikel",
       element: <IndexNews />,
+    },
+    {
+      path: "/pesanan",
+      element: <Pesanan />,
     },
   ]);
   return <RouterProvider router={router} />;
