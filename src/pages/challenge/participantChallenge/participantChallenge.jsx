@@ -94,7 +94,7 @@ export default function IndexPesertaTantangan() {
                 <div className="flex items-center">
                   <MdOutlineCalendarMonth size={30} />
                   <Select>
-                    <SelectTrigger className="border-none pr-0">
+                    <SelectTrigger className="border-none focus:ring-offset-0 focus:ring-0 pr-0">
                       <SelectValue placeholder="Bulan ini" />
                     </SelectTrigger>
                     <SelectContent>
