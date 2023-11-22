@@ -72,39 +72,37 @@ export default function Ulasan() {
           <Breadcrumbs pages="Ulasan" />
         </div>
 
-        <div className="mx-10 px-[15px] py-5 shadow-md bg-white rounded-[5px]">
-          <div className="flex justify-start items-center mb-7 gap-5">
-            <div className="flex items-center">
-              <Input type="text" placeholder="Cari Tantangan" className="p-3" />
-              <FiSearch className="absolute ml-36" />
-            </div>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex items-center rounded-md bg-white py-3 px-3 border gap-20">
-                <p>Filter</p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="5"
-                  viewBox="0 0 10 5"
-                  fill="none"
-                >
-                  <path
-                    d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
-                    fill="#373737"
-                  />
-                </svg>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent>
-                <DropdownMenuItem>Terbaik</DropdownMenuItem>
-                <DropdownMenuItem>Terburuk</DropdownMenuItem>
-                <DropdownMenuItem>Sedang</DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+        <div className="flex justify-start items-center mb-5 mt-8 gap-5">
+          <div className="flex items-center">
+            <Input type="text" placeholder="Cari Tantangan" className="p-3" />
+            <FiSearch className="absolute ml-44" />
           </div>
-          <Tabel columns={columns} data={data} />
+
+          <DropdownMenu>
+            <DropdownMenuTrigger className="flex items-center rounded-md bg-white py-3 px-3 border gap-20">
+              <p>Filter</p>
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="10"
+                height="5"
+                viewBox="0 0 10 5"
+                fill="none"
+              >
+                <path
+                  d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
+                  fill="#373737"
+                />
+              </svg>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+              <DropdownMenuItem>Terbaik</DropdownMenuItem>
+              <DropdownMenuItem>Terburuk</DropdownMenuItem>
+              <DropdownMenuItem>Sedang</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
+        <Tabel columns={columns} data={data} />
       </Layout>
     </div>
   );
