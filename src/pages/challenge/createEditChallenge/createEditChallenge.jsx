@@ -22,7 +22,7 @@ function CreateChallenge() {
         <Breadcrumbs pages="Buat Tantangan" />
       </div>
 
-      <div className="my-6 mx-[100px] px-[25px] py-5 flex justify-center bg-[#FFFFFF] shadow-md border-2">
+      <div className="mt-8">
         <form onSubmit={submitForm} className="w-full">
           <div className="mb-10">
             <div className="flex">

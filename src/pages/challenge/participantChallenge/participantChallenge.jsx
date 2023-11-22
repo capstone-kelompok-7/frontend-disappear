@@ -82,57 +82,55 @@ export default function IndexPesertaTantangan() {
           <Breadcrumbs pages="Peserta Tantangan" />
         </div>
 
-        <div className="mx-10 px-[15px] py-5 shadow-md bg-white rounded-[5px]">
-          <div className="flex justify-between items-center mb-7">
-            <div>
-              <p className="font-semibold text-3xl">Semua Peserta</p>
-            </div>
-
-            <div className="flex space-x-4">
-              <div className="flex items-center space-x-3">
-                <p>Data Untuk</p>
-                <div className="flex items-center">
-                  <MdOutlineCalendarMonth size={30} />
-                  <Select>
-                    <SelectTrigger className="border-none focus:ring-offset-0 focus:ring-0 pr-0">
-                      <SelectValue placeholder="Bulan ini" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="BulanIni">Bulan ini</SelectItem>
-                      <SelectItem value="MingguIni">Minggu ini</SelectItem>
-                      <SelectItem value="HariIni">Hari ini</SelectItem>
-                    </SelectContent>
-                  </Select>
-                </div>
-              </div>
-
-              <DropdownMenu>
-                <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border gap-20">
-                  <p>Filter</p>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="10"
-                    height="5"
-                    viewBox="0 0 10 5"
-                    fill="none"
-                  >
-                    <path
-                      d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
-                      fill="#373737"
-                    />
-                  </svg>
-                </DropdownMenuTrigger>
-
-                <DropdownMenuContent>
-                  <DropdownMenuItem>Valid</DropdownMenuItem>
-                  <DropdownMenuItem>Tidak Valid</DropdownMenuItem>
-                  <DropdownMenuItem>Menunggu Validasi</DropdownMenuItem>
-                </DropdownMenuContent>
-              </DropdownMenu>
-            </div>
+        <div className="flex justify-between items-center mb-6 mt-8">
+          <div>
+            <p className="font-semibold text-3xl">Semua Peserta</p>
           </div>
-          <Tabel columns={columns} data={data} />
+
+          <div className="flex space-x-4">
+            <div className="flex items-center space-x-3">
+              <p>Data Untuk</p>
+              <div className="flex items-center">
+                <MdOutlineCalendarMonth size={30} />
+                <Select>
+                  <SelectTrigger className="border-none focus:ring-offset-0 focus:ring-0 pr-0">
+                    <SelectValue placeholder="Bulan ini" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem value="BulanIni">Bulan ini</SelectItem>
+                    <SelectItem value="MingguIni">Minggu ini</SelectItem>
+                    <SelectItem value="HariIni">Hari ini</SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+            </div>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border gap-20">
+                <p>Filter</p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="10"
+                  height="5"
+                  viewBox="0 0 10 5"
+                  fill="none"
+                >
+                  <path
+                    d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
+                    fill="#373737"
+                  />
+                </svg>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent>
+                <DropdownMenuItem>Valid</DropdownMenuItem>
+                <DropdownMenuItem>Tidak Valid</DropdownMenuItem>
+                <DropdownMenuItem>Menunggu Validasi</DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
+          </div>
         </div>
+        <Tabel columns={columns} data={data} />
       </Layout>
     </div>
   );

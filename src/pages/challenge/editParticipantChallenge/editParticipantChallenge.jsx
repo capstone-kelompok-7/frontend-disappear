@@ -28,7 +28,7 @@ function editPesertaChallange() {
         <Breadcrumbs pages="Edit Peserta Tantangan" />
       </div>
 
-      <div className="my-6 mx-[100px] px-[25px] py-5 flex justify-center bg-[#FFFFFF] shadow-md border-2">
+      <div className="my-6 mx-[100px] px-[25px] py-5 flex justify-center bg-[#FFFFFF] shadow-md">
         <form onSubmit={submitForm} className="w-full">
           <div className="mb-9">
             <div className="flex">

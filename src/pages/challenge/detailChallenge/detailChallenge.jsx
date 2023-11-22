@@ -16,7 +16,7 @@ export default function DetailChallange() {
         </div>
       </div>
 
-      <div className="p-6 mx-[60px] shadow-md bg-white rounded-[5px]">
+      <div className="p-6 mx-[60px] rounded-[5px]">
         <div className="flex justify-between">
           <h1 className="font-bold text-[40px]">Tantangan Menanam Pohon</h1>
           <div>
