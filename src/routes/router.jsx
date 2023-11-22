@@ -24,6 +24,8 @@ import DetailNews from "../pages/Artikel/detailNews";
 import CreateNews from "../pages/Artikel/createNews";
 import EditNews from "@/pages/Artikel/editNews";
 import IndexNews from "../pages/Artikel/indexNews";
+import IndexPayment from "@/pages/payment/indexPayment";
+import ConfirmPayment from "@/pages/payment/confirmPayment";
 
 import Pesanan from "../pages/order/order";
 
@@ -129,6 +131,14 @@ export default function Router() {
     {
       path: "/pesanan",
       element: <Pesanan />,
+    },
+    {
+      path: "/pembayaran",
+      element: <IndexPayment />,
+    },
+    {
+      path: "/pembayaran/konfirmasi-pembayaran",
+      element: <ConfirmPayment />,
     },
   ]);
   return <RouterProvider router={router} />;
