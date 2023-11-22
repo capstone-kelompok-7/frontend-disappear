@@ -10,7 +10,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Tabel from "@/components/table/table";
-import { VscKebabVertical } from "react-icons/vsc";
+import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Delete from "@/components/delete/delete";
 
@@ -32,23 +32,8 @@ function VoucherApp() {
       Diskon: 5000,
       TanggalMulai: "10-10-2023",
       TanggalBerakhir: "15-10-2023",
-      Status: {
-        text: "Kadaluwarsa",
-        icon: (
-          <DropdownMenu>
-            <DropdownMenuTrigger>
-              <VscKebabVertical />
-            </DropdownMenuTrigger>
-
-            <DropdownMenuContent>
-              <Link to="/kupon/edit-kupon">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem onClick={handleDeleteClick}>Hapus</DropdownMenuItem>
-            </DropdownMenuContent>
-          </DropdownMenu>
-        ),
-      },
+      Status: "Kadaluwarsa",
+      
     },
   ];
 
@@ -62,10 +47,24 @@ function VoucherApp() {
     { Header: "TANGGAL BERAKHIR", accessor: "TanggalBerakhir" },
     {
       Header: "STATUS",
-      accessor: "Status",
-      Cell: ({ value }) => (
-        <div className="flex items-center">
-          <span className="ml-2">{value.text}</span> {value.icon}
+      accessor: "status",
+      Cell: ({ row }) => (
+        <div>
+          {row.original.Status}
+          <DropdownMenu>
+            <DropdownMenuTrigger>
+              <div className="three-dots">
+                <PiDotsThreeVerticalBold />
+              </div>
+            </DropdownMenuTrigger>
+
+            <DropdownMenuContent>
+              <Link to="/kupon/edit-kupon">
+                <DropdownMenuItem>Detail</DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem onClick={handleDeleteClick}>Hapus</DropdownMenuItem>
+            </DropdownMenuContent>
+          </DropdownMenu>
         </div>
       ),
     },
