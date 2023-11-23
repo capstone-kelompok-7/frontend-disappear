@@ -12,16 +12,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
+import { useToast } from "@/components/ui/use-toast";
+import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
 
 export default function DetailOrder() {
+  const { toast } = useToast();
   return (
     <>
       <Layout>
         <Breadcrumbs pages="Detail Pesanan" />
         <div className="flex flex-row justify-between">
-          <div className="flex justify-start flex-col">
+          <div className="flex justify-start flex-col border border-transparent w-[60%]">
             {/*DATA PESANAN*/}
-            <div className="flex flex-col justify-start relative border shadow w-[940px] h-72 p-15 mt-4 border-gray-400 rounded-md gap-15">
+            <div className="flex flex-col justify-start relative border shadow w-full h-72 p-15 mt-4 border-gray-400 rounded-md gap-15">
               <div className="flex">
                 <p className="text-sm font-semibold m-4 text-secondary-green">
                   Data Pesanan{"  "}
@@ -88,7 +91,7 @@ export default function DetailOrder() {
             </div>
 
             {/*TOTAL PEMBAYARAN*/}
-            <div className="flex flex-col justify-start relative border shadow w-[940px] h-80 mt-4 border-gray-400 rounded-md">
+            <div className="flex flex-col justify-start relative border shadow w-full h-80 mt-4 border-gray-400 rounded-md">
               <div className="flex items-center justify-between m-6">
                 <p className="font-semibold justify-between text-sm text-primary-green">
                   Total Pembayaran
@@ -123,7 +126,7 @@ export default function DetailOrder() {
             </div>
 
             {/*DETAIL PEMBAYARAN*/}
-            <div className="flex flex-col justify-start relative border shadow w-[940px] h-[217px] mt-4 border-gray-400 rounded-md">
+            <div className="flex flex-col justify-start relative border shadow w-full h-[217px] mt-4 border-gray-400 rounded-md">
               <div className="flex flex-col justify-between items-start gap-4 p-5">
                 <div className="flex justify-between items-center w-full">
                   <div className="flex text-sm font-semibold mb-1 text-left text-primary-green">
@@ -136,19 +139,19 @@ export default function DetailOrder() {
                     />
                   </div>
                 </div>
-                <div className="flex text-xs justify-between mb-1 gap-[780px]">
+                <div className="flex text-xs justify-between mb-1 w-full">
                   <p>Transfer</p>
                   <p>Rp. 607.000</p>
                 </div>
-                <div className="flex text-xs justify-between mb-1 gap-[780px]">
+                <div className="flex text-xs justify-between mb-1 w-full">
                   <p>Tanggal</p>
                   <p>12-03-2023</p>
                 </div>
-                <div className="flex text-xs justify-between mb-1 gap-[795px]">
+                <div className="flex text-xs justify-between mb-1 w-full">
                   <p>Status</p>
                   <p>Konfirmasi</p>
                 </div>
-                <div className="flex text-xs justify-between mb-1 gap-[655px]">
+                <div className="flex text-xs justify-between mb-1 w-full">
                   <p>Transfer Dari</p>
                   <p>BCA a.n. Dimas Bayuwangis</p>
                 </div>
@@ -156,9 +159,9 @@ export default function DetailOrder() {
             </div>
           </div>
 
-          <div className="flex justify-start flex-col">
+          <div className="flex justify-start flex-col border border-transparent w-[35%] mr-16">
             {/*Catatan*/}
-            <div className="flex flex-col justify-start relative border shadow w-[485px] h-[110px] p-15 mt-4 ml-10 border-gray-400 rounded-md">
+            <div className="flex flex-col justify-start relative border shadow w-full h-[110px] p-15 mt-4 ml-10 border-gray-400 rounded-md">
               <div className="flex items-center m-6">
                 <p className="font-semibold text-sm text-primary-green">
                   Catatan
@@ -170,7 +173,7 @@ export default function DetailOrder() {
             </div>
 
             {/*Info Pelanggan*/}
-            <div className="flex flex-col justify-start relative border shadow w-[485px] h-[360px] p-15 mt-4 ml-10 border-gray-400 rounded-md">
+            <div className="flex flex-col justify-start relative border shadow w-full h-[360px] p-15 mt-4 ml-10 border-gray-400 rounded-md">
               <div className="flex items-center justify-between mt-6 ml-6 mr-6">
                 <p className="font-semibold text-sm text-primary-green">
                   Pelanggan
@@ -212,7 +215,7 @@ export default function DetailOrder() {
             </div>
 
             {/*Status Pesanan*/}
-            <div className="flex flex-col justify-start relative border shadow w-[485px] h-[355px] p-15 mt-4 ml-10 border-gray-400 rounded-md">
+            <div className="flex flex-col justify-start relative border shadow w-full h-[355px] p-15 mt-4 ml-10 border-gray-400 rounded-md">
               <div className="flex items-center m-6">
                 <p className="font-semibold text-sm text-primary-green">
                   Status Pesanan
@@ -224,13 +227,13 @@ export default function DetailOrder() {
                   <Input
                     type="date"
                     name="deadline-tantangan"
-                    className="block w-[290px] rounded-md border border-[#5D5D5D] py-1 px-4 mr-6 text-muted-foreground"
+                    className="block w-[60%] rounded-md border border-[#5D5D5D] py-1 px-4 mr-6 text-muted-foreground"
                   />
                 </div>
                 <div className="flex justify-between items-center">
                   <p className="text-sm">Status Pesanan</p>
                   <DropdownMenu>
-                    <DropdownMenuTrigger className="flex w-[290px] justify-between h-[40px] items-center rounded-md bg-white py-2 px-4 border border-[#5D5D5D] gap-35 mr-6">
+                    <DropdownMenuTrigger className="flex w-[60%] justify-between h-[40px] items-center rounded-md bg-white py-2 px-4 border border-[#5D5D5D] gap-35 mr-6">
                       <p className="text-xs text-muted-foreground">Status</p>
                       <svg
                         xmlns="http://www.w3.org/2000/svg"
@@ -259,17 +262,47 @@ export default function DetailOrder() {
                     id="status-pesanan"
                     name="status-pesanan"
                     placeholder="Pesanan anda dalam perjalanan menuju kota Bandung."
-                    className="p-3 mt-3 block w-[290px] h-[57px] text-xs border border-black rounded-md resize-none mr-6"
+                    className="p-3 mt-3 block w-[60%] h-[57px] text-xs border border-black rounded-md resize-none mr-6"
                   />
                 </div>
                 <div className="flex flex-row justify-end gap-7 mr-6">
                   <Button
                     label="Batal"
                     className="rounded bg-white border border-primary-green text-primary-green py-3 px-5 items-center font-semibold"
+                    onClick={() => {
+                      toast({
+                        variant: "destructive",
+                        title: (
+                          <div className="flex items-center">
+                            <CrossCircledIcon />
+                            <span className="ml-2">
+                              Gagal Mengubah Status Pesanan!
+                            </span>
+                          </div>
+                        ),
+                        description:
+                          "Oh, noo! Sepertinya ada masalah saat proses perubahan data, nih. Periksa koneksimu dan coba lagi, yuk!",
+                      });
+                    }}
                   />
                   <Button
                     label="Kirim"
                     className="rounded bg-primary-green text-white py-3 px-5 items-center font-semibold"
+                    onClick={() => {
+                      toast({
+                        title: (
+                          <div className="flex items-center">
+                            <CheckCircledIcon />
+                            <span className="ml-2">
+                              Berhasil Mengubah Status Pesanan!
+                            </span>
+                          </div>
+                        ),
+                        description:
+                          "Status pesanan berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!",
+                        color: "#000000",
+                      });
+                    }}
                   />
                 </div>
               </div>
