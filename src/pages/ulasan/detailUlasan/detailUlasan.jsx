@@ -72,88 +72,86 @@ export default function LihatUlasan() {
       </div>
 
       <div className="flex mt-4 items-center">
-        <div className="flex-col w-1/4">
+        <div className="flex-col w-1/2">
           <p className="font-semibold pb-4">Totebag</p>
           <p>P00B4532</p>
         </div>
 
-        <div className="flex flex-row justify-end w-full">
-          <div className="flex-col w-1/4 mr-10">
-            <p className="font-semibold pb-4">Total Ulasan</p>
-            <div className="flex">
-              <p className="text-2xl font-bold">100K</p>
-              <p className="font-semibold pl-5">Pelanggan</p>
-            </div>
+        <div className="flex-col w-1/4 mr-10">
+          <p className="font-semibold pb-4">Total Ulasan</p>
+          <div className="flex">
+            <p className="text-2xl font-bold">100K</p>
+            <p className="font-semibold pl-5">Pelanggan</p>
+          </div>
+        </div>
+
+        <div className="flex-col w-1/4">
+          <p className="font-semibold pb-4">Total Rating</p>
+          <div className="flex">
+            <p className="text-2xl font-bold pr-5">4.8</p>
+            <Star />
+          </div>
+        </div>
+
+        <div className="flex-col w-1/4">
+          <div className="flex items-center h-4 ">
+            <p className="pr-2 text-sm w-4">5</p>
+            <Progress
+              progress={35}
+              className="w-52"
+              theme={customTheme}
+              color="primary"
+              size="sm"
+            />
+            <p className="pl-2 text-sm w-4">35</p>
           </div>
 
-          <div className="flex-col w-1/4">
-            <p className="font-semibold pb-4">Total Rating</p>
-            <div className="flex">
-              <p className="text-2xl font-bold pr-5">4.8</p>
-              <Star />
-            </div>
+          <div className="flex items-center">
+            <p className="pr-2 text-sm w-4">4</p>
+            <Progress
+              progress={22}
+              className="w-52"
+              theme={customTheme}
+              color="primary"
+              size="sm"
+            />
+            <p className="pl-2 text-sm w-4">22</p>
           </div>
 
-          <div className="flex-col w-1/4 pl-10">
-            <div className="flex items-center h-4 ">
-              <p className="pr-2 text-sm w-4">5</p>
-              <Progress
-                progress={35}
-                className="w-52"
-                theme={customTheme}
-                color="primary"
-                size="sm"
-              />
-              <p className="pl-2 text-sm w-4">35</p>
-            </div>
+          <div className="flex items-center h-4">
+            <p className="pr-2 text-sm w-4">3</p>
+            <Progress
+              progress={28}
+              className="w-52"
+              theme={customTheme}
+              color="primary"
+              size="sm"
+            />
+            <p className="pl-2 text-sm w-4">28</p>
+          </div>
 
-            <div className="flex items-center">
-              <p className="pr-2 text-sm w-4">4</p>
-              <Progress
-                progress={22}
-                className="w-52"
-                theme={customTheme}
-                color="primary"
-                size="sm"
-              />
-              <p className="pl-2 text-sm w-4">22</p>
-            </div>
+          <div className="flex items-center">
+            <p className="pr-2 text-sm w-4">2</p>
+            <Progress
+              progress={10}
+              className="w-52"
+              theme={customTheme}
+              color="primary"
+              size="sm"
+            />
+            <p className="pl-2 text-sm w-4">10</p>
+          </div>
 
-            <div className="flex items-center h-4">
-              <p className="pr-2 text-sm w-4">3</p>
-              <Progress
-                progress={28}
-                className="w-52"
-                theme={customTheme}
-                color="primary"
-                size="sm"
-              />
-              <p className="pl-2 text-sm w-4">28</p>
-            </div>
-
-            <div className="flex items-center">
-              <p className="pr-2 text-sm w-4">2</p>
-              <Progress
-                progress={10}
-                className="w-52"
-                theme={customTheme}
-                color="primary"
-                size="sm"
-              />
-              <p className="pl-2 text-sm w-4">10</p>
-            </div>
-
-            <div className="flex items-center h-4">
-              <p className="pr-2 text-sm w-4">1</p>
-              <Progress
-                progress={5}
-                className="w-52"
-                theme={customTheme}
-                color="primary"
-                size="sm"
-              />
-              <p className="pl-2 text-sm w-4">5</p>
-            </div>
+          <div className="flex items-center h-4">
+            <p className="pr-2 text-sm w-4">1</p>
+            <Progress
+              progress={5}
+              className="w-52"
+              theme={customTheme}
+              color="primary"
+              size="sm"
+            />
+            <p className="pl-2 text-sm w-4">5</p>
           </div>
         </div>
       </div>
