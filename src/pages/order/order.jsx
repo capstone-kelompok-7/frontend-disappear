@@ -11,19 +11,20 @@ import { Input } from "@/components/ui/input";
 import { FiSearch } from "react-icons/fi";
 import "../../styles/order/order.css";
 import { FaRegCalendarAlt } from "react-icons/fa";
+import { Link } from "react-router-dom";
 
 function Order() {
   const data = [
     {
       No: 1,
-      Pelanggan: "Dimas",
+      Pelanggan: <Link to="/pesanan/detail-pesanan">Dimas</Link>,
       Tanggal: "12-12-2012",
       TotalPembayaran: "500.000",
       Status: "Proses Pengantaran",
     },
     {
       No: 1,
-      Pelanggan: "Dimas",
+      Pelanggan: <Link to="/pesanan/detail-pesanan">Dimas</Link>,
       Tanggal: "12-12-2012",
       TotalPembayaran: "500.000",
       Status: "Proses Pengantaran",

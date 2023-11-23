@@ -30,6 +30,7 @@ import IndexPayment from "@/pages/payment/indexPayment";
 import ConfirmPayment from "@/pages/payment/confirmPayment";
 
 import Pesanan from "../pages/order/order";
+import DetailOrder from "@/pages/order/detailOrder";
 import Landingpage from "@/pages/landingpage/landingpage";
 
 import IndexUlasan from "@/pages/ulasan/indexUlasan";
@@ -135,6 +136,10 @@ export default function Router() {
       element: <Pesanan />,
     },
     {
+      path: "/pesanan/detail-pesanan",
+      element: <DetailOrder />,
+    },
+    {
       path: "/pembayaran",
       element: <IndexPayment />,
     },
@@ -152,8 +157,8 @@ export default function Router() {
     },
     {
       path: "/landingpage",
-      element: <Landingpage />
-    }
+      element: <Landingpage />,
+    },
   ]);
   return <RouterProvider router={router} />;
 }
