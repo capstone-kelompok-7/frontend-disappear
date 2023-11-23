@@ -1,4 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+import login from "@/utils/api/login";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/button";
 import Label from "@/components/label";
@@ -6,6 +8,76 @@ import rectangle from "@/assets/Rectangle292.png";
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [rememberChecked, setRememberChecked] = useState(false);
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    const rememberedEmail = localStorage.getItem("rememberedEmail");
+    const rememberedPassword = localStorage.getItem("rememberedPassword");
+    const rememberedCheckbox = localStorage.getItem("rememberedCheckbox");
+
+    if (rememberedCheckbox === "checked") {
+      setRememberChecked(true);
+      setEmail(rememberedEmail);
+      setPassword(rememberedPassword);
+    }
+  }, []);
+
+  const handleRememberChange = () => {
+    setRememberChecked(!rememberChecked);
+
+    if (!rememberChecked) {
+      localStorage.setItem("rememberedEmail", email);
+      localStorage.setItem("rememberedPassword", password);
+      localStorage.setItem("rememberedCheckbox", "checked");
+    } else {
+      localStorage.removeItem("rememberedEmail");
+      localStorage.removeItem("rememberedPassword");
+      localStorage.removeItem("rememberedCheckbox");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    // Validasi email
+    if (!/\S+@\S+\.com$/.test(email)) {
+      setEmailError("Email harus berformat gmail.com");
+      return;
+    } else {
+      setEmailError("");
+    }
+
+    // Validasi password
+    if (password.length < 6) {
+      setPasswordError("Kata sandi harus terdiri dari 6 karakter");
+      return;
+    } else {
+      setPasswordError("");
+    }
+
+    try {
+      const data = await login(email, password);
+
+      if (rememberChecked) {
+        localStorage.setItem("rememberedEmail", email);
+        localStorage.setItem("rememberedPassword", password);
+      }
+
+      localStorage.setItem("accessToken", data.data.access_token);
+      console.log(data.message);
+
+      console.log(data);
+      navigate("/dashboard");
+    } catch (error) {
+      console.error("Login gagal", error);
+    }
+  };
 
   return (
     <div className="w-full h-full flex items-start bg-white">
@@ -18,7 +90,11 @@ const LoginPage = () => {
             <h1 className="flex-grow-0 flex-shrink-0 text-[50px] font-bold text-center text-[#25745a]">
               Selamat Datang!
             </h1>
-            <form className="space-y-4 md:space-y-6" action="#">
+            <form
+              className="space-y-4 md:space-y-6"
+              action="#"
+              onSubmit={handleSubmit}
+            >
               <div>
                 <Label htmlFor="email">Email</Label>
                 <Input
@@ -26,9 +102,19 @@ const LoginPage = () => {
                   name="email"
                   id="email"
                   placeholder="Masukkan email anda"
-                  className="bg-neutral-100"
-                  required
+                  className={`bg-neutral-100 ${
+                    emailError ? "border-red-500" : ""
+                  }`}
+                  value={email}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
                 />
+                {emailError && (
+                  <p className="flex-grow-0 flex-shrink-0 text-xs text-left text-[#e50000]">
+                    {emailError}
+                  </p>
+                )}
               </div>
               <div style={{ position: "relative" }}>
                 <Label htmlFor="password">Kata Sandi</Label>
@@ -37,9 +123,19 @@ const LoginPage = () => {
                   name="password"
                   id="password"
                   placeholder="Masukkan kata sandi anda"
-                  className="bg-neutral-100"
-                  required
+                  className={`bg-neutral-100 ${
+                    passwordError ? "border-red-500" : ""
+                  }`}
+                  value={password}
+                  onChange={(e) => {
+                    setPassword(e.target.value);
+                  }}
                 />
+                {passwordError && (
+                  <p className="flex-grow-0 flex-shrink-0 text-xs text-left text-[#e50000]">
+                    {passwordError}
+                  </p>
+                )}
                 <svg
                   onClick={() => setShowPassword(!showPassword)}
                   viewBox="0 0 30 30"
@@ -66,11 +162,14 @@ const LoginPage = () => {
                     <Input
                       id="remember"
                       type="checkbox"
-                      className="w-4 h-4 border border-[#25745a] rounded bg-white"
+                      className="w-4 h-4 border border-[#25745a] rounded"
+                      onChange={handleRememberChange}
                     />
                   </div>
                   <div className="ml-3 text-sm">
-                    <Label htmlFor="remember">Ingat Saya</Label>
+                    <Label htmlFor="remember" style={{ color: "#808080" }}>
+                      Ingat Saya
+                    </Label>
                   </div>
                 </div>
               </div>
