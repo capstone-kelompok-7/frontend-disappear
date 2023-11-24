@@ -95,7 +95,7 @@ function IndexChallenge() {
 
               <Link to="/tantangan/edit-tantangan">
                 <DropdownMenuItem className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white">
-                  <BiTrash />
+                  <BiEdit />
                   <p>Edit</p>
                 </DropdownMenuItem>
               </Link>
@@ -104,7 +104,7 @@ function IndexChallenge() {
                 className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
                 onClick={handleDelete}
               >
-                <BiEdit />
+                <BiTrash />
                 <p>Hapus</p>
               </DropdownMenuItem>
             </DropdownMenuContent>
