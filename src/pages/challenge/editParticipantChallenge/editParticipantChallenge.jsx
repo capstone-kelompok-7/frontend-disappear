@@ -28,7 +28,7 @@ function editPesertaChallange() {
         <Breadcrumbs pages="Edit Peserta Tantangan" />
       </div>
 
-      <div className="my-6 mx-[100px] px-[25px] py-5 flex justify-center bg-[#FFFFFF] shadow-md border-2">
+      <div className="my-6 mx-[100px] px-[25px] py-5 flex justify-center bg-[#FFFFFF] shadow-md">
         <form onSubmit={submitForm} className="w-full">
           <div className="mb-9">
             <div className="flex">
@@ -88,7 +88,7 @@ function editPesertaChallange() {
                 <Button
                   label="Batal"
                   type="submit"
-                  className="rounded-[5px] border border-black px-2.5 py-1.5 shadow"
+                  className="rounded-[5px] border border-primary-green px-2.5 py-1.5 shadow text-primary-green"
                 />
               </div>
               <div className="pr-3">
