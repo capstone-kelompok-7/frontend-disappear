@@ -5,7 +5,6 @@ import {
 } from "react-router-dom";
 import React from "react";
 
-import App from "../pages/App";
 import IndexCategory from "../pages/category/indexCategory";
 import Dashboard from "../pages/dashboard/dashboard";
 import LoginPage from "../pages/login/LoginPage";
