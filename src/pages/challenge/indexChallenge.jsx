@@ -147,8 +147,12 @@ function IndexChallenge() {
           />
 
           <div className="flex ml-auto gap-4">
-            <div className="flex items-center w-80">
-              <Input type="text" placeholder="Cari Tantangan" className="p-3" />
+            <div className="flex items-center w-full ">
+              <Input
+                type="text"
+                placeholder="Cari Tantangan"
+                className="pr-32 py-6"
+              />
               <FiSearch className="absolute ml-72" />
             </div>
 
