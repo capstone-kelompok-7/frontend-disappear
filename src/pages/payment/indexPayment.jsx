@@ -30,7 +30,7 @@ export default function IndexPayment() {
       ),
       Tanggal: "12-09-2023",
       TotalPembayaran: 500000,
-      Status: <p className=" text-red-500">Menunggu Konfirmasi</p>,
+      Status: <p className=" text-[#DC9B09]">Menunggu Konfirmasi</p>,
     },
   ];
 
@@ -48,17 +48,17 @@ export default function IndexPayment() {
         <Breadcrumbs pages="Pembayaran" />
         <div className=" flex items-center justify-between gap-5 mt-14 mb-10 w-full">
           <div className="flex items-center gap-5 w-1/2">
-            <div className=" relative w-full">
+            <div className=" relative w-full ">
               <Input
                 placeholder="Cari Pelanggan"
                 type="text"
-                className=" border-primary-green"
+                className=" border-primary-green py-6"
               />
               <svg
-                className="absolute right-3 top-3 text-primary-green"
+                className="absolute right-3 top-4 text-primary-green"
                 xmlns="http://www.w3.org/2000/svg"
-                width="14"
-                height="14"
+                width="15"
+                height="15"
                 viewBox="0 0 14 14"
                 fill="none"
               >
@@ -102,8 +102,8 @@ export default function IndexPayment() {
                 <SlCalender />
               </div>
               <DropdownMenu className="flex">
-                <DropdownMenuTrigger className="flex justify-between items-center gap-1">
-                  <p>Filter</p>
+                <DropdownMenuTrigger className="flex justify-between items-center gap-3">
+                  <p>Bulan Ini</p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="10"
