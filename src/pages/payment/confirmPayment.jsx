@@ -118,6 +118,34 @@ export default function ConfirmPayment() {
             <p>Rp. 607.000</p>
           </div>
         </div>
+
+        <div className="border border-black rounded mt-4 shadow">
+          <p className="text-[#AF8050] text-sm font-semibold m-4">
+            Informasi Pembayaran
+          </p>
+          <div className="flex items-center justify-between m-6">
+            <p>Transfer</p>
+            <p>Rp. 607.000</p>
+          </div>
+          <div className="flex items-center justify-between m-6">
+            <p>Tanggal</p>
+            <p>12-03-2023</p>
+          </div>
+          <div className="flex items-center justify-between m-6">
+            <p>Metode Pembayaran</p>
+            <p>Transfer M-Banking</p>
+          </div>
+          <div className="flex items-center justify-between m-6">
+            <p>Transfer Dari</p>
+            <p>BCA a.n. Dimas Bayuwangis</p>
+          </div>
+        </div>
+        <Button
+          onClick={handleConfirmPayment}
+          type="submit"
+          label="Konfirmasi Pembayaran"
+          className=" bg-primary-green w-full my-4 text-white py-6 rounded-md text-xl font-medium flex justify-center items-center"
+        />
       </Layout>
     </>
   );
