@@ -30,7 +30,7 @@ export default function IndexPayment() {
       ),
       Tanggal: "12-09-2023",
       TotalPembayaran: 500000,
-      Status: <p className=" text-red-500">Menunggu Konfirmasi</p>,
+      Status: <p className=" text-[#DC9B09]">Menunggu Konfirmasi</p>,
     },
   ];
 

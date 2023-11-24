@@ -25,7 +25,7 @@ export default function ConfirmPayment() {
         </div>
       ),
       description:
-        "Pembayaran telah berhasil dikonfimasi. Terima kasih atas kontribusinya!",
+        "Pembayaran telah berhasil dikonfimasi. Silahkan nikmati fitur lainnya!!",
     });
   };
 
@@ -93,12 +93,8 @@ export default function ConfirmPayment() {
             <p>Rp. 60.000</p>
           </div>
           <div className="flex items-center justify-between m-6">
-            <p>Pajak 12%</p>
+            <p>Biaya Admin</p>
             <p>Rp. 600.000</p>
-          </div>
-          <div className="flex items-center justify-between m-6">
-            <p>Total Pembayaran</p>
-            <p>Rp. 2.000</p>
           </div>
           <div className="flex items-center justify-between m-6">
             <p>Voucher</p>
@@ -144,7 +140,7 @@ export default function ConfirmPayment() {
           onClick={handleConfirmPayment}
           type="submit"
           label="Konfirmasi Pembayaran"
-          className=" bg-primary-green w-full my-4 text-white py-6 rounded-md text-xl font-medium flex justify-center items-center"
+          className=" bg-secondary-green w-full my-4 text-white py-6 rounded-md text-xl font-medium flex justify-center items-center"
         />
       </Layout>
     </>
