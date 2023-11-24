@@ -102,8 +102,8 @@ export default function IndexPayment() {
                 <SlCalender />
               </div>
               <DropdownMenu className="flex">
-                <DropdownMenuTrigger className="flex justify-between items-center gap-1">
-                  <p>Filter</p>
+                <DropdownMenuTrigger className="flex justify-between items-center gap-3">
+                  <p>Bulan Ini</p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="10"
