@@ -97,6 +97,7 @@ export default function SideBar(props) {
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarList
+                to="/ulasan"
                 label="Ulasan"
                 icon={<BiEdit />}
                 isSidebarOpen={isSidebarOpen}

@@ -5,7 +5,6 @@ import {
 } from "react-router-dom";
 import React from "react";
 
-import App from "../pages/App";
 import IndexCategory from "../pages/category/indexCategory";
 import Dashboard from "../pages/dashboard/dashboard";
 import LoginPage from "../pages/login/LoginPage";
@@ -19,7 +18,6 @@ import EditParticipantChallenge from "@/pages/challenge/editParticipantChallenge
 import IndexProducts from "@/pages/products/indexProducts";
 import CreateEditProducts from "@/pages/products/createEditProducts/createEditProducts";
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
-import Review from "../pages/review/review";
 import VoucherApp from "../pages/voucherPage/voucherIndex";
 import CreateVoucher from "@/pages/voucherPage/createVoucher";
 import EditVoucher from "../pages/voucherPage/editVoucher";
@@ -32,6 +30,9 @@ import IndexPayment from "@/pages/payment/indexPayment";
 import ConfirmPayment from "@/pages/payment/confirmPayment";
 
 import Pesanan from "../pages/order/order";
+
+import IndexUlasan from "@/pages/ulasan/indexUlasan";
+import DetailUlasan from "@/pages/ulasan/detailUlasan/detailUlasan";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -101,10 +102,6 @@ export default function Router() {
       element: <DetailProducts />,
     },
     {
-      path: "/star",
-      element: <Review />,
-    },
-    {
       path: "/kupon",
       element: <VoucherApp />,
     },
@@ -143,6 +140,14 @@ export default function Router() {
     {
       path: "/pembayaran/konfirmasi-pembayaran",
       element: <ConfirmPayment />,
+    },
+    {
+      path: "/ulasan",
+      element: <IndexUlasan />,
+    },
+    {
+      path: "/ulasan/lihat-ulasan",
+      element: <DetailUlasan />,
     },
   ]);
   return <RouterProvider router={router} />;
