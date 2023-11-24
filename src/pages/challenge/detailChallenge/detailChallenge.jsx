@@ -20,8 +20,8 @@ export default function DetailChallange() {
         <div className="flex justify-between">
           <h1 className="font-bold text-[40px]">Tantangan Menanam Pohon</h1>
           <div>
-            <div className="bg-[#039900] rounded-xl py-1 px-6 font-semibold ">
-              <p className="text-white">Belum Kadaluwarsa</p>
+            <div className="bg-[#82ff80] rounded-xl py-1 px-9 ">
+              <p className="text-black">Belum Kadaluwarsa</p>
             </div>
           </div>
         </div>
