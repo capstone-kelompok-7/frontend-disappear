@@ -1,4 +1,8 @@
-import { RouterProvider, createBrowserRouter } from "react-router-dom";
+import {
+  RouterProvider,
+  createBrowserRouter,
+  Navigate,
+} from "react-router-dom";
 import React from "react";
 
 import App from "../pages/App";
@@ -33,7 +37,7 @@ export default function Router() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <App />,
+      element: <Navigate to="login" />,
     },
     {
       path: "/category",
