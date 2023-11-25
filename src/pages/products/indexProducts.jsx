@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -14,8 +14,13 @@ import {
 import Tabel from "@/components/table/table";
 import { BiDotsVerticalRounded, BiEdit, BiTrash } from "react-icons/bi";
 import Delete from "@/components/delete/delete";
+import { IoEye } from "react-icons/io5";
+import { getAllProducts } from "@/utils/api/products/api";
+import formatCurrency from "@/utils/formatter/currencyIdr";
 
 export default function IndexProducts() {
+  const [products, setProducts] = useState([]);
+
   const navigate = useNavigate();
 
   const toDetailProduct = () => {
@@ -33,83 +38,55 @@ export default function IndexProducts() {
     });
   };
 
-  const data = [
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-  ];
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const result = await getAllProducts();
+      setProducts(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const columns = [
-    { Header: "Foto", accessor: "Foto" },
-    { Header: "Nama Produk", accessor: "NamaProduk" },
-    { Header: "Kategori", accessor: "Kategori" },
-    { Header: "Gram", accessor: "Gram" },
-    { Header: "Stok", accessor: "Stok" },
-    { Header: "Diskon", accessor: "Diskon" },
-    { Header: "EXP", accessor: "EXP" },
+    {
+      Header: "Foto",
+      accessor: "image_url",
+      Cell: ({ row }) => {
+        const firstPhotoUrl = row.original.image_url[0]?.image_url;
+        return (
+          <img
+            src={firstPhotoUrl}
+            alt="Product"
+            className=" w-20 h-28 rounded block m-auto"
+          />
+        );
+      },
+    },
+    { Header: "Nama Produk", accessor: "name" },
+    {
+      Header: "Kategori",
+      accessor: "categories",
+      Cell: ({ row }) => {
+        const categories = row.original.categories.map(
+          (category) => category.name
+        );
+        return <p>{categories.join(", ")}</p>;
+      },
+    },
+    { Header: "Gram", accessor: "gram_plastic" },
+    { Header: "Stok", accessor: "stock" },
+    { Header: "Diskon", accessor: "discount" },
+    { Header: "EXP", accessor: "product_exp" },
     {
       Header: "Harga",
-      accessor: "Harga",
+      accessor: "price",
       Cell: ({ row }) => (
         <div className="flex justify-between items-center">
-          <p>{row.original.Harga}</p>
+          <p>{formatCurrency(row.original.price)}</p>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <BiDotsVerticalRounded />
@@ -117,42 +94,24 @@ export default function IndexProducts() {
 
             <DropdownMenuContent>
               <Link onClick={toDetailProduct}>
-                <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center">
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="15"
-                    height="11"
-                    viewBox="0 0 15 11"
-                    fill="none"
-                  >
-                    <path
-                      d="M7.5 3.76923C6.51897 3.76923 5.72368 4.54412 5.72368 5.5C5.72368 6.45588 6.51897 7.23077 7.5 7.23077C8.48103 7.23077 9.27632 6.45588 9.27632 5.5C9.27632 4.54412 8.48103 3.76923 7.5 3.76923Z"
-                      fill="white"
-                    />
-                    <path
-                      fillRule="evenodd"
-                      clipRule="evenodd"
-                      d="M7.5 0.5C5.43334 0.5 3.57474 1.30876 2.23549 2.31027C1.56499 2.81168 1.01482 3.36856 0.628808 3.91052C0.250153 4.44216 0 5.00118 0 5.5C0 5.99882 0.250153 6.55784 0.628808 7.08948C1.01482 7.63144 1.56499 8.18832 2.23549 8.68973C3.57474 9.69124 5.43334 10.5 7.5 10.5C9.56666 10.5 11.4253 9.69124 12.7645 8.68973C13.435 8.18832 13.9852 7.63144 14.3712 7.08948C14.7498 6.55784 15 5.99882 15 5.5C15 5.00118 14.7498 4.44216 14.3712 3.91052C13.9852 3.36856 13.435 2.81168 12.7645 2.31027C11.4253 1.30876 9.56666 0.5 7.5 0.5ZM4.53947 5.5C4.53947 3.90687 5.86495 2.61538 7.5 2.61538C9.13505 2.61538 10.4605 3.90687 10.4605 5.5C10.4605 7.09313 9.13505 8.38462 7.5 8.38462C5.86495 8.38462 4.53947 7.09313 4.53947 5.5Z"
-                      fill="black"
-                    />
-                  </svg>
-
-                  <p className=" text-black hover:text-white">Detail Produk</p>
+                <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white">
+                  <IoEye />
+                  <p>Detail Produk</p>
                 </DropdownMenuItem>
               </Link>
               <Link onClick={toEditProduct}>
-                <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer items-center gap-3">
-                  <BiEdit className=" text-black hover:text-white" />
-                  <p className=" text-black hover:text-white">Edit Produk</p>
+                <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white">
+                  <BiEdit />
+                  <p>Edit Produk</p>
                 </DropdownMenuItem>
               </Link>
 
               <DropdownMenuItem
-                className=" hover:bg-secondary-green cursor-pointer items-center gap-3"
+                className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
                 onClick={handleDelete}
               >
-                <BiTrash className=" text-black hover:text-white" />
-                <p className=" text-black hover:text-white">Hapus Produk</p>
+                <BiTrash />
+                <p>Hapus Produk</p>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -193,10 +152,10 @@ export default function IndexProducts() {
               <Input
                 type="text"
                 placeholder="Cari Produk"
-                className=" border-primary-green"
+                className=" border-primary-green py-6"
               />
               <svg
-                className="absolute right-3 top-3 text-primary-green"
+                className="absolute right-3 top-4 text-primary-green"
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"
                 height="14"
@@ -231,16 +190,21 @@ export default function IndexProducts() {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem>Alat Rumah Tangga</DropdownMenuItem>
-                <DropdownMenuItem>Produk Ramah Lingkungan</DropdownMenuItem>
-                <DropdownMenuItem>Botol Air</DropdownMenuItem>
-                <DropdownMenuItem>Bag</DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Tas Baru
+                </DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Alat Makan
+                </DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Sendok
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
         <div className="mt-5">
-          <Tabel columns={columns} data={data} />
+          <Tabel columns={columns} data={products} />
         </div>
       </Layout>
     </>
