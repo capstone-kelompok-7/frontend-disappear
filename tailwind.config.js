@@ -17,6 +17,9 @@ module.exports = {
       },
     },
     extend: {
+      gap: {
+        35: "8.5rem",
+      },
       colors: {
         "primary-green": "#25745A",
         "secondary-green": "#39AD85",
