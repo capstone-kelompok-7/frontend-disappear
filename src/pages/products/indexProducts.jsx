@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -15,8 +15,12 @@ import Tabel from "@/components/table/table";
 import { BiDotsVerticalRounded, BiEdit, BiTrash } from "react-icons/bi";
 import Delete from "@/components/delete/delete";
 import { IoEye } from "react-icons/io5";
+import { getAllProducts } from "@/utils/api/products/api";
+import formatCurrency from "@/utils/formatter/currencyIdr";
 
 export default function IndexProducts() {
+  const [products, setProducts] = useState([]);
+
   const navigate = useNavigate();
 
   const toDetailProduct = () => {
@@ -34,83 +38,55 @@ export default function IndexProducts() {
     });
   };
 
-  const data = [
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-    {
-      Foto: 1,
-      NamaProduk: "Totebag",
-      Kategori: "Bag, Alat Rumah tangga, Produk Ramah Lingkungan",
-      Gram: 20,
-      Stok: 140,
-      Diskon: 50000,
-      EXP: 15,
-      Harga: 35000,
-    },
-  ];
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const result = await getAllProducts();
+      setProducts(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
 
   const columns = [
-    { Header: "Foto", accessor: "Foto" },
-    { Header: "Nama Produk", accessor: "NamaProduk" },
-    { Header: "Kategori", accessor: "Kategori" },
-    { Header: "Gram", accessor: "Gram" },
-    { Header: "Stok", accessor: "Stok" },
-    { Header: "Diskon", accessor: "Diskon" },
-    { Header: "EXP", accessor: "EXP" },
+    {
+      Header: "Foto",
+      accessor: "image_url",
+      Cell: ({ row }) => {
+        const firstPhotoUrl = row.original.image_url[0]?.image_url;
+        return (
+          <img
+            src={firstPhotoUrl}
+            alt="Product"
+            className=" w-20 h-28 rounded block m-auto"
+          />
+        );
+      },
+    },
+    { Header: "Nama Produk", accessor: "name" },
+    {
+      Header: "Kategori",
+      accessor: "categories",
+      Cell: ({ row }) => {
+        const categories = row.original.categories.map(
+          (category) => category.name
+        );
+        return <p>{categories.join(", ")}</p>;
+      },
+    },
+    { Header: "Gram", accessor: "gram_plastic" },
+    { Header: "Stok", accessor: "stock" },
+    { Header: "Diskon", accessor: "discount" },
+    { Header: "EXP", accessor: "product_exp" },
     {
       Header: "Harga",
-      accessor: "Harga",
+      accessor: "price",
       Cell: ({ row }) => (
         <div className="flex justify-between items-center">
-          <p>{row.original.Harga}</p>
+          <p>{formatCurrency(row.original.price)}</p>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <BiDotsVerticalRounded />
@@ -176,10 +152,10 @@ export default function IndexProducts() {
               <Input
                 type="text"
                 placeholder="Cari Produk"
-                className=" border-primary-green"
+                className=" border-primary-green py-6"
               />
               <svg
-                className="absolute right-3 top-3 text-primary-green"
+                className="absolute right-3 top-4 text-primary-green"
                 xmlns="http://www.w3.org/2000/svg"
                 width="14"
                 height="14"
@@ -214,16 +190,21 @@ export default function IndexProducts() {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem>Alat Rumah Tangga</DropdownMenuItem>
-                <DropdownMenuItem>Produk Ramah Lingkungan</DropdownMenuItem>
-                <DropdownMenuItem>Botol Air</DropdownMenuItem>
-                <DropdownMenuItem>Bag</DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Tas Baru
+                </DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Alat Makan
+                </DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Sendok
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
         <div className="mt-5">
-          <Tabel columns={columns} data={data} />
+          <Tabel columns={columns} data={products} />
         </div>
       </Layout>
     </>

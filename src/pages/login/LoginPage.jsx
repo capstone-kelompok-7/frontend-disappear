@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { toast } from "@/components/ui/use-toast";
-import login from "@/utils/api/login";
+import login from "@/utils/api/auth/login";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/button";
 import Label from "@/components/label";
