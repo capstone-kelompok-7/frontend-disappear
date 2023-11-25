@@ -154,7 +154,7 @@ export default function IndexPopup() {
                 placeholder="Cari Kategori"
                 className="p-3 rounded-[3px] pr-10"
               />
-              <FiSearch className="absolute right-3 top-3" />
+              <FiSearch className="absolute right-10 top-3" />
             </div>
           </div>
 
