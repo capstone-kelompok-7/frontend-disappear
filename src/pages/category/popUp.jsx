@@ -76,7 +76,7 @@ const PopUp = ({
                   {cancelButtonLabel}
                 </button>
               </div>
-              <div className="border-solid shadow-[0px_2px_4px_0px_rgba(0,_0,_0,_0.15)] bg-[#25745A] flex flex-col h-10 items-center py-2 rounded-full">
+              <div className="border-solid shadow-[0px_2px_4px_0px_rgba(0,_0,_0,_0.15)] bg-secondary-green flex flex-col h-10 items-center py-2 rounded-full">
                 <button
                   type="button"
                   className="text-xl text-white font-['Inter'] tracking-[0.2] leading-[19.6px] mx-8"

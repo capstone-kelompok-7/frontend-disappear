@@ -96,13 +96,17 @@ export default function IndexPopup() {
 
             <DropdownMenuContent>
               <DropdownMenuItem
+                className=" hover:bg-secondary-green cursor-pointer gap-3 items-center"
                 onClick={() => openModal("Edit Kategori", data[0])}
                 style={{ cursor: "pointer" }}
               >
                 <BiEdit />
                 Edit Kategori
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete}>
+              <DropdownMenuItem
+                className=" hover:bg-secondary-green cursor-pointer gap-3 items-center"
+                onClick={handleDelete}
+              >
                 <RiDeleteBinLine />
                 Delete Kategori
               </DropdownMenuItem>
@@ -141,7 +145,7 @@ export default function IndexPopup() {
                 </svg>
               }
               onClick={() => openModal("Tambahkan Kategori!")}
-              className="flex items-center space-x-2 border bg-[#25745A] text-white p-2 rounded-[3px]"
+              className="flex items-center space-x-2 border bg-secondary-green text-white p-2 rounded-[3px]"
             />
 
             <div className="flex items-center w-64 relative">
