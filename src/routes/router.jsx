@@ -3,38 +3,43 @@ import {
   createBrowserRouter,
   Navigate,
 } from "react-router-dom";
-import React from "react";
 
-import IndexCategory from "../pages/category/indexCategory";
-import Dashboard from "../pages/dashboard/dashboard";
-import LoginPage from "../pages/login/LoginPage";
-import Pelanggan from "../pages/pelanggan/pelanggan";
-import PelangganDetail from "../pages/pelanggan/pelangganDetail";
-import IndexChallenge from "@/pages/challenge/indexChallenge";
+import EditParticipantChallenge from "@/pages/challenge/editParticipantChallenge/editParticipantChallenge";
+import ParticipantChallange from "@/pages/challenge/participantChallenge/participantChallenge";
 import CreateEditChallenge from "@/pages/challenge/createEditChallenge/createEditChallenge";
 import DetailChallenge from "@/pages/challenge/detailChallenge/detailChallenge";
-import ParticipantChallange from "@/pages/challenge/participantChallenge/participantChallenge";
-import EditParticipantChallenge from "@/pages/challenge/editParticipantChallenge/editParticipantChallenge";
-import IndexProducts from "@/pages/products/indexProducts";
+import IndexChallenge from "@/pages/challenge/indexChallenge";
+
 import CreateEditProducts from "@/pages/products/createEditProducts/createEditProducts";
 import DetailProducts from "@/pages/products/detailProducts/detailProducts";
-import VoucherApp from "../pages/voucherPage/voucherIndex";
+import IndexProducts from "@/pages/products/indexProducts";
+
+import PelangganDetail from "@/pages/pelanggan/pelangganDetail";
+import Pelanggan from "@/pages/pelanggan/pelanggan";
+
 import CreateVoucher from "@/pages/voucherPage/createVoucher";
-import EditVoucher from "../pages/voucherPage/editVoucher";
+import VoucherApp from "@/pages/voucherPage/voucherIndex";
+import EditVoucher from "@/pages/voucherPage/editVoucher";
 
-import DetailNews from "../pages/Artikel/detailNews";
-import CreateNews from "../pages/Artikel/createNews";
-import EditNews from "@/pages/Artikel/editNews";
-import IndexNews from "../pages/Artikel/indexNews";
-import IndexPayment from "@/pages/payment/indexPayment";
 import ConfirmPayment from "@/pages/payment/confirmPayment";
+import IndexPayment from "@/pages/payment/indexPayment";
 
-import Pesanan from "../pages/order/order";
 import DetailOrder from "@/pages/order/detailOrder";
-import Landingpage from "@/pages/landingpage/landingpage";
+import Pesanan from "@/pages/order/order";
 
-import IndexUlasan from "@/pages/ulasan/indexUlasan";
+import DetailNews from "@/pages/Artikel/detailNews";
+import CreateNews from "@/pages/Artikel/createNews";
+import IndexNews from "@/pages/Artikel/indexNews";
+import EditNews from "@/pages/Artikel/editNews";
+
 import DetailUlasan from "@/pages/ulasan/detailUlasan/detailUlasan";
+import IndexUlasan from "@/pages/ulasan/indexUlasan";
+
+import IndexCategory from "@/pages/category/indexCategory";
+import Landingpage from "@/pages/landingpage/landingpage";
+import Dashboard from "@/pages/dashboard/dashboard";
+import LoginPage from "@/pages/login/LoginPage";
+import Carousel from "@/pages/carousel/index";
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -158,6 +163,10 @@ export default function Router() {
     {
       path: "/landingpage",
       element: <Landingpage />,
+    },
+    {
+      path: "/carousel",
+      element: <Carousel />,
     },
   ]);
   return <RouterProvider router={router} />;

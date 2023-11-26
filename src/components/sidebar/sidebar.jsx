@@ -62,6 +62,7 @@ export default function SideBar(props) {
                 isSidebarOpen={isSidebarOpen}
               />
               <SidebarList
+                to="/carousel"
                 label="Carousel"
                 icon={<IoImageOutline />}
                 isSidebarOpen={isSidebarOpen}
