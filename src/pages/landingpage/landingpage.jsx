@@ -34,8 +34,8 @@ export default function Landingpage() {
     <>
       <Nav />
       {/* Hero Beranda */}
-      <img src={bgImage} alt="Background Image" className="w-full" />
-      <div className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
+      <img id="beranda" src={bgImage} alt="Background Image" className="w-full" />
+      <div  className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-center">
         <p className="text-white md:text-4xl font-medium w-[1034px] sm:w-auto sm:text-2xl sm:pb-80 md:pb-0" >
           Merawat lingkungan hari ini untuk kehidupan yang lebih baik Kedepannya
         </p>
@@ -82,7 +82,7 @@ export default function Landingpage() {
       </div>
 
       {/* MISI */}
-      <div className="flex bg-[#D9F2EA]">
+      <div id="misi" className="flex bg-[#D9F2EA]">
         <div className="self-center px-32 sm:py-20">
           <h1 className="font-semibold md:text-4xl pb-4 sm:text-2xl">Membawa Perubahan</h1>
           <p className="md:text-2xl font-normal sm:text-base">
@@ -100,7 +100,7 @@ export default function Landingpage() {
       </div>
 
       {/* ALASAN */}
-      <h1 className="text-center md:pt-32 md:pb-11 sm:pt-20 md:text-5xl font-semibold sm:text-xl">
+      <h1  id="alasan" className="text-center md:pt-32 md:pb-11 sm:pt-20 md:text-5xl font-semibold sm:text-xl">
         Kenapa Harus Pilih Disappear, sih?
       </h1>
       <div className="flex justify-center md:gap-24 md:pb-44 sm:pb-24 sm:gap-10">
@@ -140,7 +140,7 @@ export default function Landingpage() {
       </div>
 
       {/* MANFAAT */}
-      <div className="flex justify-center px-32 bg-[#D9F2EA] py-44 sm:py-24">
+      <div id="manfaat" className="flex justify-center px-32 bg-[#D9F2EA] py-44 sm:py-24">
         <img src={grid} alt="Product Image" className="pl-70 sm:hidden md:block" />
         <div>
           <h1 className="md:text-4xl font-semibold pb-14 sm:text-2xl">
@@ -182,7 +182,7 @@ export default function Landingpage() {
         <img src={gogreen} alt="Go Green Logo" className="w-full pb-40" />
 
         {/* TESTIMONI */}
-        <h1 className="text-center md:text-5xl font-semibold pb-60 sm:text-2xl">
+        <h1 id="testimoni" className="text-center md:text-5xl font-semibold pb-60 sm:text-2xl">
           Testimoni Pelanggan
         </h1>
       </div>
@@ -248,7 +248,7 @@ export default function Landingpage() {
       </div>
 
       {/* FAQ */}
-      <div className="bg-[#D9F2EA] px-48 pt-20 pb-40">
+      <div id="faq" className="bg-[#D9F2EA] px-48 pt-20 pb-40">
         <h1 className="text-center font-semibold md:text-5xl pt-28 pb-20 sm:text-2xl sm:pt-14">
           Masih Bingung? Yuk Lihat Ini
         </h1>
@@ -311,7 +311,7 @@ export default function Landingpage() {
       </div>
 
       {/* KONTAK */}
-      <div className="flex bg-[#25745A] text-white py-24 px-16">
+      <div id="kontak" className="flex bg-[#25745A] text-white py-24 px-16">
         <div className="self-center md:ps-12 sm:ps-0">
           <h1 className="font-semibold md:text-5xl pb-8 md:leading-snug sm:text-3xl">
             Dapatkan Akses Langsung Di Aplikasi Kami
