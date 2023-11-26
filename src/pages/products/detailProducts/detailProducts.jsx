@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import Layout from "@/components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
@@ -7,8 +7,26 @@ import Button from "@/components/button";
 import { IoArrowBack } from "react-icons/io5";
 import Star from "@/components/review/star";
 import Delete from "@/components/delete/delete";
+import { getDetailProducts } from "@/utils/api/products/api";
+import formatCurrency from "@/utils/formatter/currencyIdr";
 
 export default function DetailProducts() {
+  const [products, setProducts] = useState([]);
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const result = await getDetailProducts(id);
+      setProducts(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const navigate = useNavigate();
 
   function toRoute() {
@@ -53,15 +71,23 @@ export default function DetailProducts() {
                 />
               </div>
               <div className="flex mt-6">
-                <p className="bg-gray-300 border border-black px-5 py-1 rounded-full font-normal text-base">
-                  category
-                </p>
+                {Array.isArray(products.categories) &&
+                  products.categories.map((category) => (
+                    <p
+                      className="bg-gray-300 border border-black px-5 py-1 rounded-full font-normal text-base mr-3"
+                      key={category.id}
+                    >
+                      {category.name}
+                    </p>
+                  ))}
               </div>
             </div>
             <div className="w-full">
               <div className="flex justify-between w-full items-center">
-                <h1 className=" text-3xl font-semibold">GunnySack Bag</h1>
-                <p className=" text-xs font-semibold">20 gram</p>
+                <h1 className=" text-3xl font-semibold">{products.name}</h1>
+                <p className=" text-xs font-semibold">
+                  {products.gram_plastic} gram
+                </p>
               </div>
               <div className="flex my-3 items-center">
                 <Star starValue={apiStarValue} />
@@ -70,9 +96,11 @@ export default function DetailProducts() {
                 </p>
               </div>
               <div className=" flex items-center gap-8">
-                <p className=" text-base font-semibold">Rp. 120.000</p>
+                <p className=" text-base font-semibold">
+                  {formatCurrency(products.price)}
+                </p>
                 <p className=" text-xs font-normal">
-                  Diskon Produk : Rp. 15.000
+                  Diskon Produk : {formatCurrency(products.discount)}
                 </p>
               </div>
               <div className=" mt-8">

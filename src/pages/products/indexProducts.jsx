@@ -27,8 +27,8 @@ export default function IndexProducts() {
 
   const navigate = useNavigate();
 
-  const toDetailProduct = () => {
-    navigate("/produk/:id");
+  const toDetailProduct = (productId) => {
+    navigate(`/produk/${productId}`);
   };
 
   const toEditProduct = () => {
@@ -111,7 +111,7 @@ export default function IndexProducts() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <Link onClick={toDetailProduct}>
+              <Link onClick={() => toDetailProduct(row.original.id)}>
                 <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white">
                   <IoEye />
                   <p>Detail Produk</p>
