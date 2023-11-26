@@ -30,6 +30,7 @@ import IndexPayment from "@/pages/payment/indexPayment";
 import ConfirmPayment from "@/pages/payment/confirmPayment";
 
 import Pesanan from "../pages/order/order";
+import Landingpage from "@/pages/landingpage/landingpage";
 
 import IndexUlasan from "@/pages/ulasan/indexUlasan";
 import DetailUlasan from "@/pages/ulasan/detailUlasan/detailUlasan";
@@ -149,6 +150,10 @@ export default function Router() {
       path: "/ulasan/lihat-ulasan",
       element: <DetailUlasan />,
     },
+    {
+      path: "/landingpage",
+      element: <Landingpage />
+    }
   ]);
   return <RouterProvider router={router} />;
 }

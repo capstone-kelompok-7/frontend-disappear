@@ -1,0 +1,64 @@
+.cardHero {
+    text-align: -webkit-center;
+  }
+  
+  .testimonial .image {
+      height: 170px;
+      width: 170px;
+      object-fit: cover;
+  }
+  
+  .testimonial {
+      position: relative;
+      width: 100%;
+      max-width: 900px;
+      background-color: white;
+      padding: 50px 0;
+      
+  }
+  .container {
+      height: 100vh;
+      width: 100%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+  }
+  .testimonial .slide {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      row-gap: 30px;
+  }
+  .slide p {
+      text-align: center;
+      padding: 0 160px;
+  }
+  .slide .star-icon {
+      font-size: 30px;
+  }
+  .swiper {
+      width: 100%;
+      height: 100%;
+    }
+    
+    .swiper-slide {
+      text-align: center;
+      font-size: 18px;
+      background: #fff;
+    
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+    
+    .swiper-slide img {
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+  
+    .swiper-button-next, .swiper-button-prev {
+      color: black;
+  }
