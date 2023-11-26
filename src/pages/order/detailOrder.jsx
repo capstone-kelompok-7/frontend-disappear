@@ -88,26 +88,26 @@ export default function DetailOrder() {
             </div>
 
             {/*TOTAL PEMBAYARAN*/}
-            <div className="flex flex-col justify-start relative border shadow w-[940px] h-72 mt-4 border-gray-400 rounded-md">
+            <div className="flex flex-col justify-start relative border shadow w-[940px] h-80 mt-4 border-gray-400 rounded-md">
               <div className="flex items-center justify-between m-6">
                 <p className="font-semibold justify-between text-sm text-primary-green">
                   Total Pembayaran
                 </p>
                 <p className="text-sm">Rp. 600.000</p>
               </div>
-              <div className="flex items-center text-sm justify-between mb-3 mx-6">
+              <div className="flex items-center text-sm justify-between mb-5 mx-6">
                 <p>Pengiriman (Kelas Ekonomi)</p>
                 <p>Rp. 60.000</p>
               </div>
-              <div className="flex items-center text-sm justify-between mb-3 mx-6">
+              <div className="flex items-center text-sm justify-between mb-5 mx-6">
                 <p>Biaya Admin</p>
                 <p>Rp. 2.000</p>
               </div>
-              <div className="flex items-center text-sm justify-between mb-3 mx-6">
+              <div className="flex items-center text-sm justify-between mb-5 mx-6">
                 <p>Voucher</p>
                 <p>Rp. 50.000</p>
               </div>
-              <div className="flex items-center text-sm justify-between mb-3 mx-6">
+              <div className="flex items-center text-sm justify-between mb-5 mx-6">
                 <p>Diskon Produk</p>
                 <p>Rp. 5.000</p>
               </div>
@@ -123,32 +123,32 @@ export default function DetailOrder() {
             </div>
 
             {/*DETAIL PEMBAYARAN*/}
-            <div className="flex flex-col justify-start relative border shadow w-[940px] h-48 p-15 mt-4 border-gray-400 rounded-md">
-              <div className="flex flex-col justify-start items-start gap-4 p-4">
-                <div className="flex justify-start items-center gap-[480px]">
-                  <p className="flex-grow-0 flex-shrink-0 text-sm font-semibold text-left text-primary-green">
+            <div className="flex flex-col justify-start relative border shadow w-[940px] h-[217px] mt-4 border-gray-400 rounded-md">
+              <div className="flex flex-col justify-between items-start gap-4 p-5">
+                <div className="flex justify-between items-center w-full">
+                  <div className="flex text-sm font-semibold mb-1 text-left text-primary-green">
                     Detail Pembayaran
-                  </p>
-                  <div className="flex justify-center items-center gap-[558px] px-3.5 py-1.5 rounded bg-secondary-green">
+                  </div>
+                  <div className="flex px-3.5 py-1.5 rounded bg-secondary-green">
                     <Button
                       label="View"
                       className="text-xs font-medium text-white"
                     />
                   </div>
                 </div>
-                <div className="flex text-xs justify-between gap-[558px]">
+                <div className="flex text-xs justify-between mb-1 gap-[780px]">
                   <p>Transfer</p>
                   <p>Rp. 607.000</p>
                 </div>
-                <div className="flex text-xs justify-between gap-[559px]">
+                <div className="flex text-xs justify-between mb-1 gap-[780px]">
                   <p>Tanggal</p>
                   <p>12-03-2023</p>
                 </div>
-                <div className="flex text-xs justify-between gap-[573px]">
+                <div className="flex text-xs justify-between mb-1 gap-[795px]">
                   <p>Status</p>
                   <p>Konfirmasi</p>
                 </div>
-                <div className="flex text-xs justify-between gap-[433px]">
+                <div className="flex text-xs justify-between mb-1 gap-[655px]">
                   <p>Transfer Dari</p>
                   <p>BCA a.n. Dimas Bayuwangis</p>
                 </div>
