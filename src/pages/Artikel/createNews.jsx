@@ -2,35 +2,34 @@ import React, { useState } from "react";
 import { IoMdCloudUpload } from "react-icons/io";
 import { IoArrowBack } from "react-icons/io5";
 import Layout from "../../components/layout";
-import { Inputt } from "@/components/input";
 import TextEditor from "@/components/texteditor/tipTap";
 import { Link } from "react-router-dom";
+import Breadcrumbs from "@/components/breadcrumbs";
+import { Input } from "@/components/ui/input";
 
 function CreateNews() {
   return (
     <Layout>
+      <div>
+        <Breadcrumbs pages="Artikel" />
+      </div>
       <form>
-        <div className="mt-5 text-xl">
-          <Link to="/artikel">
-            <button className="flex items-center space-x-2">
-              <IoArrowBack />
-              <div className="font-bold">Artikel</div>
-            </button>
-          </Link>
-        </div>
-        <div className="mt-5 mx-8 border-t-2 border-l-2 border-b-2">
-          <div className="mt-5 ml-5">
-            <h1 className="font-bold">Tambah Artikel</h1>
+        <div className="mt-8 border-t-2 border-l-2 border-b-2 rounded-xl">
+          <div className="bg-primary-green p-7 rounded-t-xl">
+            <h1 className="font-bold text-white">Tambah Artikel</h1>
           </div>
-          <hr className="border border-black mt-5" />
           <div className="mt-6 ml-4 flex space-x-3">
-            <Inputt
-              className="border rounded-sm border-black p-2 bg-white"
-              type="text"
-              name="title"
-              label="Judul"
-              placeholder="Judul Artikel"
-            />
+            <div className="w-full ">
+              <label className="font-bold" htmlFor="">
+                Judul
+              </label>
+              <Input
+                className="border rounded-sm border-black p-2 bg-white mt-3"
+                type="text"
+                name="title"
+                placeholder="Judul Artikel"
+              />
+            </div>
             <div className="flex flex-col mb-4 w-full">
               <label className="text-black font-bold mb-3">Unggah File</label>
               <div className="border p-2 rounded-sm border-black flex">
@@ -54,14 +53,14 @@ function CreateNews() {
           </div>
           <div className="mt-6 ml-4">
             <label className="text-black font-bold">Konten</label>
-            <div>
+            <div className="overflow-auto">
               <TextEditor />
             </div>
           </div>
-          <div className="mt-6 ml-4 mb-7 flex space-x-3">
+          <div className="justify-end mb-7 flex space-x-3">
             <button
               type="submit"
-              className="bg-slate-600 text-white px-4 py-2 rounded"
+              className="bg-secondary-green text-white px-4 py-2 rounded"
             >
               Tambah Artikel
             </button>

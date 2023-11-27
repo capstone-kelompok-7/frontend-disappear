@@ -40,7 +40,7 @@ function IndexNews() {
         <div className="flex justify-between">
           <div className="flex space-x-3">
             <Link to="/create-news">
-              <button className="flex items-center space-x-2 border bg-slate-500 hover:bg-slate-200 text-white hover:text-black hover:border-black p-4 rounded-lg">
+              <button className="flex items-center space-x-2 border bg-secondary-green text-white p-4 rounded-lg">
                 <AiOutlinePlus />
                 <div>Buat Artikel</div>
               </button>
