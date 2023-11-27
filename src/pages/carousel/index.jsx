@@ -1,6 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { PiDotsThreeVerticalBold } from "react-icons/pi";
+import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
 import { BiEdit } from "react-icons/bi";
@@ -25,9 +25,9 @@ Modal.setAppElement("#root");
 
 export default function IndexPopup() {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [popupLabel, setPopupLabel] = useState("");
   const [inputName, setInputName] = useState("");
   const [file, setFile] = useState(null);
-  const [popupLabel, setPopupLabel] = useState("");
 
   const openModal = (label, data = null) => {
     setPopupLabel(label);
@@ -89,7 +89,7 @@ export default function IndexPopup() {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="three-dots">
-                <PiDotsThreeVerticalBold />
+                <PiDotsThreeOutlineVerticalFill />
               </div>
             </DropdownMenuTrigger>
 
@@ -140,16 +140,16 @@ export default function IndexPopup() {
                 </svg>
               }
               onClick={() => openModal("Tambah Carousel")}
-              className="flex items-center space-x-2 border bg-[#25745A] text-white p-2  rounded-[3px]"
+              className="flex items-center space-x-2 border bg-[#25745A] text-white p-2  rounded-md"
             />
 
-            <div className="flex items-center w-64 relative">
+            <div className="flex w-64 relative">
               <Input
                 type="text"
                 placeholder="Cari Carousel"
-                className="p-3 rounded-[3px] pr-10"
+                className="border-primary-green pr-36 placeholder:text-left"
+                icon={<FiSearch />}
               />
-              <FiSearch className="absolute right-3 top-3" />
             </div>
           </div>
 
