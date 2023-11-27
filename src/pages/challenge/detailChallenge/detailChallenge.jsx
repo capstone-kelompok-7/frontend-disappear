@@ -1,7 +1,7 @@
 import React from "react";
 import { BsArrowLeft } from "react-icons/bs";
 
-import Layout from "../../../components/layout";
+import Layout from "@/components/layout";
 import { Link } from "react-router-dom";
 
 export default function DetailChallange() {
@@ -9,7 +9,7 @@ export default function DetailChallange() {
     <Layout>
       <div className="mt-6 mb-6 mx-6 px-[15px] py-5 flex justify-between">
         <div className="flex items-center font-bold">
-          <Link to="/">
+          <Link to="/tantangan">
             <BsArrowLeft />
           </Link>
           <p className="pl-2 text-xl">Tantangan</p>
