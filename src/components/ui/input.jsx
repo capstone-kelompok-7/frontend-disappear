@@ -2,7 +2,7 @@ import * as React from "react";
 
 import { cn } from "@/lib/utils";
 
-const Input = React.forwardRef(({ className, type, error, ...props }, ref) => {
+const Input = React.forwardRef(({ className, type, error, icon, ...props }, ref) => {
   return (
     <div className="relative">
       <input
@@ -20,6 +20,7 @@ const Input = React.forwardRef(({ className, type, error, ...props }, ref) => {
           {error}
         </p>
       )}
+      {icon && <div className="absolute right-3 top-3">{icon}</div>}
     </div>
   );
 });
