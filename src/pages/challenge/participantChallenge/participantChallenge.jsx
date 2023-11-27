@@ -1,14 +1,9 @@
+import React, { useEffect, useState } from "react";
+
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { Link } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
-import {
-  Select,
-  SelectValue,
-  SelectTrigger,
-  SelectContent,
-  SelectItem,
-} from "@/components/ui/select";
 import Layout from "@/components/layout";
 import {
   DropdownMenu,
@@ -17,8 +12,24 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Tabel from "@/components/table/table";
+import { getParticipant } from "@/utils/api/challenge/participantChallenge/api";
 
 export default function IndexPesertaTantangan() {
+  const [participant, setParticipant] = useState([]);
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const result = await getParticipant();
+      setParticipant(result.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
   const data = [
     {
       No: 1,
@@ -88,20 +99,39 @@ export default function IndexPesertaTantangan() {
           </div>
 
           <div className="flex space-x-4">
-            <div className="flex items-center space-x-3">
-              <p>Data Untuk</p>
-              <div className="flex items-center">
+            <div className="flex items-center gap-5">
+              <p className="text-zinc-400">Data Untuk</p>
+              <div className="flex items-center gap-3">
                 <MdOutlineCalendarMonth size={30} />
-                <Select>
-                  <SelectTrigger className="border-none focus:ring-offset-0 focus:ring-0 pr-0">
-                    <SelectValue placeholder="Bulan ini" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="BulanIni">Bulan ini</SelectItem>
-                    <SelectItem value="MingguIni">Minggu ini</SelectItem>
-                    <SelectItem value="HariIni">Hari ini</SelectItem>
-                  </SelectContent>
-                </Select>
+                <DropdownMenu>
+                  <DropdownMenuTrigger className="flex justify-between items-center py-3 px-3 gap-3">
+                    <p>Bulan ini</p>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="5"
+                      viewBox="0 0 10 5"
+                      fill="none"
+                    >
+                      <path
+                        d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
+                        fill="#373737"
+                      />
+                    </svg>
+                  </DropdownMenuTrigger>
+
+                  <DropdownMenuContent>
+                    <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                      Bulan ini
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                      Minggu ini
+                    </DropdownMenuItem>
+                    <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                      Hari ini
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
               </div>
             </div>
 
@@ -123,9 +153,15 @@ export default function IndexPesertaTantangan() {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem>Valid</DropdownMenuItem>
-                <DropdownMenuItem>Tidak Valid</DropdownMenuItem>
-                <DropdownMenuItem>Menunggu Validasi</DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Valid
+                </DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Tidak Valid
+                </DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Menunggu Validasi
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

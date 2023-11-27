@@ -1,3 +1,5 @@
+import React, { useEffect, useState } from "react";
+
 import { useNavigate, Link } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import Breadcrumbs from "@/components/breadcrumbs";
@@ -15,9 +17,41 @@ import {
 import Tabel from "@/components/table/table";
 import { Input } from "@/components/ui/input";
 import Delete from "@/components/delete/delete";
+import {
+  getChallenge,
+  deleteChallenge,
+} from "@/utils/api/challenge/challenge/api";
 
 function IndexChallenge() {
+  const [challenge, setChallenge] = useState([]);
+
   const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const result = await getChallenge();
+      setChallenge(result.data);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async function onClickDelete(id) {
+    try {
+      await deleteChallenge(id);
+      Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+      fetchData();
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
 
   const handleDelete = () => {
     Delete({
@@ -174,8 +208,12 @@ function IndexChallenge() {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem>Kadaluwarsa</DropdownMenuItem>
-                <DropdownMenuItem>Belum Kadaluwarsa</DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Kadaluwarsa
+                </DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Belum Kadaluwarsa
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
