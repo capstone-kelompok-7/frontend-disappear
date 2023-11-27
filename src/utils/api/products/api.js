@@ -30,6 +30,6 @@ export const getDetailProducts = async (id) => {
 
     return response.data;
   } catch (error) {
-    throw Error("Failed to get product");
+    throw Error(error.response.data.message);
   }
 };

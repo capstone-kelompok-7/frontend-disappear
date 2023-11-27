@@ -57,7 +57,7 @@ export default function IndexProducts() {
       setProducts(result.data);
       setMeta(rest);
     } catch (error) {
-      console.log(error);
+      console.log(error.message);
     }
   }
 
@@ -111,13 +111,16 @@ export default function IndexProducts() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <Link onClick={() => toDetailProduct(row.original.id)}>
+              <Link
+                onClick={() => toDetailProduct(row.original.id)}
+                id="toDetailProduct"
+              >
                 <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white">
                   <IoEye />
                   <p>Detail Produk</p>
                 </DropdownMenuItem>
               </Link>
-              <Link onClick={toEditProduct}>
+              <Link onClick={toEditProduct} id="toEditProduct">
                 <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white">
                   <BiEdit />
                   <p>Edit Produk</p>
@@ -127,6 +130,7 @@ export default function IndexProducts() {
               <DropdownMenuItem
                 className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
                 onClick={handleDelete}
+                id="deleteProduct"
               >
                 <BiTrash />
                 <p>Hapus Produk</p>
@@ -144,6 +148,7 @@ export default function IndexProducts() {
         <Breadcrumbs pages="Produk" />
         <div className=" flex justify-between items-center mt-10">
           <Link
+            id="toCreateProducts"
             to="/produk/buat-produk"
             className=" font-medium text-sm rounded-md text-white bg-primary-green px-3 py-3 flex items-center justify-between gap-3"
           >
@@ -168,6 +173,7 @@ export default function IndexProducts() {
           <div className=" flex gap-5 items-center justify-end w-1/2">
             <div className=" relative w-3/6">
               <Input
+                id="searchProducts"
                 type="text"
                 placeholder="Cari Produk"
                 className=" border-primary-green py-6"
@@ -190,7 +196,10 @@ export default function IndexProducts() {
             </div>
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20">
+              <DropdownMenuTrigger
+                className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20"
+                id="dropdownFilter"
+              >
                 <p className=" text-primary-green">Filter</p>
 
                 <svg

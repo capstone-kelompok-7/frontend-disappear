@@ -22,6 +22,7 @@ export default function DetailProducts() {
     try {
       const result = await getDetailProducts(id);
       setProducts(result.data);
+      console.log(result.data);
     } catch (error) {
       console.log(error);
     }
@@ -40,7 +41,8 @@ export default function DetailProducts() {
     });
   }
 
-  let apiStarValue = 4;
+  let apiStarValue = products.rating;
+
   return (
     <>
       <Layout>
@@ -51,25 +53,28 @@ export default function DetailProducts() {
         </Link>
         <div className=" w-full border shadow rounded mb-5">
           <div className="flex p-5 gap-8">
-            <div className="w-2/3">
-              <img src="" alt="" className="bg-gray-300 w-full h-96 rounded" />
-              <div className="flex mt-3 gap-3">
-                <img
-                  src=""
-                  alt=""
-                  className="bg-gray-300 w-full h-28 rounded"
-                />
-                <img
-                  src=""
-                  alt=""
-                  className="bg-gray-300 w-full h-28 rounded"
-                />
-                <img
-                  src=""
-                  alt=""
-                  className="bg-gray-300 w-full h-28 rounded"
-                />
+            <div className="w-4/6">
+              <div>
+                {products.image_url && products.image_url.length > 0 && (
+                  <img
+                    src={products.image_url[0].image_url}
+                    alt={products.image_url[0].image_url}
+                    className="bg-gray-300 w-full h-96 rounded"
+                  />
+                )}
               </div>
+              {products.image_url && products.image_url.length > 1 && (
+                <div className="flex mt-3 gap-2">
+                  {products.image_url.slice(1).map((image, index) => (
+                    <img
+                      key={index}
+                      src={image.image_url}
+                      alt={image.image_url}
+                      className="bg-gray-300 w-full h-28 rounded"
+                    />
+                  ))}
+                </div>
+              )}
               <div className="flex mt-6">
                 {Array.isArray(products.categories) &&
                   products.categories.map((category) => (
@@ -92,7 +97,7 @@ export default function DetailProducts() {
               <div className="flex my-3 items-center">
                 <Star starValue={apiStarValue} />
                 <p className=" text-xs font-medium">
-                  (4.0 Partisipasi Pelanggan)
+                  ({products.total_review} Partisipasi Pelanggan)
                 </p>
               </div>
               <div className=" flex items-center gap-8">
@@ -106,10 +111,7 @@ export default function DetailProducts() {
               <div className=" mt-8">
                 <p className=" text-base font-semibold">Deskripsi Produk</p>
                 <p className="mt-4 font-normal text-sm">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Perspiciatis, culpa! Officia nihil eum sequi minus quia in
-                  molestias dolor vel autem, possimus iusto cumque sunt eveniet
-                  dolorem ratione at voluptates.
+                  {products.description}
                 </p>
               </div>
             </div>
