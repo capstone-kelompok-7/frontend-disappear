@@ -136,8 +136,8 @@ export default function IndexPesertaTantangan() {
             </div>
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border gap-20">
-                <p>Filter</p>
+              <DropdownMenuTrigger className="flex justify-between items-center rounded-md py-3 px-3 border border-primary-green gap-20">
+                <p className="text-primary-green">Filter</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="10"
@@ -146,8 +146,8 @@ export default function IndexPesertaTantangan() {
                   fill="none"
                 >
                   <path
-                    d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
-                    fill="#373737"
+                    d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z"
+                    fill="#257157"
                   />
                 </svg>
               </DropdownMenuTrigger>
