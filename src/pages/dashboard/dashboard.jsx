@@ -3,7 +3,6 @@ import { Chart as ChartJS } from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 import React from "react";
 
-import DashboardDetail from "../../components/dashboard/dashboardDetail";
 import DashboardIcon from "../../components/dashboard/dashboardIcon";
 import Layout from "../../components/layout";
 import Tabel from "@/components/table/table";
