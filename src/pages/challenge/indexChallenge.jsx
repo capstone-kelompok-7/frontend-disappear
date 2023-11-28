@@ -117,7 +117,9 @@ function IndexChallenge() {
           <p>{row.original.Status}</p>
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <BiDotsVerticalRounded />
+              <div className="three-dots">
+                <BiDotsVerticalRounded />
+              </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <Link to="/tantangan/detail-tantangan">
@@ -157,7 +159,7 @@ function IndexChallenge() {
 
         <div className="flex items-center mt-8 pb-6 gap-6">
           <Button
-            className="flex items-center space-x-2 border bg-[#25745A] text-white p-3 rounded-lg"
+            className="flex items-center space-x-2 border bg-secondary-green text-white p-3 rounded-lg"
             label="Buat Tantangan"
             icon={
               <svg
@@ -185,14 +187,14 @@ function IndexChallenge() {
               <Input
                 type="text"
                 placeholder="Cari Tantangan"
-                className="pr-32 py-6"
+                className="pr-32 py-6 border border-primary-green"
               />
-              <FiSearch className="absolute ml-72" />
+              <FiSearch className="absolute ml-72 text-primary-green" />
             </div>
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border gap-20">
-                <p className="opacity-70">Filter</p>
+              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green gap-20">
+                <p className="text-primary-green">Filter</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="10"
@@ -201,8 +203,8 @@ function IndexChallenge() {
                   fill="none"
                 >
                   <path
-                    d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
-                    fill="#373737"
+                    d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z"
+                    fill="#257157"
                   />
                 </svg>
               </DropdownMenuTrigger>
