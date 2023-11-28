@@ -83,21 +83,18 @@ function editPesertaChallange() {
               />
             </div>
 
-            <div className="flex w-1/2 pl-8 mt-6 justify-end">
-              <div className="pr-3">
-                <Button
-                  label="Batal"
-                  type="submit"
-                  className="rounded-[5px] border border-primary-green px-2.5 py-1.5 shadow text-primary-green"
-                />
-              </div>
-              <div className="pr-3">
-                <Button
-                  label="Edit"
-                  type="submit"
-                  className="bg-[#25745A] rounded-[5px] px-3 py-2 shadow text-white"
-                />
-              </div>
+            <div className="flex w-1/2 pl-8 mt-16 justify-end gap-3">
+              <Button
+                label="Batal"
+                type="submit"
+                className="w-24 h-12 rounded-md border border-primary-green p-3.5 shadow text-primary-green text-sm font-semibold items-center justify-center inline-flex"
+              />
+
+              <Button
+                label="Simpan Perubahan"
+                type="submit"
+                className="w-44 h-12 bg-secondary-green rounded-md p-3.5 shadow text-white text-sm font-semibold"
+              />
             </div>
           </div>
 

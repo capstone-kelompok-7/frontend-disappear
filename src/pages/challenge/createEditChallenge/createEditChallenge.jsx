@@ -63,7 +63,7 @@ function CreateChallenge() {
             <div className="flex-col w-1/2 pl-8">
               <label className="font-semibold">EXP</label>
               <Input
-                type="text"
+                type="number"
                 name="exp"
                 placeholder="EXP"
                 label="EXP"
@@ -139,29 +139,26 @@ function CreateChallenge() {
               >
                 Deskripsi
               </label>
-              <div className="grow flex flex-col overflow-auto">
-                <Textarea
-                  id="deskripsi-tantangan"
-                  name="deskripsi-tantangan"
-                  placeholder="Deskripsi Tantangan"
-                  className="p-4 shadow-sm mt-3 block w-full h-[12rem] sm:text-sm border border-black rounded-md resize-none"
-                />
-              </div>
+              <Textarea
+                id="deskripsi-tantangan"
+                name="deskripsi-tantangan"
+                placeholder="Deskripsi Tantangan"
+                className="p-4 shadow-sm mt-3 block w-full h-[12rem] sm:text-sm border border-black rounded-md resize-none"
+              />
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <div className="pr-3">
-              <Button
-                label="Batal"
-                type="submit"
-                className="rounded-[5px] border border-primary-green px-2.5 py-1.5 shadow text-primary-green"
-              />
-            </div>
+          <div className="flex justify-end gap-3">
             <Button
-              label="Tambah"
+              label="Batal"
               type="submit"
-              className="bg-[#25745A] rounded-[5px]  px-3 py-2 shadow text-white"
+              className="w-24 h-12 rounded-md border border-primary-green p-3.5 shadow text-primary-green text-sm font-semibold items-center justify-center inline-flex"
+            />
+
+            <Button
+              label="Tambah Tantangan"
+              type="submit"
+              className="w-44 h-12 bg-secondary-green rounded-md shadow text-white text-sm font-semibold p-3.5"
             />
           </div>
         </form>
