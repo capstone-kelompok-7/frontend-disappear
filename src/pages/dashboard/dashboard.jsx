@@ -89,6 +89,12 @@ export default function Dashboard() {
       TotalPembayaran: "Rp.200.000",
       StatusDashboard: "Menunggu Konfirmasi",
     },
+    {
+      Nama: "Dimas Banyuwangis",
+      Tanggal: "24-11-2023",
+      TotalPembayaran: "Rp.200.000",
+      StatusDashboard: "Menunggu Konfirmasi",
+    },
   ];
 
   const columns = [
@@ -146,7 +152,7 @@ export default function Dashboard() {
         </div>
 
         {/* Section 4 - Transaction Section */}
-        <div className="px-5 py-6 mt-20 shadow-lg rounded-lg">
+        <div className="px-5 py-6 mt-20 shadow-lg rounded-lg mb-20">
           <h1 className="font-semibold text-2xl mb-5 ">Transaksi Terakhir</h1>
           <div>
             <Tabel columns={columns} data={transactionData} dashboardTable={true} />
