@@ -1,20 +1,20 @@
 tbody tr:nth-child(even) {
-    background-color: #ECECEC; 
-  }
-  
-  tbody tr:nth-child(odd) {
-    background-color: #FFFFFF; 
-  }
+  background-color: #ECECEC; 
+}
 
-  table {
-    width: 100%; /* Menyesuaikan lebar tabel dengan container */
-    border-collapse: collapse; /* Menggabungkan border antar sel */
-    overflow: hidden;
-    border-radius: 0.375rem;
-    border: #ACACAC;
-  }
-  
-  .table-cell {
-    text-align: center; /* Rata tengah teks pada kolom header dan data */
-    padding: 10px; /* Menambahkan ruang dalam di dalam sel */
-  }
+tbody tr:nth-child(odd) {
+  background-color: #FFFFFF; 
+}
+
+table {
+  width: 100%; /* Menyesuaikan lebar tabel dengan container */
+  border-collapse: collapse; /* Menggabungkan border antar sel */
+  overflow: hidden;
+  border-radius: 0.375rem;
+  border: #ACACAC;
+}
+
+.table-cell {
+  text-align: center; /* Rata tengah teks pada kolom header dan data */
+  padding: 10px; /* Menambahkan ruang dalam di dalam sel */
+}
