@@ -25,8 +25,12 @@ function Tabel({ columns, data, dashboardTable }) {
                 key={columnIndex}
                 {...column.getHeaderProps()}
                 className={` ${
-                  dashboardTable ? "text-black border-none" : "text-white uppercase border-[#ACACAC]"
-                } px-6 py-3 text-center font-semibold tracking-wider border `}
+                  dashboardTable
+                    ? "text-black border-none"
+                    : "text-white uppercase border-[#ACACAC]"
+                } ${
+                  column.id === "StatusDashboard" ? "text-left" : "text-center"
+                }  px-6 py-3  font-semibold tracking-wider border `}
               >
                 {column.render("Header")}
               </th>
@@ -41,17 +45,21 @@ function Tabel({ columns, data, dashboardTable }) {
             <tr
               key={index}
               {...row.getRowProps()}
-              className={`${row.index % 2 === 0 ? "bg-[#ECECEC]" : "bg-[#FFFFFF]"} ${dashboardTable ? "bg-white" : ""}`}
+              className={`${
+                row.index % 2 === 0 ? "bg-[#ECECEC]" : "bg-[#FFFFFF]"
+              } ${dashboardTable ? "bg-white" : ""}`}
             >
               {row.cells.map((cell, cellIndex) => {
                 return (
                   <td
                     key={cellIndex}
                     {...cell.getCellProps()}
-                    className={`${dashboardTable ? "border-none" : "border border-[#ACACAC]"} table-cell px-6 py-4 whitespace-nowrap `}
+                    className={`${
+                      dashboardTable ? "border-none" : "border border-[#ACACAC]"
+                    } table-cell px-6 py-4 whitespace-nowrap `}
                   >
                     {cell.column.id === "StatusDashboard" && (
-                      <div className="flex items-center pl-10">
+                      <div className="flex items-center">
                         <div
                           className={`rounded-full w-4 h-4 ${
                             cell.value === "Menunggu Konfirmasi"
