@@ -1,8 +1,9 @@
-import React from "react";
+/* eslint-disable react/prop-types */
 import { useTable } from "react-table";
+
 import "../../styles/table.css";
 
-function Tabel({ columns, data }) {
+function Tabel({ columns, data, dashboardTable }) {
   const { getTableProps, getTableBodyProps, headerGroups, rows, prepareRow } =
     useTable({ columns, data });
 
@@ -13,13 +14,19 @@ function Tabel({ columns, data }) {
           <tr
             key={index}
             {...headerGroup.getHeaderGroupProps()}
-            className="bg-primary-green text-white"
+            className={`${
+              dashboardTable
+                ? "text-black bg-[#EFE5DC]"
+                : "bg-primary-green text-white"
+            }`}
           >
             {headerGroup.headers.map((column, columnIndex) => (
               <th
                 key={columnIndex}
                 {...column.getHeaderProps()}
-                className="px-6 py-3 text-center font-semibold text-white uppercase tracking-wider border border-[#ACACAC]"
+                className={` ${
+                  dashboardTable ? "text-black" : "text-white uppercase"
+                } px-6 py-3 text-center font-semibold   tracking-wider border border-[#ACACAC]`}
               >
                 {column.render("Header")}
               </th>
@@ -43,7 +50,20 @@ function Tabel({ columns, data }) {
                     {...cell.getCellProps()}
                     className="table-cell px-6 py-4 whitespace-nowrap border border-[#ACACAC]"
                   >
-                    {cell.render("Cell")}
+                    {cell.column.id === "StatusDashboard" && (
+                      <div className="flex items-center pl-10">
+                        <div
+                          className={`rounded-full w-4 h-4 ${
+                            cell.value === "Menunggu Konfirmasi"
+                              ? "bg-[#F7BC3B]"
+                              : "bg-[#37FF33]"
+                          }`}
+                        ></div>
+                        <p className="text-sm ml-2">{cell.value}</p>
+                      </div>
+                    )}
+                    {cell.column.id !== "StatusDashboard" &&
+                      cell.render("Cell")}
                   </td>
                 );
               })}
