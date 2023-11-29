@@ -155,7 +155,11 @@ export default function Dashboard() {
         <div className="px-5 py-6 mt-20 shadow-lg rounded-lg mb-20">
           <h1 className="font-semibold text-2xl mb-5 ">Transaksi Terakhir</h1>
           <div>
-            <Tabel columns={columns} data={transactionData} dashboardTable={true} />
+            <Tabel
+              columns={columns}
+              data={transactionData}
+              dashboardTable={true}
+            />
           </div>
         </div>
       </div>

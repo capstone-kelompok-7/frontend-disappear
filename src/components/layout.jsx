@@ -12,7 +12,7 @@ export default function Layout(props) {
   const { isSidebarOpen, setIsSidebarOpen } = useSidebar();
 
   return (
-    <div className="w-full overflow-auto flex flex-row bg-white">
+    <div className="w-full  flex flex-row bg-white h-screen">
       <SideBar isSidebarOpen={isSidebarOpen} />
       <div className="flex flex-col flex-grow">
         <div className="flex justify-between items-center shadow-md h-20 bg-white w-full">
@@ -21,7 +21,9 @@ export default function Layout(props) {
             onClick={() => setIsSidebarOpen(!isSidebarOpen)}
           />
         </div>
-        <div className="flex flex-col flex-grow mx-12">{children}</div>
+        <div className="flex flex-col flex-grow px-12 overflow-auto">
+          {children}
+        </div>
         <Toaster />
       </div>
     </div>

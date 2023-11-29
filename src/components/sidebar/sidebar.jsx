@@ -25,7 +25,7 @@ export default function SideBar(props) {
         <div
           className={` ${
             isSidebarOpen ? "w-72" : "w-0"
-          } duration-300 h-full bg-white shadow-md`}
+          } duration-300 h-screen bg-white shadow-md flex flex-col`}
         >
           <div className=" flex items-center p-5 w-20  gap-5">
             <img
@@ -52,9 +52,9 @@ export default function SideBar(props) {
           <div
             className={`pt-9 duration-300 origin-left ${
               !isSidebarOpen && " scale-0"
-            } flex flex-col justify-between flex-grow h-screen`}
+            } flex flex-col justify-between flex-grow `}
           >
-            <div>
+            <div className="flex-grow">
               <SidebarList
                 to="/dashboard"
                 label="Dasbor"
