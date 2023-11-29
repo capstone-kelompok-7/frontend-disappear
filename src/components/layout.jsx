@@ -14,7 +14,7 @@ export default function Layout(props) {
   return (
     <div className="w-full  flex flex-row bg-white h-screen">
       <SideBar isSidebarOpen={isSidebarOpen} />
-      <div className="flex flex-col flex-grow">
+      <div className="flex flex-col flex-grow overflow-auto">
         <div className="flex justify-between items-center shadow-md h-20 bg-white w-full">
           <Navbar
             label="Admin"
