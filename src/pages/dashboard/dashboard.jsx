@@ -106,11 +106,11 @@ export default function Dashboard() {
 
   return (
     <Layout>
-      <div className=" w-full h-full">
+      <div className="">
         {/* Hero Section */}
-        <div className="flex flex-col bg-[#EFE5DC] relative pb-[10vh] pl-10 rounded-b-2xl">
+        <div className="flex flex-col bg-[#EFE5DC] relative pb-[10vh] rounded-b-2xl">
           {/* Section 1 - Hero */}
-          <div className="flex items-center justify-between">
+          <div className="flex items-center justify-between pl-10">
             <div className="flex flex-col gap-3">
               <h1 className="font-bold text-3xl text-primary-green">
                 Selamat Datang!!!
@@ -124,7 +124,7 @@ export default function Dashboard() {
             </div>
           </div>
           {/* Section 2 - Icon Section */}
-          <div className="flex absolute top-1/2 w-full max-w-[70vw] pr-10 mt-6">
+          <div className="flex absolute top-1/2 mt-6 items-center justify-between w-full px-10">
             <div className="flex items-center justify-center w-full gap-8">
               <DashboardIcon
                 iconSrc={IconWallet}
