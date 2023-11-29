@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -17,9 +18,11 @@ import Delete from "@/components/delete/delete";
 import { IoEye } from "react-icons/io5";
 import { getAllProducts } from "@/utils/api/products/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
+import PageNation from "@/components/pagenation";
 
 export default function IndexProducts() {
   const [products, setProducts] = useState([]);
+  const [page, setPage] = useState(1);
 
   const navigate = useNavigate();
 
@@ -40,7 +43,7 @@ export default function IndexProducts() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [page]);
 
   async function fetchData() {
     try {
@@ -56,14 +59,17 @@ export default function IndexProducts() {
       Header: "Foto",
       accessor: "image_url",
       Cell: ({ row }) => {
-        const firstPhotoUrl = row.original.image_url[0]?.image_url;
-        return (
-          <img
-            src={firstPhotoUrl}
-            alt="Product"
-            className=" w-20 h-28 rounded block m-auto"
-          />
-        );
+        if (row.original) {
+          const firstPhotoUrl = row.original.image_url?.[0]?.image_url;
+          return (
+            <img
+              src={firstPhotoUrl}
+              alt="Product"
+              className="w-20 h-28 rounded block m-auto"
+            />
+          );
+        }
+        return null;
       },
     },
     { Header: "Nama Produk", accessor: "name" },
@@ -205,6 +211,7 @@ export default function IndexProducts() {
         </div>
         <div className="mt-5">
           <Tabel columns={columns} data={products} />
+          <PageNation page={page} setPage={setPage}/>
         </div>
       </Layout>
     </>
