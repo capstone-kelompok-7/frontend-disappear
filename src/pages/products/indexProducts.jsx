@@ -22,7 +22,6 @@ import PageNation from "@/components/pagenation";
 
 export default function IndexProducts() {
   const [products, setProducts] = useState([]);
-  const [page, setPage] = useState(1);
 
   const navigate = useNavigate();
 
@@ -43,7 +42,7 @@ export default function IndexProducts() {
 
   useEffect(() => {
     fetchData();
-  }, [page]);
+  }, []);
 
   async function fetchData() {
     try {
