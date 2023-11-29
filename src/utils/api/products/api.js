@@ -1,8 +1,8 @@
 import axiosWithConfig from "../axiosWithConfig";
 
-export const getAllProducts = async () => {
+export const getAllProducts = async (page) => {
   try {
-    const response = await axiosWithConfig.get("api/v1/products");
+    const response = await axiosWithConfig.get(`api/v1/products?page=${page}`);
 
     return response.data;
   } catch (error) {
