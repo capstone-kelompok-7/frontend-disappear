@@ -19,10 +19,6 @@ export default function Ulasan() {
 
   const navigate = useNavigate();
 
-  function onClick() {
-    navigate("/ulasan/lihat-ulasan");
-  }
-
   useEffect(() => {
     fetchData();
   }, []);
@@ -36,50 +32,17 @@ export default function Ulasan() {
     }
   }
 
-  const data = [
-    {
-      No: 1,
-      NamaProduk: <Link to="/ulasan/lihat-ulasan">Totebag</Link>,
-      Penilaian: "4.7",
-      TotalReview: 200,
-    },
-    {
-      No: 2,
-      NamaProduk: (
-        <Link to="/ulasan/lihat-ulasan">Alat makan ramah lingkungan</Link>
-      ),
-      Penilaian: "4.7",
-      TotalReview: 150,
-    },
-    {
-      No: 3,
-      NamaProduk: (
-        <Link to="/ulasan/lihat-ulasan">botol minuman stainless steel</Link>
-      ),
-      Penilaian: "5.0",
-      TotalReview: 45,
-    },
-    {
-      No: 4,
-      NamaProduk: (
-        <Link to="/ulasan/lihat-ulasan">Alat makan ramah lingkungan</Link>
-      ),
-      Penilaian: "4.7",
-      TotalReview: 78,
-    },
-    {
-      No: 5,
-      NamaProduk: <Link to="/ulasan/lihat-ulasan">Totebag</Link>,
-      Penilaian: "5.0 ",
-      TotalReview: 50,
-    },
-  ];
-
   const columns = [
-    { Header: "No", accessor: "No" },
-    { Header: "Nama Produk", accessor: "NamaProduk" },
-    { Header: "Penilaian", accessor: "Penilaian" },
-    { Header: "Total Review", accessor: "TotalReview" },
+    { Header: "No", accessor: "id" },
+    {
+      Header: "Nama Produk",
+      accessor: "name",
+      Cell: ({ row }) => (
+        <Link to={`/ulasan/${row.original.id}`}>{row.original.name}</Link>
+      ),
+    },
+    { Header: "Penilaian", accessor: "rating" },
+    { Header: "Total Review", accessor: "total_review" },
   ];
 
   return (
@@ -126,7 +89,7 @@ export default function Ulasan() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <Tabel columns={columns} data={data} />
+        <Tabel columns={columns} data={ulasan} />
       </Layout>
     </div>
   );
