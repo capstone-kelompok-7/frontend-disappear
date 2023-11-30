@@ -23,3 +23,27 @@ export const getAllProducts = async (params) => {
     throw Error(error.response.data.message);
   }
 };
+
+export const getDetailProducts = async (id) => {
+  try {
+    const response = await axiosWithConfig.get(`api/v1/products/${id}`);
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
+
+export const createProducts = async (data) => {
+  try {
+    const newData = {
+      ...data,
+    };
+
+    const response = await axiosWithConfig.post(`api/v1/products`, newData);
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};

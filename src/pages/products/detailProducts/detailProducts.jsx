@@ -1,5 +1,5 @@
-import React from "react";
-import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
+import { Link, useNavigate, useParams } from "react-router-dom";
 
 import Layout from "@/components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
@@ -7,8 +7,27 @@ import Button from "@/components/button";
 import { IoArrowBack } from "react-icons/io5";
 import Star from "@/components/review/star";
 import Delete from "@/components/delete/delete";
+import { getDetailProducts } from "@/utils/api/products/api";
+import formatCurrency from "@/utils/formatter/currencyIdr";
 
 export default function DetailProducts() {
+  const [products, setProducts] = useState([]);
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const result = await getDetailProducts(id);
+      setProducts(result.data);
+      console.log(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const navigate = useNavigate();
 
   function toRoute() {
@@ -22,7 +41,8 @@ export default function DetailProducts() {
     });
   }
 
-  let apiStarValue = 4;
+  let apiStarValue = products.rating;
+
   return (
     <>
       <Layout>
@@ -33,55 +53,65 @@ export default function DetailProducts() {
         </Link>
         <div className=" w-full border shadow rounded mb-5">
           <div className="flex p-5 gap-8">
-            <div className="w-2/3">
-              <img src="" alt="" className="bg-gray-300 w-full h-96 rounded" />
-              <div className="flex mt-3 gap-3">
-                <img
-                  src=""
-                  alt=""
-                  className="bg-gray-300 w-full h-28 rounded"
-                />
-                <img
-                  src=""
-                  alt=""
-                  className="bg-gray-300 w-full h-28 rounded"
-                />
-                <img
-                  src=""
-                  alt=""
-                  className="bg-gray-300 w-full h-28 rounded"
-                />
+            <div className="w-4/6">
+              <div>
+                {products.image_url && products.image_url.length > 0 && (
+                  <img
+                    src={products.image_url[0].image_url}
+                    alt={products.image_url[0].image_url}
+                    className="bg-gray-300 w-full h-96 rounded"
+                  />
+                )}
               </div>
+              {products.image_url && products.image_url.length > 1 && (
+                <div className="flex mt-3 gap-2">
+                  {products.image_url.slice(1).map((image, index) => (
+                    <img
+                      key={index}
+                      src={image.image_url}
+                      alt={image.image_url}
+                      className="bg-gray-300 w-full h-28 rounded"
+                    />
+                  ))}
+                </div>
+              )}
               <div className="flex mt-6">
-                <p className="bg-gray-300 border border-black px-5 py-1 rounded-full font-normal text-base">
-                  category
-                </p>
+                {Array.isArray(products.categories) &&
+                  products.categories.map((category) => (
+                    <p
+                      className="bg-gray-300 border border-black px-5 py-1 rounded-full font-normal text-base mr-3"
+                      key={category.id}
+                    >
+                      {category.name}
+                    </p>
+                  ))}
               </div>
             </div>
             <div className="w-full">
               <div className="flex justify-between w-full items-center">
-                <h1 className=" text-3xl font-semibold">GunnySack Bag</h1>
-                <p className=" text-xs font-semibold">20 gram</p>
+                <h1 className=" text-3xl font-semibold">{products.name}</h1>
+                <p className=" text-xs font-semibold">
+                  {products.gram_plastic} gram
+                </p>
               </div>
               <div className="flex my-3 items-center">
                 <Star starValue={apiStarValue} />
                 <p className=" text-xs font-medium">
-                  (4.0 Partisipasi Pelanggan)
+                  ({products.total_review} Partisipasi Pelanggan)
                 </p>
               </div>
               <div className=" flex items-center gap-8">
-                <p className=" text-base font-semibold">Rp. 120.000</p>
+                <p className=" text-base font-semibold">
+                  {formatCurrency(products.price)}
+                </p>
                 <p className=" text-xs font-normal">
-                  Diskon Produk : Rp. 15.000
+                  Diskon Produk : {formatCurrency(products.discount)}
                 </p>
               </div>
               <div className=" mt-8">
                 <p className=" text-base font-semibold">Deskripsi Produk</p>
                 <p className="mt-4 font-normal text-sm">
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit.
-                  Perspiciatis, culpa! Officia nihil eum sequi minus quia in
-                  molestias dolor vel autem, possimus iusto cumque sunt eveniet
-                  dolorem ratione at voluptates.
+                  {products.description}
                 </p>
               </div>
             </div>
