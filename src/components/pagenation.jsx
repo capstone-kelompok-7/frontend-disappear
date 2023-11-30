@@ -1,5 +1,5 @@
 import { useMemo } from "react";
-import { generatePagesToDisplay } from "@/utils/formatter";
+import generatePagesToDisplay from "@/utils/formatter/formatterpagination";
 
 const Pagination = (props) => {
   const { meta, onClickPrevious, onClickNext, onClickPage } = props;
@@ -10,7 +10,7 @@ const Pagination = (props) => {
   );
 
   return (
-    <div className="flex justify-center items-center gap-3">
+    <div className="flex justify-end items-center gap-3 mt-4 mb-4">
       <button
         className="join-item btn btn-outline"
         size="icon"
@@ -23,7 +23,7 @@ const Pagination = (props) => {
         pagesToDisplay.map((page, index) => {
           return (
             <button
-              className="hover:bg-primary-green "
+              className="hover:bg-primary-green p-3 rounded-lg"
               size="icon"
               key={`${page}-${index}`}
               disabled={meta?.current_page === page}

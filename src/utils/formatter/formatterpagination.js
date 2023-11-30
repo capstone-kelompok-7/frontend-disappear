@@ -29,3 +29,5 @@ const generatePagesToDisplay = (current_page, total_page) => {
 
   return pagesToDisplay;
 };
+
+export default generatePagesToDisplay;
