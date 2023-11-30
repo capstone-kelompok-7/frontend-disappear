@@ -1,4 +1,5 @@
 import React, { useEffect, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -17,9 +18,12 @@ import Delete from "@/components/delete/delete";
 import { IoEye } from "react-icons/io5";
 import { getAllProducts } from "@/utils/api/products/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
+import Pagination from "@/components/pagenation";
 
 export default function IndexProducts() {
   const [products, setProducts] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
 
   const navigate = useNavigate();
 
@@ -40,15 +44,26 @@ export default function IndexProducts() {
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [searchParams]);
 
   async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
     try {
-      const result = await getAllProducts();
+      const result = await getAllProducts({ ...query });
+      const { data, ...rest } = result.meta;
       setProducts(result.data);
+      setMeta(rest);
     } catch (error) {
       console.log(error);
     }
+  }
+
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
   }
 
   const columns = [
@@ -56,14 +71,17 @@ export default function IndexProducts() {
       Header: "Foto",
       accessor: "image_url",
       Cell: ({ row }) => {
-        const firstPhotoUrl = row.original.image_url[0]?.image_url;
-        return (
-          <img
-            src={firstPhotoUrl}
-            alt="Product"
-            className=" w-20 h-28 rounded block m-auto"
-          />
-        );
+        if (row.original) {
+          const firstPhotoUrl = row.original.image_url?.[0]?.image_url;
+          return (
+            <img
+              src={firstPhotoUrl}
+              alt="Product"
+              className="w-20 h-28 rounded block m-auto"
+            />
+          );
+        }
+        return null;
       },
     },
     { Header: "Nama Produk", accessor: "name" },
@@ -205,6 +223,12 @@ export default function IndexProducts() {
         </div>
         <div className="mt-5">
           <Tabel columns={columns} data={products} />
+          <Pagination
+            meta={meta}
+            onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+            onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+            onClickPage={(page) => handlePrevNextPage(page)}
+          />
         </div>
       </Layout>
     </>
