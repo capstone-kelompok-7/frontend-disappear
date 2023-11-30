@@ -53,7 +53,7 @@ export default function IndexProducts() {
     }
     try {
       const result = await getAllProducts({ ...query });
-      const { data, ...rest } = result.meta;
+      const { ...rest } = result.meta;
       setProducts(result.data);
       setMeta(rest);
     } catch (error) {
@@ -97,7 +97,11 @@ export default function IndexProducts() {
     },
     { Header: "Gram", accessor: "gram_plastic" },
     { Header: "Stok", accessor: "stock" },
-    { Header: "Diskon", accessor: "discount" },
+    {
+      Header: "Diskon",
+      accessor: "discount",
+      Cell: ({ row }) => <p>{formatCurrency(row.original.discount)}</p>,
+    },
     { Header: "EXP", accessor: "product_exp" },
     {
       Header: "Harga",

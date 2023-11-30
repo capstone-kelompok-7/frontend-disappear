@@ -33,3 +33,17 @@ export const getDetailProducts = async (id) => {
     throw Error(error.response.data.message);
   }
 };
+
+export const createProducts = async (data) => {
+  try {
+    const newData = {
+      ...data,
+    };
+
+    const response = await axiosWithConfig.post(`api/v1/products`, newData);
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
