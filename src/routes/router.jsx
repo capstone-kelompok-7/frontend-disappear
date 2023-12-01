@@ -45,7 +45,7 @@ export default function Router() {
   const router = createBrowserRouter([
     {
       path: "/",
-      element: <Navigate to="login" />,
+      element: <Landingpage />,
     },
     {
       path: "/category",
@@ -159,10 +159,6 @@ export default function Router() {
     {
       path: "/ulasan/:id",
       element: <DetailUlasan />,
-    },
-    {
-      path: "/landingpage",
-      element: <Landingpage />,
     },
     {
       path: "/carousel",
