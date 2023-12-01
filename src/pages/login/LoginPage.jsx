@@ -84,11 +84,11 @@ const LoginPage = () => {
       navigate("/dashboard");
       toast({
         title: "Login Berhasil!",
-        description: "Anda berhasil login ke dalam aplikasi.",
+        description: result.message,
         variant: "default",
       });
     } catch (error) {
-      console.error("Login gagal", error);
+      console.log(error);
     }
   };
 
