@@ -8,6 +8,19 @@ import Button from "@/components/button";
 import Label from "@/components/label";
 import rectangle from "@/assets/Rectangle292.png";
 import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
+const schema = z.object({
+  email: z
+    .string()
+    .min(1, { message: "Email harus diisi" })
+    .email({ message: "Isi dengan format email yang benar" }),
+  password: z
+    .string()
+    .min(1, { message: "Kata sandi harus diisi" })
+    .min(6, { message: "Kata sandi harus terdiri dari 6 karakter" }),
+});
 
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
@@ -15,12 +28,14 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [rememberChecked, setRememberChecked] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
+  const navigate = useNavigate();
   const {
     register,
     handleSubmit,
     formState: { errors },
-  } = useForm();
-  const navigate = useNavigate();
+  } = useForm({
+    resolver: zodResolver(schema),
+  });
 
   useEffect(() => {
     const rememberedEmail = localStorage.getItem("rememberedEmail");
@@ -66,15 +81,14 @@ const LoginPage = () => {
       localStorage.setItem("accessToken", result.data.access_token);
 
       console.log(result.message);
-      console.log(result.data);
       navigate("/dashboard");
       toast({
         title: "Login Berhasil!",
-        description: "Anda berhasil login ke dalam aplikasi.",
+        description: result.message,
         variant: "default",
       });
     } catch (error) {
-      console.error("Login gagal", error);
+      console.log(error);
     }
   };
 
@@ -103,14 +117,8 @@ const LoginPage = () => {
                   className={`bg-neutral-100 ${
                     errors.email ? "border-red-500" : ""
                   }`}
-                  error={errors.email ? errors.email.message : ""}
-                  {...register("email", {
-                    required: "Email harus diisi",
-                    pattern: {
-                      value: /\S+@\S+\.com$/,
-                      message: "Isi dengan format email yang benar",
-                    },
-                  })}
+                  register={register}
+                  error={errors.email?.message}
                 />
               </div>
               <div style={{ position: "relative" }}>
@@ -123,14 +131,8 @@ const LoginPage = () => {
                   className={`bg-neutral-100 ${
                     errors.password ? "border-red-500" : ""
                   }`}
-                  error={errors.password ? errors.password.message : ""}
-                  {...register("password", {
-                    required: "Kata sandi harus diisi",
-                    minLength: {
-                      value: 6,
-                      message: "Kata sandi harus terdiri dari 6 karakter",
-                    },
-                  })}
+                  register={register}
+                  error={errors.password?.message}
                 />
                 {showIcon ? (
                   <IoEyeOffOutline
