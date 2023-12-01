@@ -1,5 +1,8 @@
 import React from "react";
 import Modal from "react-modal";
+import { useToast } from "@/components/ui/use-toast";
+import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { Button } from "@/components/ui/button";
 
 const PopUp = ({
   isOpen,
@@ -11,11 +14,34 @@ const PopUp = ({
   onNameChange,
   onFileChange,
   popupName,
+  file,
   onAddPopup,
 }) => {
+  const { toast } = useToast();
   const handlePopUp = () => {
-    onAddPopup(popupName, file);
+    let title, description;
+
+    if (popupLabel === "Tambah Kategori") {
+      title = "Berhasil Menambahkan Kategori!";
+      description =
+        "Kategori produk telah berhasil ditambah, nih. Silahkan nikmati fitur lainnya!";
+    } else if (popupLabel === "Edit Kategori") {
+      title = "Berhasil Mengubah Kategori!";
+      description =
+        "Kategori produk telah berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!";
+    }
+    toast({
+      title: (
+        <div className="flex items-center gap-3">
+          <CheckCircledIcon />
+          <span className="ml-2">{title}</span>
+        </div>
+      ),
+      description: description,
+      color: "#000000",
+    });
     closeModal();
+    onAddPopup(popupName, file);
   };
 
   return (
@@ -39,14 +65,12 @@ const PopUp = ({
     >
       <div className="flex items-center justify-center font-poppins">
         <div className="w-full p-6 space-y-6 rounded-xl shadow-lg bg-white">
-          <div className="bg-white flex flex-col gap-4 w-full h-[400px] items-center px-12 py-20 rounded">
-            <div className="text-3xl font-bold tracking-[0.32] leading-[19.6px]">
-              {popupLabel}
-            </div>
+          <div className="bg-white flex flex-col gap-4 w-full h-96 items-center px-12 py-10 rounded">
+            <div className="text-3xl font-bold">{popupLabel}</div>
             <div className="flex flex-col gap-4 w-full h-40 mt-10">
               <div>
                 <input
-                  className="w-full rounded-[5px] font-poppins p-2 border"
+                  className="w-full rounded-sm font-poppins border-black mb-5 p-2 border"
                   type="text"
                   id="inputName"
                   name="inputName"
@@ -58,32 +82,31 @@ const PopUp = ({
               <div>
                 <input
                   type="file"
-                  className="w-full rounded-[5px] font-poppins p-2 border"
-                  id="fileInput"
-                  name="fileInput"
+                  className="w-full border-black rounded-sm font-poppins p-2 border"
+                  id="inputFile"
+                  name="inputFile"
                   onChange={(e) => onFileChange(e.target.files[0])}
                 />
               </div>
             </div>
 
             <div className="flex flex-row justify-between items-start gap-x-10 mt-10">
-              <div className="border-solid shadow-[0px_2px_4px_0px_rgba(0,_0,_0,_0.15)] bg-white flex flex-col h-10 items-center text-center pl-6 py-2 border-[#25745A] border rounded-full">
-                <button
-                  className="text-xl font-semibold font-['Inter'] tracking-[0.2] leading-[19.6px] mr-8"
-                  style={{ color: "#25745A" }}
+              <div>
+                <Button
+                  className="border-solid flex flex-col items-center text-center h-10 py-1.5 hover:bg-white space-x-2 border-primary-green border bg-white p-2 rounded-full text-lg text-primary-green font-semibold font-['Inter'] mx-8"
                   onClick={closeModal}
                 >
                   {cancelButtonLabel}
-                </button>
+                </Button>
               </div>
-              <div className="border-solid shadow-[0px_2px_4px_0px_rgba(0,_0,_0,_0.15)] bg-secondary-green flex flex-col h-10 items-center py-2 rounded-full">
-                <button
+              <div>
+                <Button
                   type="button"
-                  className="text-xl text-white font-['Inter'] tracking-[0.2] leading-[19.6px] mx-8"
+                  className="border-solid bg-secondary-green hover:bg-secondary-green flex flex-col h-10 items-center py-1.5 rounded-full text-lg font-semibold text-white font-['Inter'] mx-8"
                   onClick={handlePopUp}
                 >
                   {confirmButtonLabel}
-                </button>
+                </Button>
               </div>
             </div>
           </div>

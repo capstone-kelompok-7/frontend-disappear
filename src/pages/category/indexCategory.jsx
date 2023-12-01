@@ -20,7 +20,7 @@ import {
 
 Modal.setAppElement("#root");
 
-export default function IndexPopup() {
+export default function IndexCategory() {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputName, setInputName] = useState("");
   const [file, setFile] = useState(null);
@@ -96,7 +96,7 @@ export default function IndexPopup() {
 
             <DropdownMenuContent>
               <DropdownMenuItem
-                className=" hover:bg-secondary-green cursor-pointer gap-3 items-center"
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
                 onClick={() => openModal("Edit Kategori", data[0])}
                 style={{ cursor: "pointer" }}
               >
@@ -104,7 +104,7 @@ export default function IndexPopup() {
                 Edit Kategori
               </DropdownMenuItem>
               <DropdownMenuItem
-                className=" hover:bg-secondary-green cursor-pointer gap-3 items-center"
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
                 onClick={handleDelete}
               >
                 <RiDeleteBinLine />
@@ -122,7 +122,7 @@ export default function IndexPopup() {
       <Layout>
         <Breadcrumbs pages="Kategori Produk" />
 
-        <div className=" flex flex-col min-h-screen flex-grow overflow-y-auto mx-5 mt-6 px-[15px] py-5 shadow-md rounded-[3px]">
+        <div className=" flex flex-col min-h-screen flex-grow overflow-y-auto mx-5 mt-6 px-3.5 py-5 shadow-md rounded-sm">
           <div className="flex items-center pb-7 gap-6">
             <Button
               label="Tambah Kategori"
@@ -144,15 +144,15 @@ export default function IndexPopup() {
                   />
                 </svg>
               }
-              onClick={() => openModal("Tambahkan Kategori!")}
-              className="flex items-center space-x-2 border bg-secondary-green text-white p-2 rounded-[3px]"
+              onClick={() => openModal("Tambah Kategori")}
+              className="flex items-center space-x-2 border bg-secondary-green text-white p-2 rounded-sm"
             />
 
             <div className="flex items-center w-64 relative">
               <Input
                 type="text"
                 placeholder="Cari Kategori"
-                className="p-3 rounded-[3px] pr-10"
+                className="p-3 rounded pr-10 border-black"
               />
               <FiSearch className="absolute right-10 top-3" />
             </div>
@@ -167,11 +167,11 @@ export default function IndexPopup() {
         closeModal={closeModal}
         popupLabel={popupLabel}
         placeholder={
-          popupLabel === "Tambahkan Kategori!" ? "Nama Kategori" : "Nama data"
+          popupLabel === "Tambah Kategori" ? "Nama Kategori" : "Nama data"
         }
         cancelButtonLabel="Batal"
         confirmButtonLabel={
-          popupLabel === "Tambahkan Kategori!" ? "Tambah" : "Edit"
+          popupLabel === "Tambah Kategori" ? "Tambah" : "Edit"
         }
         onAddPopup={handlePopup}
         onNameChange={onNameChange}
