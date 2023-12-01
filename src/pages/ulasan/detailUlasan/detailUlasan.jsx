@@ -1,3 +1,4 @@
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import "@/styles/ulasan/detail.css";
@@ -7,8 +8,27 @@ import { FaUserCircle } from "react-icons/fa";
 import Layout from "@/components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Star from "@/components/review/star";
+import { useParams } from "react-router-dom";
+import { getDetailUlasan } from "@/utils/api/ulasan/api";
 
 export default function LihatUlasan() {
+  const [ulasan, setUlasan] = useState([]);
+  const { id } = useParams();
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const result = await getDetailUlasan(id);
+      setUlasan(result.data);
+      console.log(result.data);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
   const customTheme = {
     color: {
       primary: "bg-orange-400",

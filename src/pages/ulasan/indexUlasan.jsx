@@ -1,5 +1,6 @@
+import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -11,58 +12,55 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Tabel from "@/components/table/table";
 import { Input } from "@/components/ui/input";
+import { getUlasan } from "@/utils/api/ulasan/api";
+import Pagination from "@/components/pagenation";
+import { Loading } from "@/components/loading";
 
 export default function Ulasan() {
-  const navigate = useNavigate();
+  const [ulasan, setUlasan] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
-  function onClick() {
-    navigate("/ulasan/lihat-ulasan");
+  useEffect(() => {
+    fetchData();
+  }, [searchParams]);
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
+    try {
+      const result = await getUlasan({ ...query });
+      const { ...rest } = result.meta;
+      setUlasan(result.data);
+      setIsLoading(false);
+      setMeta(rest);
+    } catch (error) {
+      console.log(error.message);
+    }
   }
 
-  const data = [
-    {
-      No: 1,
-      NamaProduk: <Link to="/ulasan/lihat-ulasan">Totebag</Link>,
-      Penilaian: "4.7",
-      TotalReview: 200,
-    },
-    {
-      No: 2,
-      NamaProduk: (
-        <Link to="/ulasan/lihat-ulasan">Alat makan ramah lingkungan</Link>
-      ),
-      Penilaian: "4.7",
-      TotalReview: 150,
-    },
-    {
-      No: 3,
-      NamaProduk: (
-        <Link to="/ulasan/lihat-ulasan">botol minuman stainless steel</Link>
-      ),
-      Penilaian: "5.0",
-      TotalReview: 45,
-    },
-    {
-      No: 4,
-      NamaProduk: (
-        <Link to="/ulasan/lihat-ulasan">Alat makan ramah lingkungan</Link>
-      ),
-      Penilaian: "4.7",
-      TotalReview: 78,
-    },
-    {
-      No: 5,
-      NamaProduk: <Link to="/ulasan/lihat-ulasan">Totebag</Link>,
-      Penilaian: "5.0 ",
-      TotalReview: 50,
-    },
-  ];
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
 
   const columns = [
-    { Header: "No", accessor: "No" },
-    { Header: "Nama Produk", accessor: "NamaProduk" },
-    { Header: "Penilaian", accessor: "Penilaian" },
-    { Header: "Total Review", accessor: "TotalReview" },
+    {
+      Header: "No",
+      accessor: "id",
+    },
+    {
+      Header: "Nama Produk",
+      accessor: "name",
+      Cell: ({ row }) => (
+        <Link to={`/ulasan/${row.original.id}`}>{row.original.name}</Link>
+      ),
+    },
+    { Header: "Penilaian", accessor: "rating" },
+    { Header: "Total Review", accessor: "total_review" },
   ];
 
   return (
@@ -74,13 +72,17 @@ export default function Ulasan() {
 
         <div className="flex justify-start items-center mb-5 mt-8 gap-5">
           <div className="flex items-center">
-            <Input type="text" placeholder="Cari Tantangan" className="p-3" />
-            <FiSearch className="absolute ml-44" />
+            <Input
+              type="text"
+              placeholder="Cari Tantangan"
+              className="pr-32 py-6 border border-primary-green"
+            />
+            <FiSearch className="absolute ml-72 text-primary-green" />
           </div>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex items-center rounded-md bg-white py-3 px-3 border gap-20">
-              <p>Filter</p>
+            <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green gap-20">
+              <p className="text-secondary-green">Filter</p>
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="10"
@@ -88,21 +90,36 @@ export default function Ulasan() {
                 viewBox="0 0 10 5"
                 fill="none"
               >
-                <path
-                  d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
-                  fill="#373737"
-                />
+                <path d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z" fill="#257157" />
               </svg>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem>Terbaik</DropdownMenuItem>
-              <DropdownMenuItem>Terburuk</DropdownMenuItem>
-              <DropdownMenuItem>Sedang</DropdownMenuItem>
+              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                Terbaik
+              </DropdownMenuItem>
+              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                Terburuk
+              </DropdownMenuItem>
+              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                Sedang
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <Tabel columns={columns} data={data} />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <Tabel columns={columns} data={ulasan} />
+            <Pagination
+              meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </>
+        )}
       </Layout>
     </div>
   );

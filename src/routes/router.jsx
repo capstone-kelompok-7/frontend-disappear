@@ -157,7 +157,7 @@ export default function Router() {
       element: <IndexUlasan />,
     },
     {
-      path: "/ulasan/lihat-ulasan",
+      path: "/ulasan/:id",
       element: <DetailUlasan />,
     },
     {
