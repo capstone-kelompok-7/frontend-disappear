@@ -1,7 +1,7 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { MdOutlineCalendarMonth } from "react-icons/md";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -13,21 +13,38 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Tabel from "@/components/table/table";
 import { getParticipant } from "@/utils/api/challenge/participantChallenge/api";
+import Pagination from "@/components/pagenation";
+import { Loading } from "@/components/loading";
 
 export default function IndexPesertaTantangan() {
   const [participant, setParticipant] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [searchParams]);
 
   async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
     try {
-      const result = await getParticipant();
+      const result = await getParticipant({ ...query });
+      const { ...rest } = result.meta;
       setParticipant(result.data);
+      setIsLoading(false);
+      setMeta(rest);
     } catch (error) {
       console.log(error.message);
     }
+  }
+
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
   }
 
   const data = [
@@ -79,7 +96,7 @@ export default function IndexPesertaTantangan() {
   ];
 
   const columns = [
-    { Header: "No", accessor: "No" },
+    { Header: "No", accessor: "id" },
     { Header: "Username Instagram", accessor: "UsernameInstagram" },
     { Header: "Tanggal Berpartisipasi", accessor: "TanggalBerpartisipasi" },
     { Header: "EXP Tantangan", accessor: "EXP" },
@@ -166,7 +183,19 @@ export default function IndexPesertaTantangan() {
             </DropdownMenu>
           </div>
         </div>
-        <Tabel columns={columns} data={data} />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <Tabel columns={columns} data={data} />
+            <Pagination
+              meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </>
+        )}
       </Layout>
     </div>
   );
