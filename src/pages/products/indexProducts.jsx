@@ -16,14 +16,20 @@ import Tabel from "@/components/table/table";
 import { BiDotsVerticalRounded, BiEdit, BiTrash } from "react-icons/bi";
 import Delete from "@/components/delete/delete";
 import { IoEye } from "react-icons/io5";
-import { getAllProducts } from "@/utils/api/products/api";
+import { deleteProducts, getAllProducts } from "@/utils/api/products/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
 import Pagination from "@/components/pagenation";
+import { useToast } from "@/components/ui/use-toast";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { Loading } from "@/components/loading";
 
 export default function IndexProducts() {
   const [products, setProducts] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
+  const { toast } = useToast();
 
   const navigate = useNavigate();
 
@@ -33,13 +39,6 @@ export default function IndexProducts() {
 
   const toEditProduct = () => {
     navigate("/produk/edit-produk");
-  };
-
-  const handleDelete = () => {
-    Delete({
-      title: "Yakin mau hapus data?",
-      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-    });
   };
 
   useEffect(() => {
@@ -52,18 +51,59 @@ export default function IndexProducts() {
       query[entry[0]] = entry[1];
     }
     try {
+      setIsLoading(true);
       const result = await getAllProducts({ ...query });
       const { ...rest } = result.meta;
       setProducts(result.data);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   function handlePrevNextPage(page) {
     searchParams.set("page", String(page));
     setSearchParams(searchParams);
+  }
+
+  async function handleDeleteClick(id) {
+    try {
+      const result = await Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        await deleteProducts(id);
+        toast({
+          title: (
+            <div className="flex items-center">
+              <FaRegCheckCircle />
+              <span className="ml-2">Produk berhasil dihapus!</span>
+            </div>
+          ),
+          description:
+            "Data produk telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+        });
+        fetchData();
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menghapus Produk!</span>
+          </div>
+        ),
+        description: "Terjadi kesalahan saat menghapus produk.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   const columns = [
@@ -133,7 +173,7 @@ export default function IndexProducts() {
 
               <DropdownMenuItem
                 className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
-                onClick={handleDelete}
+                onClick={() => handleDeleteClick(row.original.id)}
                 id="deleteProduct"
               >
                 <BiTrash />
@@ -234,15 +274,19 @@ export default function IndexProducts() {
             </DropdownMenu>
           </div>
         </div>
-        <div className="mt-5">
-          <Tabel columns={columns} data={products} />
-          <Pagination
-            meta={meta}
-            onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-            onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-            onClickPage={(page) => handlePrevNextPage(page)}
-          />
-        </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className="mt-5">
+            <Tabel columns={columns} data={products} />
+            <Pagination
+              meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </div>
+        )}
       </Layout>
     </>
   );
