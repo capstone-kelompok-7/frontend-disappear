@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from "react";
 
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
-import Breadcrumbs from "@/components/breadcrumbs";
 import { BiDotsVerticalRounded, BiEdit, BiTrash } from "react-icons/bi";
 import { IoEyeSharp } from "react-icons/io5";
 
+import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import {
@@ -21,24 +21,48 @@ import {
   getChallenge,
   deleteChallenge,
 } from "@/utils/api/challenge/challenge/api";
+import Pagination from "@/components/pagenation";
+import { Loading } from "@/components/loading";
 
 function IndexChallenge() {
   const [challenge, setChallenge] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [searchParams]);
 
   async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
     try {
-      const result = await getChallenge();
+      const result = await getChallenge({ ...query });
+      const { ...rest } = result.meta;
       setChallenge(result.data);
+      setIsLoading(false);
+      setMeta(rest);
     } catch (error) {
       console.log(error.message);
     }
   }
+
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
+
+  const formatDate = (dateString) => {
+    const [day, month, year] = new Date(dateString)
+      .toLocaleDateString("en-GB")
+      .split("/");
+    return `${day}-${month}-${year}`;
+  };
 
   async function onClickDelete(id) {
     try {
@@ -60,61 +84,26 @@ function IndexChallenge() {
     });
   };
 
-  const data = [
-    {
-      No: 1,
-      NamaTantangan: "Tantangan menanam pohon",
-      TanggalMulai: "24-10-2023",
-      TanggalBerakhir: "31-10-2023",
-      EXP: 150,
-      Status: "Kadaluwarsa",
-    },
-    {
-      No: 2,
-      NamaTantangan: "Tantangan menanam pohon",
-      TanggalMulai: "24-10-2023",
-      TanggalBerakhir: "31-10-2023",
-      EXP: 100,
-      Status: "Belum Kadaluwarsa",
-    },
-    {
-      No: 3,
-      NamaTantangan: "Tantangan menanam pohon",
-      TanggalMulai: "24-10-2023",
-      TanggalBerakhir: "31-10-2023",
-      EXP: 100,
-      Status: "Belum Kadaluwarsa",
-    },
-    {
-      No: 4,
-      NamaTantangan: "Tantangan menanam pohon",
-      TanggalMulai: "24-10-2023",
-      TanggalBerakhir: "31-10-2023",
-      EXP: 100,
-      Status: "Kadaluwarsa",
-    },
-    {
-      No: 5,
-      NamaTantangan: "Tantangan menanam pohon",
-      TanggalMulai: "24-10-2023",
-      TanggalBerakhir: "31-10-2023",
-      EXP: 150,
-      Status: "Belum Kadaluwarsa",
-    },
-  ];
-
   const columns = [
-    { Header: "No", accessor: "No" },
-    { Header: "Nama Tantangan", accessor: "NamaTantangan" },
-    { Header: "Tanggal Mulai", accessor: "TanggalMulai" },
-    { Header: "Tanggal Berakhir", accessor: "TanggalBerakhir" },
-    { Header: "EXP", accessor: "EXP" },
+    { Header: "No", accessor: "id" },
+    { Header: "Nama Tantangan", accessor: "title" },
+    {
+      Header: "Tanggal Mulai",
+      accessor: "start_date",
+      Cell: ({ value }) => formatDate(value),
+    },
+    {
+      Header: "Tanggal Berakhir",
+      accessor: "end_date",
+      Cell: ({ value }) => formatDate(value),
+    },
+    { Header: "EXP", accessor: "exp" },
     {
       Header: "Status",
       accessor: "Status",
       Cell: ({ row }) => (
         <div className="flex justify-between items-center">
-          <p>{row.original.Status}</p>
+          <p>{row.original.status}</p>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="three-dots">
@@ -220,7 +209,19 @@ function IndexChallenge() {
             </DropdownMenu>
           </div>
         </div>
-        <Tabel columns={columns} data={data} />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <Tabel columns={columns} data={challenge} />
+            <Pagination
+              meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </>
+        )}
       </Layout>
     </div>
   );
