@@ -1,6 +1,7 @@
 import Layout from "../../components/layout";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import "../../styles/pelanggan/pelanggan.css";
+import { useState, useEffect, useRef } from "react";
 import Tabel from "../../components/table/table";
 import Breadcrumbs from "@/components/breadcrumbs";
 import {
@@ -10,11 +11,18 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Link } from "react-router-dom";
-
-function Pelanggan() {
+import Delete from "@/components/delete/delete";
+import { BiEdit, BiTrash } from "react-icons/bi";
+function App() {
+  const handleDelete = () => {
+    Delete({
+      title: "Yakin mau hapus data?",
+      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+    });
+  };
   const data = [
     {
-      Foto: 1,
+      Foto: <img src="rectangle-58.png" className="w-16 h-20 rounded-md" />,
       Email: "dimas90@gmail.com",
       Nama: "John Doe",
       Telepon: "085343787908",
@@ -23,7 +31,7 @@ function Pelanggan() {
       Level: "silver",
     },
     {
-      Foto: 1,
+      Foto: <img src="rectangle-58.png" className="w-16 h-20 rounded-md" />,
       Email: "dimas90@gmail.com",
       Nama: "John Doe",
       Telepon: "085343787908",
@@ -32,7 +40,7 @@ function Pelanggan() {
       Level: "silver",
     },
     {
-      Foto: 1,
+      Foto: <img src="rectangle-58.png" className="w-16 h-20 rounded-md" />,
       Email: "dimas90@gmail.com",
       Nama: "John Doe",
       Telepon: "085343787908",
@@ -41,7 +49,7 @@ function Pelanggan() {
       Level: "silver",
     },
     {
-      Foto: 1,
+      Foto: <img src="rectangle-58.png" className="w-16 h-20 rounded-md" />,
       Email: "dimas90@gmail.com",
       Nama: "John Doe",
       Telepon: "085343787908",
@@ -73,9 +81,18 @@ function Pelanggan() {
 
             <DropdownMenuContent>
               <Link to="/pelanggan/pelanggandetail">
-                <DropdownMenuItem>Detail</DropdownMenuItem>
+                <DropdownMenuItem className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white">
+                  <BiEdit />
+                  <p>Edit</p>
+                </DropdownMenuItem>
               </Link>
-              <DropdownMenuItem>Hapus</DropdownMenuItem>
+              <DropdownMenuItem
+                className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
+                onClick={handleDelete}
+              >
+                <BiTrash />
+                <p>Hapus</p>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -88,7 +105,7 @@ function Pelanggan() {
       <div className="">
         <Breadcrumbs pages="Pelanggan" />
 
-        <div className="w-full mt-5  px-5 py-5 shadow-md bg-white">
+        <div className="w-full mt-5  px-5 py-5 shadow-md bg-white rounded-md">
           <div className="flex justify-between pb-7">
             <h2 className="font-bold">Semua Pelanggan</h2>
             <div className="flex space-x-3">
@@ -139,4 +156,4 @@ function Pelanggan() {
   );
 }
 
-export default Pelanggan;
+export default App;
