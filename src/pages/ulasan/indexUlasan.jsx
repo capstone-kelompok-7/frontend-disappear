@@ -47,10 +47,15 @@ export default function Ulasan() {
     setSearchParams(searchParams);
   }
 
+  const numberPage = (pageIndex, itemIndex) => {
+    const itemsPerPage = meta?.per_page || 8;
+    return pageIndex * itemsPerPage + itemIndex + 1;
+  };
+
   const columns = [
     {
       Header: "No",
-      accessor: "id",
+      accessor: (_, index) => numberPage(meta?.current_page - 1, index),
     },
     {
       Header: "Nama Produk",
@@ -74,7 +79,7 @@ export default function Ulasan() {
           <div className="flex items-center">
             <Input
               type="text"
-              placeholder="Cari Tantangan"
+              placeholder="Cari Produk"
               className="pr-32 py-6 border border-primary-green"
             />
             <FiSearch className="absolute ml-72 text-primary-green" />
