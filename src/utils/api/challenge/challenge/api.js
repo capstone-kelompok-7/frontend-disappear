@@ -1,8 +1,21 @@
 import axiosWithConfig from "../../axiosWithConfig";
 
-export const getChallenge = async () => {
+export const getChallenge = async (params) => {
   try {
-    const response = await axiosWithConfig.get("api/v1/");
+    let query = "";
+
+    if (params) {
+      const queryParams = [];
+
+      let key;
+      for (key in params) {
+        queryParams.push(`${key}=${params[key]}`);
+      }
+
+      query = queryParams.join("&");
+    }
+    const url = query ? `/api/v1/challenges?${query}` : "/api/v1/challenges";
+    const response = await axiosWithConfig.get(url);
 
     return response.data;
   } catch (error) {
@@ -13,6 +26,20 @@ export const getChallenge = async () => {
 export const getDetailChallenge = async (id) => {
   try {
     const response = await axiosWithConfig.get(`api/v1/${id}`);
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
+
+export const createChallenge = async (data) => {
+  try {
+    const newData = {
+      ...data,
+    };
+
+    const response = await axiosWithConfig.post(`api/v1/challenges`, newData);
 
     return response.data;
   } catch (error) {

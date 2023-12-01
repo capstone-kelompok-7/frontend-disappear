@@ -14,7 +14,11 @@ const Input = React.forwardRef(
             className
           )}
           ref={ref}
-          {...(register ? register(name) : {})}
+          {...(register
+            ? register(name, {
+                valueAsNumber: type === "number" ? true : false,
+              })
+            : {})}
           {...props}
         />
         {error && (
