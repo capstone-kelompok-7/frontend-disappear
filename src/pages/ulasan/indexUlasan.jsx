@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
-import { Link, useNavigate } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -13,27 +13,45 @@ import {
 import Tabel from "@/components/table/table";
 import { Input } from "@/components/ui/input";
 import { getUlasan } from "@/utils/api/ulasan/api";
+import Pagination from "@/components/pagenation";
+import { Loading } from "@/components/loading";
 
 export default function Ulasan() {
   const [ulasan, setUlasan] = useState([]);
-
-  const navigate = useNavigate();
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     fetchData();
-  }, []);
+  }, [searchParams]);
 
   async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
     try {
-      const result = await getUlasan();
+      const result = await getUlasan({ ...query });
+      const { ...rest } = result.meta;
       setUlasan(result.data);
+      setIsLoading(false);
+      setMeta(rest);
     } catch (error) {
       console.log(error.message);
     }
   }
 
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
+
   const columns = [
-    { Header: "No", accessor: "id" },
+    {
+      Header: "No",
+      accessor: "id",
+    },
     {
       Header: "Nama Produk",
       accessor: "name",
@@ -89,7 +107,19 @@ export default function Ulasan() {
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
-        <Tabel columns={columns} data={ulasan} />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <Tabel columns={columns} data={ulasan} />
+            <Pagination
+              meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </>
+        )}
       </Layout>
     </div>
   );
