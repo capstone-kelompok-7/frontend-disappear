@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { FiSearch } from "react-icons/fi";
@@ -5,7 +6,6 @@ import { BiEdit } from "react-icons/bi";
 import Button from "@/components/button";
 import { Input } from "@/components/ui/input";
 import Modal from "react-modal";
-import { useState } from "react";
 import PopUp from "./popUp";
 import Tabel from "@/components/table/table";
 import Delete from "../../components/delete/delete";
@@ -17,14 +17,50 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getCategory } from "@/utils/api/category/api";
+import Pagination from "@/components/pagenation";
+import { Loading } from "@/components/loading";
+import { useSearchParams } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
-export default function IndexPopup() {
+export default function IndexCategory() {
+  const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputName, setInputName] = useState("");
   const [file, setFile] = useState(null);
   const [popupLabel, setPopupLabel] = useState("");
+
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
+  const [isLoading, setIsLoading] = useState(false);
+
+  useEffect(() => {
+    fetchData();
+  }, [searchParams]);
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
+    try {
+      setIsLoading(true);
+      const result = await getCategory({ ...query });
+      const { ...rest } = result.meta;
+      setCategories(result.data);
+      setMeta(rest);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
 
   const openModal = (label, data = null) => {
     setPopupLabel(label);
@@ -56,53 +92,46 @@ export default function IndexPopup() {
     });
   };
 
-  const data = [
-    {
-      No: 1,
-      Foto: " ",
-      Nama: "Aksesoris",
-      JumlahProduk: "80",
-    },
-    {
-      No: 2,
-      Foto: " ",
-      Nama: "Tas",
-      JumlahProduk: "80",
-    },
-    {
-      No: 3,
-      Foto: " ",
-      Nama: "Alat Makan",
-      JumlahProduk: "80",
-    },
-  ];
-
   const columns = [
-    { Header: "No", accessor: "No" },
-    { Header: "Foto", accessor: "Foto" },
-    { Header: "Nama", accessor: "Nama" },
+    { Header: "No", accessor: "id" },
+    {
+      Header: "Foto",
+      accessor: "photo",
+      Cell: ({ row }) => (
+        <img
+          src={row.original.photo}
+          alt="Product"
+          className="w-20 h-28 rounded block m-auto"
+        />
+      ),
+    },
+    { Header: "Nama", accessor: "name" },
     {
       Header: "Jumlah Produk",
-      accessor: "JumlahProduk",
+      accessor: "total_product",
       Cell: ({ row }) => (
-        <div className="JumlahProduk-cell flex items-center justify-between">
-          <div className="text-center">{row.original.JumlahProduk}</div>
+        <div className="flex items-center justify-between">
+          <div className="text-center">{row.original.total_product}</div>
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <div className="three-dots">
+              <div className="three-dots ">
                 <PiDotsThreeVerticalBold />
               </div>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
               <DropdownMenuItem
-                onClick={() => openModal("Edit Kategori", data[0])}
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
+                onClick={() => openModal("Edit Kategori", row.original.id)}
                 style={{ cursor: "pointer" }}
               >
                 <BiEdit />
                 Edit Kategori
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete}>
+              <DropdownMenuItem
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
+                onClick={handleDelete}
+              >
                 <RiDeleteBinLine />
                 Delete Kategori
               </DropdownMenuItem>
@@ -118,7 +147,7 @@ export default function IndexPopup() {
       <Layout>
         <Breadcrumbs pages="Kategori Produk" />
 
-        <div className=" flex flex-col min-h-screen flex-grow overflow-y-auto mx-5 mt-6 px-[15px] py-5 shadow-md rounded-[3px]">
+        <div className="justify-between  mt-6  py-5">
           <div className="flex items-center pb-7 gap-6">
             <Button
               label="Tambah Kategori"
@@ -140,21 +169,34 @@ export default function IndexPopup() {
                   />
                 </svg>
               }
-              onClick={() => openModal("Tambahkan Kategori!")}
-              className="flex items-center space-x-2 border bg-[#25745A] text-white p-2 rounded-[3px]"
+              onClick={() => openModal("Tambah Kategori")}
+              className="flex items-center space-x-2 border bg-secondary-green text-white p-2 rounded-sm"
             />
 
             <div className="flex items-center w-64 relative">
               <Input
                 type="text"
                 placeholder="Cari Kategori"
-                className="p-3 rounded-[3px] pr-10"
+                className="p-3 rounded pr-10 border-black"
               />
-              <FiSearch className="absolute right-3 top-3" />
+              <FiSearch className="absolute right-10 top-3" />
             </div>
           </div>
-
-          <Tabel columns={columns} data={data} />
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <div className="mt-5">
+              <Tabel columns={columns} data={categories} />
+              <Pagination
+                meta={meta}
+                onClickPrevious={() =>
+                  handlePrevNextPage(meta?.current_page - 1)
+                }
+                onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                onClickPage={(page) => handlePrevNextPage(page)}
+              />
+            </div>
+          )}
         </div>
       </Layout>
 
@@ -163,11 +205,11 @@ export default function IndexPopup() {
         closeModal={closeModal}
         popupLabel={popupLabel}
         placeholder={
-          popupLabel === "Tambahkan Kategori!" ? "Nama Kategori" : "Nama data"
+          popupLabel === "Tambah Kategori" ? "Nama Kategori" : "Nama data"
         }
         cancelButtonLabel="Batal"
         confirmButtonLabel={
-          popupLabel === "Tambahkan Kategori!" ? "Tambah" : "Edit"
+          popupLabel === "Tambah Kategori" ? "Tambah" : "Edit"
         }
         onAddPopup={handlePopup}
         onNameChange={onNameChange}
