@@ -25,7 +25,7 @@ export const getChallenge = async (params) => {
 
 export const getDetailChallenge = async (id) => {
   try {
-    const response = await axiosWithConfig.get(`api/v1/${id}`);
+    const response = await axiosWithConfig.get(`api/v1/challenges/${id}`);
 
     return response.data;
   } catch (error) {
@@ -47,12 +47,29 @@ export const createChallenge = async (data) => {
   }
 };
 
-export const deleteChallenge = async (id) => {
+export const updateChallenge = async (data) => {
+  const { id } = data;
   try {
-    const response = await axiosWithConfig.delete(`api/v1/${id}`);
+    const newData = {
+      ...data,
+    };
+    const response = await axiosWithConfig.put(
+      `api/v1/challenges/${id}`,
+      newData
+    );
 
     return response.data;
   } catch (error) {
-    throw Error("Failed to delete a product");
+    throw Error(error.response.data.message);
+  }
+};
+
+export const deleteChallenge = async (id) => {
+  try {
+    const response = await axiosWithConfig.delete(`api/v1/challenges/${id}`);
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
   }
 };

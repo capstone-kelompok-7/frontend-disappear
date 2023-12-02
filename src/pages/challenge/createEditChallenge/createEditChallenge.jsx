@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
 import Layout from "@/components/layout";
 import Button from "@/components/button";
@@ -13,12 +13,15 @@ import { challengeSchema } from "@/utils/api/challenge/challenge/schema";
 import {
   getChallenge,
   createChallenge,
+  updateChallenge,
 } from "@/utils/api/challenge/challenge/api";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 function CreateChallenge() {
+  const { id } = useParams();
   const [gambar, setGambar] = useState(null);
+  const [selectedId, setSelectedId] = useState(0);
   const [challenge, setChallenge] = useState([]);
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -36,18 +39,29 @@ function CreateChallenge() {
     },
   });
 
-  // useEffect(() => {
-  //   fetchData();
-  // }, []);
+  useEffect(() => {
+    fetchData();
+  }, []);
 
-  // async function fetchData() {
-  //   try {
-  //     const result = await getChallenge();
-  //     setChallenge(result.data);
-  //   } catch (error) {
-  //     console.log(error.message);
-  //   }
-  // }
+  async function fetchData() {
+    try {
+      const result = await getChallenge();
+
+      const dataChallenge = result.find((item) => item.id === id);
+
+      if (dataChallenge) {
+        setSelectedId(dataChallenge.id);
+        setValue("challengeName", dataChallenge.title);
+        setValue("challengeStart", dataChallenge.start_date);
+        setValue("challengeEnd", dataChallenge.end_date);
+        setValue("description", dataChallenge.description);
+        setValue("exp", dataChallenge.exp);
+        // setValue("image", result.photo);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
 
   async function onSubmit(data) {
     try {
@@ -89,14 +103,60 @@ function CreateChallenge() {
     }
   }
 
+  async function onSubmitEdit(data) {
+    try {
+      const editChallenge = {
+        // photo: data.image,
+        id: selectedId,
+        title: data.challengeName,
+        start_date: new Date(data.challengeStart).toISOString(),
+        end_date: new Date(data.challengeEnd).toISOString(),
+        description: data.description,
+        exp: data.exp,
+      };
+      await updateChallenge(editChallenge);
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Berhasil Mengubah Tantangan!
+            </span>
+          </div>
+        ),
+        description:
+          "Data tantangan berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!!",
+      });
+      setSelectedId(0);
+      reset();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menambahkan Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    }
+  }
+
   return (
     <Layout>
       <div className="my-6">
-        <Breadcrumbs pages="Buat Tantangan" />
+        <Breadcrumbs
+          pages={selectedId === 0 ? "Tambah Tantangan" : "Edit Tantangan"}
+        />
       </div>
 
       <div className="mt-8">
-        <form onSubmit={handleSubmit(onSubmit)} className="w-full">
+        <form
+          onSubmit={handleSubmit(selectedId === 0 ? onSubmit : onSubmitEdit)}
+          className="w-full"
+        >
           <div className="mb-10">
             <div className="flex">
               <div className="flex-col w-1/2 pr-8">
@@ -238,10 +298,11 @@ function CreateChallenge() {
               label="Batal"
               type="submit"
               className="w-24 h-12 rounded-md border border-primary-green p-3.5 text-primary-green text-sm font-semibold items-center justify-center inline-flex"
+              onClick={() => navigate(`/tantangan`)}
             />
 
             <Button
-              label="Tambah Tantangan"
+              label={selectedId === 0 ? "Tambah Tantangan" : "Simpan Perubahan"}
               type="submit"
               className="w-44 h-12 bg-secondary-green rounded-md text-white text-sm font-semibold p-3.5"
             />
