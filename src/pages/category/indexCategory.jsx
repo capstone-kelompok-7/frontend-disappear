@@ -5,7 +5,7 @@ import { BiEdit } from "react-icons/bi";
 import Button from "@/components/button";
 import { Input } from "@/components/ui/input";
 import Modal from "react-modal";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import PopUp from "./popUp";
 import Tabel from "@/components/table/table";
 import Delete from "../../components/delete/delete";
@@ -17,6 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { getCategory } from "@/utils/api/category/api";
 
 Modal.setAppElement("#root");
 
@@ -25,6 +26,17 @@ export default function IndexCategory() {
   const [inputName, setInputName] = useState("");
   const [file, setFile] = useState(null);
   const [popupLabel, setPopupLabel] = useState("");
+
+  const [categories, setCategories] = useState([]);
+
+  const getCategories = async () => {
+    try {
+      const response = await getCategory();
+      setCategories(response.data);
+    } catch (error) {
+      console.error(error);
+    }
+  };
 
   const openModal = (label, data = null) => {
     setPopupLabel(label);
@@ -56,40 +68,33 @@ export default function IndexCategory() {
     });
   };
 
-  const data = [
-    {
-      No: 1,
-      Foto: " ",
-      Nama: "Aksesoris",
-      JumlahProduk: "80",
-    },
-    {
-      No: 2,
-      Foto: " ",
-      Nama: "Tas",
-      JumlahProduk: "80",
-    },
-    {
-      No: 3,
-      Foto: " ",
-      Nama: "Alat Makan",
-      JumlahProduk: "80",
-    },
-  ];
+  useEffect(() => {
+    getCategories();
+  }, []);
 
   const columns = [
-    { Header: "No", accessor: "No" },
-    { Header: "Foto", accessor: "Foto" },
-    { Header: "Nama", accessor: "Nama" },
+    { Header: "No", accessor: "id" },
+    {
+      Header: "Foto",
+      accessor: "photo",
+      Cell: ({ row }) => (
+        <img
+          src={row.original.photo}
+          alt="Product"
+          className="w-20 h-28 rounded block m-auto"
+        />
+      ),
+    },
+    { Header: "Nama", accessor: "name" },
     {
       Header: "Jumlah Produk",
-      accessor: "JumlahProduk",
+      accessor: "total_product",
       Cell: ({ row }) => (
-        <div className="JumlahProduk-cell flex items-center justify-between">
-          <div className="text-center">{row.original.JumlahProduk}</div>
+        <div className="flex items-center justify-between">
+          <div className="text-center">{row.original.total_product}</div>
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <div className="three-dots">
+              <div className="three-dots ">
                 <PiDotsThreeVerticalBold />
               </div>
             </DropdownMenuTrigger>
@@ -97,7 +102,7 @@ export default function IndexCategory() {
             <DropdownMenuContent>
               <DropdownMenuItem
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
-                onClick={() => openModal("Edit Kategori", data[0])}
+                onClick={() => openModal("Edit Kategori", row.original.id)}
                 style={{ cursor: "pointer" }}
               >
                 <BiEdit />
@@ -122,7 +127,7 @@ export default function IndexCategory() {
       <Layout>
         <Breadcrumbs pages="Kategori Produk" />
 
-        <div className=" flex flex-col min-h-screen flex-grow overflow-y-auto mx-5 mt-6 px-3.5 py-5 shadow-md rounded-sm">
+        <div className=" flex flex-col min-h-screen mx-5 mt-6 px-3.5 py-5 shadow-md rounded-sm">
           <div className="flex items-center pb-7 gap-6">
             <Button
               label="Tambah Kategori"
@@ -157,8 +162,7 @@ export default function IndexCategory() {
               <FiSearch className="absolute right-10 top-3" />
             </div>
           </div>
-
-          <Tabel columns={columns} data={data} />
+          <Tabel columns={columns} data={categories} />
         </div>
       </Layout>
 
