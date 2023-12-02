@@ -1,9 +1,11 @@
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { BiDotsVerticalRounded, BiEdit, BiTrash } from "react-icons/bi";
 import { IoEyeSharp } from "react-icons/io5";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -15,20 +17,23 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Tabel from "@/components/table/table";
-import { Input } from "@/components/ui/input";
 import Delete from "@/components/delete/delete";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import Pagination from "@/components/pagenation";
+import { Loading } from "@/components/loading";
+
 import {
   getChallenge,
   deleteChallenge,
 } from "@/utils/api/challenge/challenge/api";
-import Pagination from "@/components/pagenation";
-import { Loading } from "@/components/loading";
 
 function IndexChallenge() {
   const [challenge, setChallenge] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
 
   const navigate = useNavigate();
 
@@ -52,6 +57,46 @@ function IndexChallenge() {
     }
   }
 
+  function onClickEdit(id) {
+    navigate(`/tantangan/${id}/edit-tantangan`);
+  }
+
+  async function onClickDelete(id) {
+    try {
+      const result = await Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+
+      if (result.isConfirmed) {
+        await deleteChallenge(id);
+        toast({
+          title: (
+            <div className="flex items-center">
+              <FaRegCheckCircle />
+              <span className="ml-2">Berhasil Menghapus Tantangan! </span>
+            </div>
+          ),
+          description:
+            "Data tantangan telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+        });
+        fetchData();
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menghapus Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penghapusan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    }
+  }
+
   function handlePrevNextPage(page) {
     searchParams.set("page", String(page));
     setSearchParams(searchParams);
@@ -64,28 +109,16 @@ function IndexChallenge() {
     return `${day}-${month}-${year}`;
   };
 
-  async function onClickDelete(id) {
-    try {
-      await deleteChallenge(id);
-      Delete({
-        title: "Yakin mau hapus data?",
-        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-      });
-      fetchData();
-    } catch (error) {
-      toast.error(error.message);
-    }
-  }
-
-  const handleDelete = () => {
-    Delete({
-      title: "Yakin mau hapus data?",
-      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-    });
+  const formatNumber = (pageIndex, itemIndex) => {
+    const itemsPerPage = meta?.per_page || 8;
+    return pageIndex * itemsPerPage + itemIndex + 1;
   };
 
   const columns = [
-    { Header: "No", accessor: "id" },
+    {
+      Header: "No",
+      accessor: (_, index) => formatNumber(meta?.current_page - 1, index),
+    },
     { Header: "Nama Tantangan", accessor: "title" },
     {
       Header: "Tanggal Mulai",
@@ -111,23 +144,25 @@ function IndexChallenge() {
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <Link to="/tantangan/detail-tantangan">
-                <DropdownMenuItem className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white">
-                  <IoEyeSharp />
-                  <p>Lihat</p>
-                </DropdownMenuItem>
-              </Link>
-
-              <Link to="/tantangan/edit-tantangan">
-                <DropdownMenuItem className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white">
-                  <BiEdit />
-                  <p>Edit</p>
-                </DropdownMenuItem>
-              </Link>
+              <DropdownMenuItem
+                className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
+                onClick={() => navigate(`/tantangan/${row.original.id}`)}
+              >
+                <IoEyeSharp />
+                <p>Lihat</p>
+              </DropdownMenuItem>
 
               <DropdownMenuItem
                 className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
-                onClick={handleDelete}
+                onClick={() => onClickEdit(row.original.id)}
+              >
+                <BiEdit />
+                <p>Edit</p>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
+                onClick={() => onClickDelete(row.original.id)}
               >
                 <BiTrash />
                 <p>Hapus</p>
