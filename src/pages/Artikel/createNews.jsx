@@ -45,7 +45,6 @@ function CreateNews() {
                     name="image"
                     hidden
                   />
-                  <IoMdCloudUpload className="mr-2" />
                   Pilih File
                 </label>
               </div>

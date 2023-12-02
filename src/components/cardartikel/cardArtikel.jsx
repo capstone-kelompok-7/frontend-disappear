@@ -1,4 +1,6 @@
 import React from "react";
+import DOMPurify from "dompurify";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -6,10 +8,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 
-import DOMPurify from "dompurify";
-import { Link } from "react-router-dom";
-
-function CardArtikel({ title, content, image_url, created_at }) {
+function CardArtikel({ title, content, photo, date }) {
   const truncateContent = (text, maxWords) => {
     const words = text.split(" ");
     return words.length > maxWords
@@ -22,9 +21,9 @@ function CardArtikel({ title, content, image_url, created_at }) {
   const cleanContent = DOMPurify.sanitize(truncatedContent);
 
   return (
-    <div className="flex border-y-4 p-4 mt-4 mb-4 shadow-md space-x-8 items-center">
-      <div className="flex-grow">
-        <p>{created_at}</p>
+    <div className="flex border-y-4 p-4 mt-4 mb-4 space-x-8 shadow-md items-center">
+      <div className="p-4">
+        <p>{date}</p>
         <h2 className="text-xl font-bold mb-2">{title}</h2>
         <p
           className="text-black"
@@ -71,10 +70,10 @@ function CardArtikel({ title, content, image_url, created_at }) {
           </DropdownMenu>
         </div>
       </div>
-      <div className="items-center flex">
+      <div className="items-center">
         <img
-          className="w-[50rem] h-[15rem] rounded-md object-cover object-center"
-          src={image_url}
+          className="w-[60rem] h-[12rem] rounded-md object-cover"
+          src={photo}
           alt=""
         />
       </div>

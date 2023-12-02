@@ -12,24 +12,24 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Layout from "../../components/layout";
 import { Link } from "react-router-dom";
+import { getArtikel } from "@/utils/api/artikel/api";
+import CardArtikel from "@/components/cardartikel/cardArtikel";
 
 function IndexNews() {
-  // integrasinya
+  const [artikel, setArtikel] = useState([]);
 
-  // const [artikel, setArtikel] = useState([]);
+  useEffect(() => {
+    fetchArtikel();
+  }, []);
 
-  // useEffect(() => {
-  //   fetchArtikel();
-  // }, []);
-
-  // async function fetchArtikel() {
-  //   try {
-  //     const result = await getArtikel();
-  //     setArtikel(result.data);
-  //   } catch (error) {
-  //     toast.error(error.message);
-  //   }
-  // }
+  async function fetchArtikel() {
+    try {
+      const result = await getArtikel();
+      setArtikel(result.data);
+    } catch (error) {
+      toast.error(error.message);
+    }
+  }
 
   return (
     <Layout>
@@ -83,19 +83,17 @@ function IndexNews() {
             </DropdownMenu>
           </div>
         </div>
-        {/* implementasi apinya */}
-
-        {/* <div className="max-h-[38rem] overflow-y-auto">
+        <div className="max-h-[38rem] overflow-y-auto">
           {artikel.map((data) => (
             <CardArtikel
-              created_at={data.created_at}
+              date={data.date}
               key={data.id}
               title={data.title}
               content={data.content}
-              image_url={data.image_url}
+              photo={data.photo}
             />
           ))}
-        </div> */}
+        </div>
       </div>
     </Layout>
   );
