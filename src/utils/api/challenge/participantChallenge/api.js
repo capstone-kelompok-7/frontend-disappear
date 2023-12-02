@@ -26,9 +26,16 @@ export const getParticipant = async (params) => {
   }
 };
 
-export const getDetailParticipant = async (id) => {
+export const updateParticipant = async (data) => {
+  const { id } = data;
   try {
-    const response = await axiosWithConfig.get(`api/v1/${id}`);
+    const newData = {
+      ...data,
+    };
+    const response = await axiosWithConfig.put(
+      `api/v1/challenges/participants/status/${id}`,
+      newData
+    );
 
     return response.data;
   } catch (error) {

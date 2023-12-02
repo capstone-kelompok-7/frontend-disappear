@@ -1,8 +1,14 @@
-import React, { useState } from "react";
+import * as z from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
 import {
   Select,
   SelectValue,
@@ -10,16 +16,118 @@ import {
   SelectContent,
   SelectItem,
 } from "@/components/ui/select";
+import {
+  updateParticipant,
+  getParticipant,
+} from "@/utils/api/challenge/participantChallenge/api";
 
-function editPesertaChallange() {
+const MAX_FILE_SIZE = 200000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
+
+export const participantSchema = z.object({
+  usernameIg: z.string().min(1, { message: "Field tidak boleh kosong" }),
+  exp: z.number().min(1, { message: "Field tidak boleh kosong" }),
+  berpartisipasi: z.string().min(1, { message: "Field tidak boleh kosong" }),
+  image: z
+    .any()
+    .refine(
+      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+      `*maksimal 2MB dengan format PNG, JPG, JPEG`
+    )
+    .refine(
+      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      "*format PNG, JPG, JPEG"
+    ),
+  // status: z.string().min(1, { message: "Field tidak boleh kosong" }),
+});
+
+export default function editPesertaChallange() {
+  const { id } = useParams();
+  const [selectedId, setSelectedId] = useState(0);
+  const { toast } = useToast();
+  const navigate = useNavigate();
+
   const [gambar, setGambar] = useState(null);
+
+  const {
+    reset,
+    // register,
+    setValue,
+    handleSubmit,
+    // formState: { errors },
+  } = useForm({
+    resolver: zodResolver(participantSchema),
+    defaultValues: {
+      exp: 0,
+    },
+  });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const result = await getParticipant();
+
+      const dataParticipant = result.find((item) => item.id === id);
+      console.log(dataParticipant);
+
+      if (dataParticipant) {
+        setSelectedId(dataParticipant.id);
+        setValue("usernameIg", dataParticipant.username);
+        setValue("exp", dataParticipant.exp);
+        setValue("berpartisipasi", dataParticipant.tanggal_berpartisipasi);
+        setValue("status", dataParticipant.status);
+        // setValue("image", dataParticipant.photo);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async function onSubmitEdit(data) {
+    try {
+      const editParticipant = {
+        // photo: data.image,
+        id: selectedId,
+        username: data.usernameIg,
+        exp: data.exp,
+        berpartisipasi: new Date(data.tanggal_berpartisipasi).toISOString(),
+        status: data.status,
+      };
+      await updateParticipant(editParticipant);
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Berhasil Mengubah Status Peserta!
+            </span>
+          </div>
+        ),
+        description:
+          "Status peserta berhasil diubah, nih. Silahkan nikmati fitur lainya!",
+      });
+      setSelectedId(0);
+      reset();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mengubah Status Peserta!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    }
+  }
 
   const onGambarChange = (e) => {
     setGambar(e.target.files[0]);
-  };
-
-  const submitForm = (e) => {
-    e.preventDefault();
   };
 
   return (
@@ -28,17 +136,19 @@ function editPesertaChallange() {
         <Breadcrumbs pages="Edit Peserta Tantangan" />
       </div>
 
-      <div className="my-6 mx-[100px] px-[25px] py-5 flex justify-center bg-[#FFFFFF] shadow-md">
-        <form onSubmit={submitForm} className="w-full">
+      <div className="my-6 mx-[100px] px-[25px] py-5 flex justify-center shadow-md">
+        <form onSubmit={handleSubmit(onSubmitEdit)} className="w-full">
           <div className="mb-9">
             <div className="flex">
               <div className="flex-col w-1/4 pr-8">
                 <label className="font-semibold">Username Instagram</label>
                 <Input
                   type="text"
-                  name="usernameInstagram"
+                  name="usernameIg"
                   label="Username Instagram"
-                  className="w-full rounded-md border border-black shadow-sm py-1 px-4 mt-3"
+                  placeholder="Username Instagram"
+                  className="w-full rounded-md py-1 px-4 mt-3"
+                  readOnly
                 />
               </div>
 
@@ -48,7 +158,9 @@ function editPesertaChallange() {
                   type="text"
                   name="expTantangan"
                   label="EXP Tantangan"
-                  className="w-full rounded-md border border-black shadow-sm py-1 px-4 mt-3"
+                  placeholder="EXP Tantangan"
+                  className="w-full rounded-md py-1 px-4 mt-3"
+                  readOnly
                 />
               </div>
 
@@ -60,10 +172,10 @@ function editPesertaChallange() {
                   Status
                 </label>
                 <Select>
-                  <SelectTrigger className="w-full border border-black mt-3">
+                  <SelectTrigger className="w-full mt-3">
                     <SelectValue placeholder="Status" />
                   </SelectTrigger>
-                  <SelectContent className="border border-black">
+                  <SelectContent>
                     <SelectItem value="valid">Valid</SelectItem>
                     <SelectItem value="tidakValid">Tidak Valid</SelectItem>
                   </SelectContent>
@@ -79,7 +191,8 @@ function editPesertaChallange() {
                 label="Berpartisipasi"
                 type="date"
                 name="berpartisipasi"
-                className=" block w-full rounded-md border border-black shadow-sm py-1 px-4 mt-3"
+                className="block w-full rounded-md shadow-sm py-1 px-4 mt-3"
+                readOnly
               />
             </div>
 
@@ -88,6 +201,7 @@ function editPesertaChallange() {
                 label="Batal"
                 type="submit"
                 className="w-24 h-12 rounded-md border border-primary-green p-3.5 shadow text-primary-green text-sm font-semibold items-center justify-center inline-flex"
+                onClick={() => navigate(`/peserta-tantangan`)}
               />
 
               <Button
@@ -107,8 +221,8 @@ function editPesertaChallange() {
                 Bukti Berpartisipasi
               </label>
               <div className="mt-3 mb-4 flex items-center">
-                <div className="flex w-full items-center justify-center border border-black rounded-md">
-                  <label className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue">
+                <div className="flex w-full items-center justify-center rounded-md">
+                  <label className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 text-blue rounded-lg  tracking-wide uppercase border border-blue hover:bg-blue">
                     {!gambar ? (
                       <>
                         <svg
@@ -149,6 +263,7 @@ function editPesertaChallange() {
                       type="file"
                       className="hidden"
                       onChange={onGambarChange}
+                      disabled
                     />
                   </label>
                 </div>
@@ -160,5 +275,3 @@ function editPesertaChallange() {
     </Layout>
   );
 }
-
-export default editPesertaChallange;
