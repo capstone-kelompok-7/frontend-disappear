@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
 import { MdOutlineCalendarMonth } from "react-icons/md";
-import { Link, useSearchParams } from "react-router-dom";
+import { useSearchParams, Link } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -47,60 +47,33 @@ export default function IndexPesertaTantangan() {
     setSearchParams(searchParams);
   }
 
-  const data = [
-    {
-      No: 1,
-      UsernameInstagram: (
-        <Link to="/peserta-tantangan/edit-peserta-tantangan">dimas829</Link>
-      ),
-      TanggalBerpartisipasi: "26-10-2023",
-      EXP: 150,
-      Status: "Tidak Valid",
-    },
-    {
-      No: 2,
-      UsernameInstagram: (
-        <Link to="/peserta-tantangan/edit-peserta-tantangan">dimas829</Link>
-      ),
-      TanggalBerpartisipasi: "26-10-2023",
-      EXP: 100,
-      Status: "Valid",
-    },
-    {
-      No: 3,
-      UsernameInstagram: (
-        <Link to="/peserta-tantangan/edit-peserta-tantangan">dimas829</Link>
-      ),
-      TanggalBerpartisipasi: "26-10-2023",
-      EXP: 100,
-      Status: "Menunggu Validasi",
-    },
-    {
-      No: 4,
-      UsernameInstagram: (
-        <Link to="/peserta-tantangan/edit-peserta-tantangan">dimas829</Link>
-      ),
-      TanggalBerpartisipasi: "26-10-2023",
-      EXP: 100,
-      Status: "Valid",
-    },
-    {
-      No: 5,
-      UsernameInstagram: (
-        <Link to="/peserta-tantangan/edit-peserta-tantangan">dimas829</Link>
-      ),
-      TanggalBerpartisipasi: "26-10-2023",
-      EXP: 150,
-      Status: "Tidak Valid",
-    },
-  ];
+  const formatDate = (dateString) => {
+    const [day, month, year] = new Date(dateString)
+      .toLocaleDateString("en-GB")
+      .split("/");
+    return `${day}-${month}-${year}`;
+  };
 
   const columns = [
     { Header: "No", accessor: "id" },
-    { Header: "Username Instagram", accessor: "UsernameInstagram" },
-    { Header: "Tanggal Berpartisipasi", accessor: "TanggalBerpartisipasi" },
-    { Header: "EXP Tantangan", accessor: "EXP" },
-    { Header: "Status", accessor: "Status" },
+    {
+      Header: "Username Instagram",
+      accessor: "username",
+      Cell: ({ row }) => (
+        <Link
+          to={`/peserta-tantangan/${row.original.id}/edit-peserta-tantangan/`}
+        >
+          {row.original.username}
+        </Link>
+      ),
+    },
+    {
+      Header: "Tanggal Berpartisipasi",
+      accessor: "tanggal_berpartisipasi",
+      Cell: ({ value }) => formatDate(value),
+    },
+    { Header: "EXP Tantangan", accessor: "exp" },
+    { Header: "Status", accessor: "status" },
   ];
 
   return (
@@ -187,7 +160,7 @@ export default function IndexPesertaTantangan() {
           <Loading />
         ) : (
           <>
-            <Tabel columns={columns} data={data} />
+            <Tabel columns={columns} data={participant} />
             <Pagination
               meta={meta}
               onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
