@@ -47,3 +47,13 @@ export const createProducts = async (data) => {
     throw Error(error.response.data.message);
   }
 };
+
+export const deleteProducts = async (id) => {
+  try {
+    const response = await axiosWithConfig.delete(`api/v1/products/${id}`);
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
