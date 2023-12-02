@@ -13,7 +13,7 @@ import { getAllOrder } from "@/utils/api/paymentAndOrder/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
 import React, { useEffect, useState } from "react";
 import { SlCalender } from "react-icons/sl";
-import { useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
 import getStatusColor from "@/utils/formatter/formatStatusColor";
 import { Loading } from "@/components/loading";
@@ -23,6 +23,8 @@ export default function IndexPayment() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
+
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -60,7 +62,14 @@ export default function IndexPayment() {
     {
       Header: "Pelanggan",
       accessor: "user.name",
-      Cell: ({ value }) => <p>{value}</p>,
+      Cell: ({ row }) => (
+        <p
+          className=" cursor-pointer"
+          onClick={() => navigate(`/pembayaran/${row.original.id}`)}
+        >
+          {row.original.user.name}
+        </p>
+      ),
     },
     {
       Header: "Tanggal",

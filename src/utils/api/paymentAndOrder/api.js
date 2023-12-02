@@ -23,3 +23,13 @@ export const getAllOrder = async (params) => {
     throw Error(error.response.data.message);
   }
 };
+
+export const getDetailOrder = async (id) => {
+  try {
+    const response = await axiosWithConfig.get(`/api/v1/order/${id}`);
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
