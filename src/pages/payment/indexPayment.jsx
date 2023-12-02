@@ -1,5 +1,6 @@
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
+import Pagination from "@/components/pagenation";
 import Tabel from "@/components/table/table";
 import {
   DropdownMenu,
@@ -8,38 +9,87 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import React from "react";
+import { getAllOrder } from "@/utils/api/paymentAndOrder/api";
+import formatCurrency from "@/utils/formatter/currencyIdr";
+import React, { useEffect, useState } from "react";
 import { SlCalender } from "react-icons/sl";
-import { Link } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
+import { format } from "date-fns";
+import getStatusColor from "@/utils/formatter/formatStatusColor";
+import { Loading } from "@/components/loading";
 
 export default function IndexPayment() {
-  const data = [
-    {
-      No: 1,
-      Pelanggan: (
-        <Link to="/pembayaran/konfirmasi-pembayaran">Dimas Bayuwangis</Link>
-      ),
-      Tanggal: "12-09-2023",
-      TotalPembayaran: 500000,
-      Status: <p className=" text-secondary-green">Konfirmasi</p>,
-    },
-    {
-      No: 1,
-      Pelanggan: (
-        <Link to="/pembayaran/konfirmasi-pembayaran">Dimas Bayuwangis</Link>
-      ),
-      Tanggal: "12-09-2023",
-      TotalPembayaran: 500000,
-      Status: <p className=" text-[#DC9B09]">Menunggu Konfirmasi</p>,
-    },
-  ];
+  const [payment, setPayment] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
+
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    fetchData();
+  }, [searchParams]);
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
+    try {
+      setIsLoading(true);
+      const result = await getAllOrder({ ...query });
+      const { ...rest } = result.meta;
+      setPayment(result.data);
+      console.log(result.data);
+      setMeta(rest);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
 
   const columns = [
-    { Header: "NO", accessor: "No" },
-    { Header: "Pelanggan", accessor: "Pelanggan" },
-    { Header: "Tanggal", accessor: "Tanggal" },
-    { Header: "Total Pembayaran", accessor: "TotalPembayaran" },
-    { Header: "Status", accessor: "Status" },
+    {
+      Header: "NO",
+      accessor: "id",
+    },
+    {
+      Header: "Pelanggan",
+      accessor: "user.name",
+      Cell: ({ row }) => (
+        <p
+          className=" cursor-pointer"
+          onClick={() => navigate(`/pembayaran/${row.original.id}`)}
+        >
+          {row.original.user.name}
+        </p>
+      ),
+    },
+    {
+      Header: "Tanggal",
+      accessor: "created_at",
+      Cell: ({ value }) => <p>{format(new Date(value), "dd-MM-yyyy")}</p>,
+    },
+    {
+      Header: "Total Pembayaran",
+      accessor: "total_amount_paid",
+      Cell: ({ row }) => (
+        <p>{formatCurrency(row.original.total_amount_paid)}</p>
+      ),
+    },
+    {
+      Header: "Status",
+      accessor: "payment_status",
+      Cell: ({ value }) => (
+        <p style={{ color: getStatusColor(value) }}>{value}</p>
+      ),
+    },
   ];
 
   return (
@@ -129,9 +179,19 @@ export default function IndexPayment() {
             </div>
           </div>
         </div>
-        <div>
-          <Tabel columns={columns} data={data} />
-        </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div>
+            <Tabel columns={columns} data={payment} />
+            <Pagination
+              meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </div>
+        )}
       </Layout>
     </>
   );

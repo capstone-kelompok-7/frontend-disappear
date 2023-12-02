@@ -149,7 +149,7 @@ export default function Router() {
       element: <IndexPayment />,
     },
     {
-      path: "/pembayaran/konfirmasi-pembayaran",
+      path: "/pembayaran/:id",
       element: <ConfirmPayment />,
     },
     {
