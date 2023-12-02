@@ -1,3 +1,4 @@
+import React, { useEffect, useState } from "react";
 import Layout from "../../components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { FiSearch } from "react-icons/fi";
@@ -5,7 +6,6 @@ import { BiEdit } from "react-icons/bi";
 import Button from "@/components/button";
 import { Input } from "@/components/ui/input";
 import Modal from "react-modal";
-import { useEffect, useState } from "react";
 import PopUp from "./popUp";
 import Tabel from "@/components/table/table";
 import Delete from "../../components/delete/delete";
@@ -18,25 +18,49 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { getCategory } from "@/utils/api/category/api";
+import Pagination from "@/components/pagenation";
+import { Loading } from "@/components/loading";
+import { useSearchParams } from "react-router-dom";
 
 Modal.setAppElement("#root");
 
 export default function IndexCategory() {
+  const [categories, setCategories] = useState([]);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [inputName, setInputName] = useState("");
   const [file, setFile] = useState(null);
   const [popupLabel, setPopupLabel] = useState("");
 
-  const [categories, setCategories] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const getCategories = async () => {
-    try {
-      const response = await getCategory();
-      setCategories(response.data);
-    } catch (error) {
-      console.error(error);
+  useEffect(() => {
+    fetchData();
+  }, [searchParams]);
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
     }
-  };
+    try {
+      setIsLoading(true);
+      const result = await getCategory({ ...query });
+      const { ...rest } = result.meta;
+      setCategories(result.data);
+      setMeta(rest);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
 
   const openModal = (label, data = null) => {
     setPopupLabel(label);
@@ -67,10 +91,6 @@ export default function IndexCategory() {
       text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
     });
   };
-
-  useEffect(() => {
-    getCategories();
-  }, []);
 
   const columns = [
     { Header: "No", accessor: "id" },
@@ -127,7 +147,7 @@ export default function IndexCategory() {
       <Layout>
         <Breadcrumbs pages="Kategori Produk" />
 
-        <div className=" flex flex-col min-h-screen mx-5 mt-6 px-3.5 py-5 shadow-md rounded-sm">
+        <div className="justify-between  mt-6  py-5">
           <div className="flex items-center pb-7 gap-6">
             <Button
               label="Tambah Kategori"
@@ -162,7 +182,21 @@ export default function IndexCategory() {
               <FiSearch className="absolute right-10 top-3" />
             </div>
           </div>
-          <Tabel columns={columns} data={categories} />
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <div className="mt-5">
+              <Tabel columns={columns} data={categories} />
+              <Pagination
+                meta={meta}
+                onClickPrevious={() =>
+                  handlePrevNextPage(meta?.current_page - 1)
+                }
+                onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                onClickPage={(page) => handlePrevNextPage(page)}
+              />
+            </div>
+          )}
         </div>
       </Layout>
 
