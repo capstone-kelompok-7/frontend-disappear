@@ -1,4 +1,4 @@
-import React, {useState, useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import { Link } from "react-router-dom";
@@ -15,6 +15,7 @@ import Breadcrumbs from "@/components/breadcrumbs";
 import Delete from "@/components/delete/delete";
 import Pagination from "@/components/pagenation";
 import { useSearchParams } from "react-router-dom";
+import { Loading } from "@/components/loading";
 import { getVoucher } from "@/utils/api/voucher/api";
 
 function VoucherApp() {
@@ -50,27 +51,12 @@ function VoucherApp() {
     setSearchParams(searchParams);
   }
 
-
   const handleDeleteClick = () => {
     Delete({
       title: "Yakin mau hapus data?",
       text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-    })
+    });
   };
-
-  const data = [
-    {
-      No: 1,
-      NamaKupon: "Hadiah dari Level Gold",
-      Kode: "L00G1",
-      Kategori: "GOLD",
-      Diskon: 5000,
-      TanggalMulai: "10-10-2023",
-      TanggalBerakhir: "15-10-2023",
-      Status: "Kadaluwarsa",
-      
-    },
-  ];
 
   const columns = [
     { Header: "NO", accessor: "id" },
@@ -97,7 +83,9 @@ function VoucherApp() {
               <Link to="/kupon/edit-kupon">
                 <DropdownMenuItem>Detail</DropdownMenuItem>
               </Link>
-              <DropdownMenuItem onClick={handleDeleteClick}>Hapus</DropdownMenuItem>
+              <DropdownMenuItem onClick={handleDeleteClick}>
+                Hapus
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
@@ -146,11 +134,19 @@ function VoucherApp() {
           </DropdownMenu>
         </div>
 
-        <Tabel columns={columns} data={vouchers} />
-        <Pagination meta={meta}
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div>
+            <Tabel columns={columns} data={vouchers} />
+            <Pagination
+              meta={meta}
               onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
               onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)} />
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </div>
+        )}
       </div>
     </Layout>
   );
