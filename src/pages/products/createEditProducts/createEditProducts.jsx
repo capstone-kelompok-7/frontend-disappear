@@ -19,36 +19,11 @@ import { CrossCircledIcon } from "@radix-ui/react-icons";
 const schema = z.object({
   productsName: z.string().min(1, { message: "Field tidak boleh kosong" }),
 
-  productsPrice: z
-    .string()
-    .min(1, { message: "Field tidak boleh kosong" })
-    .refine((value) => !Number.isNaN(parseInt(value)), {
-      message: "Harus berupa angka",
-    }),
-  discount: z
-    .string()
-    .min(1, { message: "Field tidak boleh kosong" })
-    .refine((value) => !Number.isNaN(parseInt(value)), {
-      message: "Harus berupa angka",
-    }),
-  stock: z
-    .string()
-    .min(1, { message: "Field tidak boleh kosong" })
-    .refine((value) => !Number.isNaN(parseInt(value)), {
-      message: "Harus berupa angka",
-    }),
-  exp: z
-    .string()
-    .min(1, { message: "Field tidak boleh kosong" })
-    .refine((value) => !Number.isNaN(parseInt(value)), {
-      message: "Harus berupa angka",
-    }),
-  gram: z
-    .string()
-    .min(1, { message: "Field tidak boleh kosong" })
-    .refine((value) => !Number.isNaN(parseInt(value)), {
-      message: "Harus berupa angka",
-    }),
+  productsPrice: z.number().min(1, { message: "Field tidak boleh kosong" }),
+  discount: z.number().min(1, { message: "Field tidak boleh kosong" }),
+  stock: z.number().min(1, { message: "Field tidak boleh kosong" }),
+  exp: z.number().min(1, { message: "Field tidak boleh kosong" }),
+  gram: z.number().min(1, { message: "Field tidak boleh kosong" }),
   description: z.string().min(1, { message: "Field tidak boleh kosong" }),
 });
 
@@ -64,6 +39,13 @@ export default function CreateEditProducts() {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {
+      discount: 0,
+      stock: 0,
+      exp: 0,
+      gram: 0,
+      productsPrice: 0,
+    },
   });
 
   async function onSubmit(data) {

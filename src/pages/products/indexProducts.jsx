@@ -194,7 +194,7 @@ export default function IndexProducts() {
           <Link
             id="toCreateProducts"
             to="/produk/buat-produk"
-            className=" font-medium text-sm rounded-md text-white bg-primary-green px-3 py-3 flex items-center justify-between gap-3"
+            className=" font-medium text-sm rounded-md text-white bg-secondary-green px-3 py-3 flex items-center justify-between gap-3"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
