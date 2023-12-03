@@ -103,46 +103,47 @@ function CreateChallenge() {
     }
   }
 
-  async function onSubmitEdit(data) {
-    try {
-      const editChallenge = {
-        // photo: data.image,
-        id: selectedId,
-        title: data.challengeName,
-        start_date: new Date(data.challengeStart).toISOString(),
-        end_date: new Date(data.challengeEnd).toISOString(),
-        description: data.description,
-        exp: data.exp,
-      };
-      await updateChallenge(editChallenge);
-      toast({
-        title: (
-          <div className="flex items-center gap-3">
-            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
-            <span className=" text-base font-semibold">
-              Berhasil Mengubah Tantangan!
-            </span>
-          </div>
-        ),
-        description:
-          "Data tantangan berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!!",
-      });
-      setSelectedId(0);
-      reset();
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: (
-          <div className="flex items-center">
-            <CrossCircledIcon />
-            <span className="ml-2">Gagal Menambahkan Tantangan!</span>
-          </div>
-        ),
-        description:
-          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
-      });
-    }
-  }
+  /*BUG EDIT*/
+  // async function onSubmitEdit(data) {
+  //   try {
+  //     const editChallenge = {
+  //       // photo: data.image,
+  //       id: selectedId,
+  //       title: data.challengeName,
+  //       start_date: new Date(data.challengeStart).toISOString(),
+  //       end_date: new Date(data.challengeEnd).toISOString(),
+  //       description: data.description,
+  //       exp: data.exp,
+  //     };
+  //     await updateChallenge(editChallenge);
+  //     toast({
+  //       title: (
+  //         <div className="flex items-center gap-3">
+  //           <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+  //           <span className=" text-base font-semibold">
+  //             Berhasil Mengubah Tantangan!
+  //           </span>
+  //         </div>
+  //       ),
+  //       description:
+  //         "Data tantangan berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!!",
+  //     });
+  //     setSelectedId(0);
+  //     reset();
+  //   } catch (error) {
+  //     toast({
+  //       variant: "destructive",
+  //       title: (
+  //         <div className="flex items-center">
+  //           <CrossCircledIcon />
+  //           <span className="ml-2">Gagal Menambahkan Tantangan!</span>
+  //         </div>
+  //       ),
+  //       description:
+  //         "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+  //     });
+  //   }
+  // }
 
   return (
     <Layout>
@@ -268,10 +269,18 @@ function CreateChallenge() {
                       type="file"
                       className="hidden"
                       name="image"
-                      error={errors.image?.message}
                     />
                   </label>
                 </div>
+              </div>
+              <div className={`text-xs mt-1 ${"text-gray-500"}`}>
+                {errors.image ? (
+                  <div className="text-red-500 text-xs mt-1">
+                    {errors.image.message}
+                  </div>
+                ) : (
+                  "*maksimal 2MB dengan format PNG, JPG, JPEG"
+                )}
               </div>
             </div>
 
