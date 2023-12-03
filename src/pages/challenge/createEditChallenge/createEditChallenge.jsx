@@ -1,48 +1,186 @@
-import React, { useState } from "react";
+import { useEffect, useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { useNavigate, useParams } from "react-router-dom";
+
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import Breadcrumbs from "@/components/breadcrumbs";
+import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import { challengeSchema } from "@/utils/api/challenge/challenge/schema";
+import {
+  getChallenge,
+  createChallenge,
+  updateChallenge,
+} from "@/utils/api/challenge/challenge/api";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 function CreateChallenge() {
+  const { id } = useParams();
   const [gambar, setGambar] = useState(null);
+  const [selectedId, setSelectedId] = useState(0);
+  const [challenge, setChallenge] = useState([]);
+  const { toast } = useToast();
+  const navigate = useNavigate();
 
-  const onGambarChange = (e) => {
-    setGambar(e.target.files[0]);
-  };
+  const {
+    reset,
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(challengeSchema),
+    defaultValues: {
+      exp: 0,
+    },
+  });
 
-  const submitForm = (e) => {
-    e.preventDefault();
-  };
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      const result = await getChallenge();
+
+      const dataChallenge = result.find((item) => item.id === id);
+
+      if (dataChallenge) {
+        setSelectedId(dataChallenge.id);
+        setValue("challengeName", dataChallenge.title);
+        setValue("challengeStart", dataChallenge.start_date);
+        setValue("challengeEnd", dataChallenge.end_date);
+        setValue("description", dataChallenge.description);
+        setValue("exp", dataChallenge.exp);
+        // setValue("image", result.photo);
+      }
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  async function onSubmit(data) {
+    try {
+      const newChallenge = {
+        // photo: data.image,
+        title: data.challengeName,
+        start_date: new Date(data.challengeStart).toISOString(),
+        end_date: new Date(data.challengeEnd).toISOString(),
+        description: data.description,
+        exp: data.exp,
+      };
+      await createChallenge(newChallenge);
+      navigate("/tantangan");
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Berhasil Menambahkan Tantangan!
+            </span>
+          </div>
+        ),
+        description:
+          "Data tantangan berhasil ditambahkan, nih. Silahkan nikmati fitur lainnya!!",
+      });
+      reset();
+    } catch (error) {
+      console.log(error);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menambahkan Tantangan!</span>
+          </div>
+        ),
+        description: "Gagal menambahkan tantangan",
+      });
+    }
+  }
+
+  /*BUG EDIT*/
+  // async function onSubmitEdit(data) {
+  //   try {
+  //     const editChallenge = {
+  //       // photo: data.image,
+  //       id: selectedId,
+  //       title: data.challengeName,
+  //       start_date: new Date(data.challengeStart).toISOString(),
+  //       end_date: new Date(data.challengeEnd).toISOString(),
+  //       description: data.description,
+  //       exp: data.exp,
+  //     };
+  //     await updateChallenge(editChallenge);
+  //     toast({
+  //       title: (
+  //         <div className="flex items-center gap-3">
+  //           <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+  //           <span className=" text-base font-semibold">
+  //             Berhasil Mengubah Tantangan!
+  //           </span>
+  //         </div>
+  //       ),
+  //       description:
+  //         "Data tantangan berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!!",
+  //     });
+  //     setSelectedId(0);
+  //     reset();
+  //   } catch (error) {
+  //     toast({
+  //       variant: "destructive",
+  //       title: (
+  //         <div className="flex items-center">
+  //           <CrossCircledIcon />
+  //           <span className="ml-2">Gagal Menambahkan Tantangan!</span>
+  //         </div>
+  //       ),
+  //       description:
+  //         "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+  //     });
+  //   }
+  // }
 
   return (
     <Layout>
       <div className="my-6">
-        <Breadcrumbs pages="Buat Tantangan" />
+        <Breadcrumbs
+          pages={selectedId === 0 ? "Tambah Tantangan" : "Edit Tantangan"}
+        />
       </div>
 
       <div className="mt-8">
-        <form onSubmit={submitForm} className="w-full">
+        <form
+          onSubmit={handleSubmit(selectedId === 0 ? onSubmit : onSubmitEdit)}
+          className="w-full"
+        >
           <div className="mb-10">
             <div className="flex">
               <div className="flex-col w-1/2 pr-8">
                 <label className="font-semibold">Mulai</label>
                 <Input
+                  register={register}
                   label="Mulai"
                   type="date"
-                  name="deadline-tantangan"
-                  className="block w-full rounded-md border border-black shadow-sm py-1 px-4 mt-3"
+                  name="challengeStart"
+                  className="block w-full rounded-md py-1 px-4 mt-3"
+                  error={errors.challengeStart?.message}
                 />
               </div>
 
               <div className="flex-col w-1/2 pl-8">
                 <label className="font-semibold">Berakhir</label>
                 <Input
+                  register={register}
                   label="Berakhir"
                   type="date"
-                  name="deadline-tantangan"
-                  className="block w-full rounded-md border border-black shadow-sm py-1 px-4 mt-3"
+                  name="challengeEnd"
+                  className="block w-full rounded-md py-1 px-4 mt-3"
+                  error={errors.challengeEnd?.message}
                 />
               </div>
             </div>
@@ -52,22 +190,26 @@ function CreateChallenge() {
             <div className="flex-col w-1/2 pr-8">
               <label className="font-semibold">Nama Tantangan</label>
               <Input
+                register={register}
                 type="text"
-                name="nama-tantangan"
+                name="challengeName"
                 placeholder="Nama Tantangan"
                 label="Nama Tantangan"
-                className="border border-black rounded-md shadow-sm py-1 px-4 mt-3"
+                className="rounded-md py-1 px-4 mt-3"
+                error={errors.challengeName?.message}
               />
             </div>
 
             <div className="flex-col w-1/2 pl-8">
               <label className="font-semibold">EXP</label>
               <Input
-                type="text"
+                register={register}
+                type="number"
                 name="exp"
                 placeholder="EXP"
                 label="EXP"
-                className="border border-black rounded-md shadow-sm py-1 px-4 mt-3"
+                className="rounded-md py-1 px-4 mt-3"
+                error={errors.exp?.message}
               />
             </div>
           </div>
@@ -81,8 +223,8 @@ function CreateChallenge() {
                 Unggah File
               </label>
               <div className="mt-3 flex items-center">
-                <div className="flex w-full items-center justify-center border border-black rounded-md">
-                  <label className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 text-blue rounded-lg shadow-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue">
+                <div className="flex w-full items-center justify-center border border-slate-200 rounded-md">
+                  <label className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 text-blue rounded-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue">
                     {!gambar ? (
                       <>
                         <svg
@@ -123,12 +265,22 @@ function CreateChallenge() {
                       </>
                     )}
                     <Input
+                      register={register}
                       type="file"
                       className="hidden"
-                      onChange={onGambarChange}
+                      name="image"
                     />
                   </label>
                 </div>
+              </div>
+              <div className={`text-xs mt-1 ${"text-gray-500"}`}>
+                {errors.image ? (
+                  <div className="text-red-500 text-xs mt-1">
+                    {errors.image.message}
+                  </div>
+                ) : (
+                  "*maksimal 2MB dengan format PNG, JPG, JPEG"
+                )}
               </div>
             </div>
 
@@ -139,29 +291,29 @@ function CreateChallenge() {
               >
                 Deskripsi
               </label>
-              <div className="grow flex flex-col overflow-auto">
-                <Textarea
-                  id="deskripsi-tantangan"
-                  name="deskripsi-tantangan"
-                  placeholder="Deskripsi Tantangan"
-                  className="p-4 shadow-sm mt-3 block w-full h-[12rem] sm:text-sm border border-black rounded-md resize-none"
-                />
-              </div>
+              <Textarea
+                register={register}
+                id="deskripsi-tantangan"
+                name="description"
+                placeholder="Deskripsi Tantangan"
+                className="p-4 mt-3 block w-full h-[12rem] sm:text-sm rounded-md resize-none"
+                error={errors.description?.message}
+              />
             </div>
           </div>
 
-          <div className="flex justify-end">
-            <div className="pr-3">
-              <Button
-                label="Batal"
-                type="submit"
-                className="rounded-[5px] border border-primary-green px-2.5 py-1.5 shadow text-primary-green"
-              />
-            </div>
+          <div className="flex justify-end gap-3">
             <Button
-              label="Tambah"
+              label="Batal"
               type="submit"
-              className="bg-[#25745A] rounded-[5px]  px-3 py-2 shadow text-white"
+              className="w-24 h-12 rounded-md border border-primary-green p-3.5 text-primary-green text-sm font-semibold items-center justify-center inline-flex"
+              onClick={() => navigate(`/tantangan`)}
+            />
+
+            <Button
+              label={selectedId === 0 ? "Tambah Tantangan" : "Simpan Perubahan"}
+              type="submit"
+              className="w-44 h-12 bg-secondary-green rounded-md text-white text-sm font-semibold p-3.5"
             />
           </div>
         </form>

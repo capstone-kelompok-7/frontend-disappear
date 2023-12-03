@@ -1,9 +1,14 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useEffect, useState } from "react";
+
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
-import Breadcrumbs from "@/components/breadcrumbs";
 import { BiDotsVerticalRounded, BiEdit, BiTrash } from "react-icons/bi";
 import { IoEyeSharp } from "react-icons/io5";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
 
+import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import {
@@ -13,96 +18,145 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Tabel from "@/components/table/table";
-import { Input } from "@/components/ui/input";
 import Delete from "@/components/delete/delete";
+import { Input } from "@/components/ui/input";
+import { useToast } from "@/components/ui/use-toast";
+import Pagination from "@/components/pagenation";
+import { Loading } from "@/components/loading";
+
+import {
+  getChallenge,
+  deleteChallenge,
+} from "@/utils/api/challenge/challenge/api";
 
 function IndexChallenge() {
+  const [challenge, setChallenge] = useState([]);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
+  const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
+
   const navigate = useNavigate();
 
-  const handleDelete = () => {
-    Delete({
-      title: "Yakin mau hapus data?",
-      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-    });
+  useEffect(() => {
+    fetchData();
+  }, [searchParams]);
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
+    try {
+      const result = await getChallenge({ ...query });
+      const { ...rest } = result.meta;
+      setChallenge(result.data);
+      setIsLoading(false);
+      setMeta(rest);
+    } catch (error) {
+      console.log(error.message);
+    }
+  }
+
+  function onClickEdit(id) {
+    navigate(`/tantangan/${id}/edit-tantangan`);
+  }
+
+  async function onClickDelete(id) {
+    try {
+      const result = await Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+
+      if (result.isConfirmed) {
+        await deleteChallenge(id);
+        toast({
+          title: (
+            <div className="flex items-center">
+              <FaRegCheckCircle />
+              <span className="ml-2">Berhasil Menghapus Tantangan! </span>
+            </div>
+          ),
+          description:
+            "Data tantangan telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+        });
+        fetchData();
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menghapus Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penghapusan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    }
+  }
+
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
+
+  const formatNumber = (pageIndex, itemIndex) => {
+    const itemsPerPage = meta?.per_page || 8;
+    return pageIndex * itemsPerPage + itemIndex + 1;
   };
 
-  const data = [
-    {
-      No: 1,
-      NamaTantangan: "Tantangan menanam pohon",
-      TanggalMulai: "24-10-2023",
-      TanggalBerakhir: "31-10-2023",
-      EXP: 150,
-      Status: "Kadaluwarsa",
-    },
-    {
-      No: 2,
-      NamaTantangan: "Tantangan menanam pohon",
-      TanggalMulai: "24-10-2023",
-      TanggalBerakhir: "31-10-2023",
-      EXP: 100,
-      Status: "Belum Kadaluwarsa",
-    },
-    {
-      No: 3,
-      NamaTantangan: "Tantangan menanam pohon",
-      TanggalMulai: "24-10-2023",
-      TanggalBerakhir: "31-10-2023",
-      EXP: 100,
-      Status: "Belum Kadaluwarsa",
-    },
-    {
-      No: 4,
-      NamaTantangan: "Tantangan menanam pohon",
-      TanggalMulai: "24-10-2023",
-      TanggalBerakhir: "31-10-2023",
-      EXP: 100,
-      Status: "Kadaluwarsa",
-    },
-    {
-      No: 5,
-      NamaTantangan: "Tantangan menanam pohon",
-      TanggalMulai: "24-10-2023",
-      TanggalBerakhir: "31-10-2023",
-      EXP: 150,
-      Status: "Belum Kadaluwarsa",
-    },
-  ];
-
   const columns = [
-    { Header: "No", accessor: "No" },
-    { Header: "Nama Tantangan", accessor: "NamaTantangan" },
-    { Header: "Tanggal Mulai", accessor: "TanggalMulai" },
-    { Header: "Tanggal Berakhir", accessor: "TanggalBerakhir" },
-    { Header: "EXP", accessor: "EXP" },
+    {
+      Header: "No",
+      accessor: (_, index) => formatNumber(meta?.current_page - 1, index),
+    },
+    { Header: "Nama Tantangan", accessor: "title" },
+    {
+      Header: "Tanggal Mulai",
+      accessor: "start_date",
+      Cell: ({ value }) => <p>{format(new Date(value), "dd-MM-yyyy")}</p>,
+    },
+    {
+      Header: "Tanggal Berakhir",
+      accessor: "end_date",
+      Cell: ({ value }) => <p>{format(new Date(value), "dd-MM-yyyy")}</p>,
+    },
+    { Header: "EXP", accessor: "exp" },
     {
       Header: "Status",
       accessor: "Status",
       Cell: ({ row }) => (
         <div className="flex justify-between items-center">
-          <p>{row.original.Status}</p>
+          <p>{row.original.status}</p>
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <BiDotsVerticalRounded />
+              <div className="three-dots">
+                <BiDotsVerticalRounded />
+              </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
-              <Link to="/tantangan/detail-tantangan">
-                <DropdownMenuItem className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white">
-                  <IoEyeSharp />
-                  <p>Lihat</p>
-                </DropdownMenuItem>
-              </Link>
-
-              <Link to="/tantangan/edit-tantangan">
-                <DropdownMenuItem className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white">
-                  <BiEdit />
-                  <p>Edit</p>
-                </DropdownMenuItem>
-              </Link>
+              <DropdownMenuItem
+                className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
+                onClick={() => navigate(`/tantangan/${row.original.id}`)}
+              >
+                <IoEyeSharp />
+                <p>Lihat</p>
+              </DropdownMenuItem>
 
               <DropdownMenuItem
                 className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
-                onClick={handleDelete}
+                onClick={() => onClickEdit(row.original.id)}
+              >
+                <BiEdit />
+                <p>Edit</p>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
+                onClick={() => onClickDelete(row.original.id)}
               >
                 <BiTrash />
                 <p>Hapus</p>
@@ -123,7 +177,7 @@ function IndexChallenge() {
 
         <div className="flex items-center mt-8 pb-6 gap-6">
           <Button
-            className="flex items-center space-x-2 border bg-[#25745A] text-white p-3 rounded-lg"
+            className="flex items-center space-x-2 border bg-secondary-green text-white p-3 rounded-lg"
             label="Buat Tantangan"
             icon={
               <svg
@@ -151,14 +205,14 @@ function IndexChallenge() {
               <Input
                 type="text"
                 placeholder="Cari Tantangan"
-                className="pr-32 py-6"
+                className="pr-32 py-6 border border-primary-green"
               />
-              <FiSearch className="absolute ml-72" />
+              <FiSearch className="absolute ml-72 text-primary-green" />
             </div>
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border gap-20">
-                <p className="opacity-70">Filter</p>
+              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green gap-20">
+                <p className="text-primary-green">Filter</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="10"
@@ -167,20 +221,36 @@ function IndexChallenge() {
                   fill="none"
                 >
                   <path
-                    d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
-                    fill="#373737"
+                    d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z"
+                    fill="#257157"
                   />
                 </svg>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem>Kadaluwarsa</DropdownMenuItem>
-                <DropdownMenuItem>Belum Kadaluwarsa</DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Kadaluwarsa
+                </DropdownMenuItem>
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                  Belum Kadaluwarsa
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
         </div>
-        <Tabel columns={columns} data={data} />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <Tabel columns={columns} data={challenge} />
+            <Pagination
+              meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </>
+        )}
       </Layout>
     </div>
   );

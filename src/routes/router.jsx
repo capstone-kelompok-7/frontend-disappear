@@ -77,11 +77,11 @@ export default function Router() {
       element: <CreateEditChallenge />,
     },
     {
-      path: "/tantangan/edit-tantangan",
+      path: "/tantangan/:id/edit-tantangan",
       element: <CreateEditChallenge />,
     },
     {
-      path: "/tantangan/detail-tantangan",
+      path: "/tantangan/:id",
       element: <DetailChallenge />,
     },
     {
@@ -89,7 +89,7 @@ export default function Router() {
       element: <ParticipantChallange />,
     },
     {
-      path: "/peserta-tantangan/edit-peserta-tantangan",
+      path: "/peserta-tantangan/:id/edit-peserta-tantangan",
       element: <EditParticipantChallenge />,
     },
     {
