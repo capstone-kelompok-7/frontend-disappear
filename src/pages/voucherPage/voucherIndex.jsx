@@ -11,12 +11,15 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Tabel from "@/components/table/table";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
+import { IoEye } from "react-icons/io5";
+import { BiEdit, BiTrash } from "react-icons/bi";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Delete from "@/components/delete/delete";
 import Pagination from "@/components/pagenation";
 import { useSearchParams } from "react-router-dom";
 import { Loading } from "@/components/loading";
 import { getVoucher } from "@/utils/api/voucher/api";
+import { format } from "date-fns";
 
 function VoucherApp() {
   const [vouchers, setVouchers] = useState([]);
@@ -64,8 +67,16 @@ function VoucherApp() {
     { Header: "KODE", accessor: "code" },
     { Header: "KATEGORI", accessor: "category" },
     { Header: "DISKON", accessor: "discount" },
-    { Header: "TANGGAL MULAI", accessor: "start_date" },
-    { Header: "TANGGAL BERAKHIR", accessor: "end-date" },
+    {
+      Header: "TANGGAL MULAI",
+      accessor: "start_date",
+      Cell: ({ value }) => <p>{format(new Date(value), "dd-MM-yyyy")}</p>,
+    },
+    {
+      Header: "TANGGAL BERAKHIR",
+      accessor: "end-date",
+      Cell: ({ value }) => <p>{format(new Date(value), "dd-MM-yyyy")}</p>,
+    },
     {
       Header: "STATUS",
       accessor: "status",
@@ -80,11 +91,21 @@ function VoucherApp() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <Link to="/kupon/edit-kupon">
-                <DropdownMenuItem>Detail</DropdownMenuItem>
+              <Link to="">
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center">
+                  <IoEye />
+                  <p>Lihat Deskripsi</p>
+                </DropdownMenuItem>
               </Link>
-              <DropdownMenuItem onClick={handleDeleteClick}>
-                Hapus
+              <Link to="/kupon/edit-kupon">
+                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center">
+                  <BiEdit />
+                  <p>Edit Produk</p>
+                </DropdownMenuItem>
+              </Link>
+              <DropdownMenuItem onClick={handleDeleteClick} className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center">
+                <BiTrash />
+                <p>Hapus Produk</p>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -125,11 +146,11 @@ function VoucherApp() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem>Bronze</DropdownMenuItem>
-              <DropdownMenuItem>Silver</DropdownMenuItem>
-              <DropdownMenuItem>Gold</DropdownMenuItem>
-              <DropdownMenuItem>Kadaluwarsa</DropdownMenuItem>
-              <DropdownMenuItem>Belum Kadaluwarsa</DropdownMenuItem>
+              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer items-center">Bronze</DropdownMenuItem>
+              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer items-center">Silver</DropdownMenuItem>
+              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer items-center">Gold</DropdownMenuItem>
+              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer items-center">Kadaluwarsa</DropdownMenuItem>
+              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer items-center">Belum Kadaluwarsa</DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
