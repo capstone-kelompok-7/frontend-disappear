@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState, useEffect} from "react";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import { Link } from "react-router-dom";
@@ -14,8 +14,42 @@ import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Delete from "@/components/delete/delete";
 import Pagination from "@/components/pagenation";
+import { useSearchParams } from "react-router-dom";
+import { getVoucher } from "@/utils/api/voucher/api";
 
 function VoucherApp() {
+  const [vouchers, setVouchers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
+
+  useEffect(() => {
+    fetchData();
+  }, [searchParams]);
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
+    try {
+      setIsLoading(true);
+      const result = await getVoucher({ ...query });
+      const { ...rest } = result.meta;
+      setVouchers(result.data);
+      setMeta(rest);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
+
 
   const handleDeleteClick = () => {
     Delete({
@@ -39,19 +73,19 @@ function VoucherApp() {
   ];
 
   const columns = [
-    { Header: "NO", accessor: "No" },
-    { Header: "NAMA KUPON", accessor: "NamaKupon" },
-    { Header: "KODE", accessor: "Kode" },
-    { Header: "KATEGORI", accessor: "Kategori" },
-    { Header: "DISKON", accessor: "Diskon" },
-    { Header: "TANGGAL MULAI", accessor: "TanggalMulai" },
-    { Header: "TANGGAL BERAKHIR", accessor: "TanggalBerakhir" },
+    { Header: "NO", accessor: "id" },
+    { Header: "NAMA KUPON", accessor: "name" },
+    { Header: "KODE", accessor: "code" },
+    { Header: "KATEGORI", accessor: "category" },
+    { Header: "DISKON", accessor: "discount" },
+    { Header: "TANGGAL MULAI", accessor: "start_date" },
+    { Header: "TANGGAL BERAKHIR", accessor: "end-date" },
     {
       Header: "STATUS",
       accessor: "status",
       Cell: ({ row }) => (
         <div>
-          {row.original.Status}
+          {row.original.status}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="three-dots">
@@ -112,8 +146,11 @@ function VoucherApp() {
           </DropdownMenu>
         </div>
 
-        <Tabel columns={columns} data={data} />
-        <Pagination />
+        <Tabel columns={columns} data={vouchers} />
+        <Pagination meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)} />
       </div>
     </Layout>
   );
