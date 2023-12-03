@@ -13,6 +13,7 @@ import Tabel from "@/components/table/table";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Delete from "@/components/delete/delete";
+import Pagination from "@/components/pagenation";
 
 function VoucherApp() {
 
@@ -112,6 +113,7 @@ function VoucherApp() {
         </div>
 
         <Tabel columns={columns} data={data} />
+        <Pagination />
       </div>
     </Layout>
   );
