@@ -6,6 +6,7 @@ import { BiDotsVerticalRounded, BiEdit, BiTrash } from "react-icons/bi";
 import { IoEyeSharp } from "react-icons/io5";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { format } from "date-fns";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -102,13 +103,6 @@ function IndexChallenge() {
     setSearchParams(searchParams);
   }
 
-  const formatDate = (dateString) => {
-    const [day, month, year] = new Date(dateString)
-      .toLocaleDateString("en-GB")
-      .split("/");
-    return `${day}-${month}-${year}`;
-  };
-
   const formatNumber = (pageIndex, itemIndex) => {
     const itemsPerPage = meta?.per_page || 8;
     return pageIndex * itemsPerPage + itemIndex + 1;
@@ -123,12 +117,12 @@ function IndexChallenge() {
     {
       Header: "Tanggal Mulai",
       accessor: "start_date",
-      Cell: ({ value }) => formatDate(value),
+      Cell: ({ value }) => <p>{format(new Date(value), "dd-MM-yyyy")}</p>,
     },
     {
       Header: "Tanggal Berakhir",
       accessor: "end_date",
-      Cell: ({ value }) => formatDate(value),
+      Cell: ({ value }) => <p>{format(new Date(value), "dd-MM-yyyy")}</p>,
     },
     { Header: "EXP", accessor: "exp" },
     {

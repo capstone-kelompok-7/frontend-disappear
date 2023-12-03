@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
-
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { useSearchParams, Link } from "react-router-dom";
+import { format } from "date-fns";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -47,13 +47,6 @@ export default function IndexPesertaTantangan() {
     setSearchParams(searchParams);
   }
 
-  const formatDate = (dateString) => {
-    const [day, month, year] = new Date(dateString)
-      .toLocaleDateString("en-GB")
-      .split("/");
-    return `${day}-${month}-${year}`;
-  };
-
   const columns = [
     { Header: "No", accessor: "id" },
     {
@@ -70,7 +63,7 @@ export default function IndexPesertaTantangan() {
     {
       Header: "Tanggal Berpartisipasi",
       accessor: "tanggal_berpartisipasi",
-      Cell: ({ value }) => formatDate(value),
+      Cell: ({ value }) => <p>{format(new Date(value), "dd-MM-yyyy")}</p>,
     },
     { Header: "EXP Tantangan", accessor: "exp" },
     { Header: "Status", accessor: "status" },
