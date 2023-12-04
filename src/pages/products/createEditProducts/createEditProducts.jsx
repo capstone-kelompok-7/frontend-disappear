@@ -9,12 +9,14 @@ import { Input } from "@/components/ui/input";
 import Dropzone from "@/components/dropzone";
 import { Textarea } from "@/components/ui/textarea";
 import Button from "@/components/button";
-import AsyncSelect from "react-select/async";
+import AsyncSelect, { useAsync } from "react-select/async";
 import { Link, useNavigate } from "react-router-dom";
 import { createProducts } from "@/utils/api/products/api";
 import { useToast } from "@/components/ui/use-toast";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { getCategory } from "@/utils/api/category/api";
+import { Loading } from "@/components/loading";
 
 const schema = z.object({
   productsName: z.string().min(1, { message: "Field tidak boleh kosong" }),
@@ -28,6 +30,9 @@ const schema = z.object({
 });
 
 export default function CreateEditProducts() {
+  const [defaultOptions, setDefaultOptions] = useState([]);
+  const [isLoading, setIsloading] = useState(false);
+
   const { toast } = useToast();
   const navigate = useNavigate();
 
@@ -48,6 +53,41 @@ export default function CreateEditProducts() {
     },
   });
 
+  function transformCategoriesToOptions(categories) {
+    return categories.map((category) => ({
+      label: category.name,
+      value: category.id,
+    }));
+  }
+
+  async function fetchCategoryOptions(searchValue, callback) {
+    try {
+      const result = await getCategory({ search: searchValue });
+      const options = transformCategoriesToOptions(result.data);
+      callback(options);
+    } catch (error) {
+      console.log(error);
+    }
+  }
+
+  useEffect(() => {
+    const fetchDefaultOptions = async () => {
+      try {
+        setIsloading(true);
+        const result = await getCategory();
+        const options = transformCategoriesToOptions(result.data);
+        setDefaultOptions(options);
+        console.log(options);
+      } catch (error) {
+        console.log(error);
+      } finally {
+        setIsloading(false);
+      }
+    };
+
+    fetchDefaultOptions();
+  }, []);
+
   async function onSubmit(data) {
     try {
       const newProduct = {
@@ -60,6 +100,7 @@ export default function CreateEditProducts() {
         exp: parseInt(data.exp),
         categories: [4],
       };
+      setIsloading(true);
       await createProducts(newProduct);
       navigate("/produk");
       toast({
@@ -87,6 +128,8 @@ export default function CreateEditProducts() {
         ),
         description: { error },
       });
+    } finally {
+      setIsloading(false);
     }
   }
 
@@ -110,141 +153,132 @@ export default function CreateEditProducts() {
     console.log("handleChange", selectedOption);
   }
 
-  const options = [
-    { label: "Strawberry", value: "strawberry" },
-    { label: "Melon", value: "melon" },
-    { label: "Nangka", value: "nangka" },
-    { label: "Semangka", value: "semangka" },
-  ];
-
   const loadOptions = async (searchValue, callback) => {
-    setTimeout(() => {
-      const filteredOptions = options.filter((option) =>
-        option.label.toLowerCase().includes(searchValue.toLowerCase())
-      );
-      console.log("loadOptions", searchValue, filteredOptions);
-      callback(filteredOptions);
-    }, 2000);
+    await fetchCategoryOptions(searchValue, callback);
   };
 
   return (
     <>
       <Layout>
         <Breadcrumbs pages="Tambah Produk" />
-        <form
-          className="bg-white rounded border my-5 p-5 flex flex-col"
-          onSubmit={handleSubmit(onSubmit)}
-        >
-          <div className="flex w-full justify-between gap-14">
-            <div className=" w-full">
-              <div>
-                <label>Nama Produk</label>
-                <Input
-                  register={register}
-                  name="productsName"
-                  placeholder="Nama Produk"
-                  type="text"
-                  className=" mt-4"
-                  error={errors.productsName?.message}
-                />
-              </div>
-              <div className="mt-5">
-                <label>Kategori Produk</label>
-                <AsyncSelect
-                  loadOptions={loadOptions}
-                  defaultOptions
-                  onChange={handleChange}
-                  isMulti
-                  styles={colorStyles}
-                />
-              </div>
-              <div className="mt-5">
-                <label>Harga Produk</label>
-                <Input
-                  placeholder="Rp."
-                  type="number"
-                  className=" mt-4"
-                  register={register}
-                  name="productsPrice"
-                  error={errors.productsPrice?.message}
-                />
-              </div>
-              <div className="mt-5">
-                <label>Diskon (Rp.)</label>
-                <Input
-                  placeholder="Rp."
-                  type="number"
-                  className=" mt-4"
-                  register={register}
-                  name="discount"
-                  error={errors.discount?.message}
-                />
-              </div>
-              <div className="mt-5">
-                <label>Stock Produk</label>
-                <Input
-                  placeholder="Stock Produk"
-                  type="number"
-                  className=" mt-4"
-                  register={register}
-                  name="stock"
-                  error={errors.stock?.message}
-                />
-              </div>
-              <div className=" flex mt-5 w-full justify-between">
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <form
+            className="bg-white rounded border my-5 p-5 flex flex-col"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div className="flex w-full justify-between gap-14">
+              <div className=" w-full">
                 <div>
-                  <label>EXP</label>
+                  <label>Nama Produk</label>
                   <Input
-                    placeholder="00"
+                    register={register}
+                    name="productsName"
+                    placeholder="Nama Produk"
+                    type="text"
+                    className=" mt-4"
+                    error={errors.productsName?.message}
+                  />
+                </div>
+                <div className="mt-5">
+                  <label>Kategori Produk</label>
+                  <AsyncSelect
+                    loadOptions={loadOptions}
+                    defaultOptions={defaultOptions}
+                    onChange={handleChange}
+                    isMulti
+                    styles={colorStyles}
+                  />
+                </div>
+                <div className="mt-5">
+                  <label>Harga Produk</label>
+                  <Input
+                    placeholder="Rp."
                     type="number"
                     className=" mt-4"
                     register={register}
-                    name="exp"
-                    error={errors.exp?.message}
+                    name="productsPrice"
+                    error={errors.productsPrice?.message}
                   />
                 </div>
-                <div>
-                  <label>Kalkulasi Gram Plastik</label>
+                <div className="mt-5">
+                  <label>Diskon (Rp.)</label>
                   <Input
-                    placeholder="Gram"
+                    placeholder="Rp."
                     type="number"
                     className=" mt-4"
                     register={register}
-                    name="gram"
-                    error={errors.gram?.message}
+                    name="discount"
+                    error={errors.discount?.message}
                   />
                 </div>
+                <div className="mt-5">
+                  <label>Stock Produk</label>
+                  <Input
+                    placeholder="Stock Produk"
+                    type="number"
+                    className=" mt-4"
+                    register={register}
+                    name="stock"
+                    error={errors.stock?.message}
+                  />
+                </div>
+                <div className=" flex mt-5 w-full justify-between">
+                  <div>
+                    <label>EXP</label>
+                    <Input
+                      placeholder="00"
+                      type="number"
+                      className=" mt-4"
+                      register={register}
+                      name="exp"
+                      error={errors.exp?.message}
+                    />
+                  </div>
+                  <div>
+                    <label>Kalkulasi Gram Plastik</label>
+                    <Input
+                      placeholder="Gram"
+                      type="number"
+                      className=" mt-4"
+                      register={register}
+                      name="gram"
+                      error={errors.gram?.message}
+                    />
+                  </div>
+                </div>
+              </div>
+              <div className="w-full">
+                <Dropzone className=" border-dashed bg-gray-300 border-black w-full border-2 rounded cursor-pointer" />
               </div>
             </div>
-            <div className="w-full">
-              <Dropzone className=" border-dashed bg-gray-300 border-black w-full border-2 rounded cursor-pointer" />
+            <div className="mt-5">
+              <label>Deskripsi Produk</label>
+              <Textarea
+                placeholder="Deskripsi Produk"
+                className=" h-52 mt-4"
+                register={register}
+                name="description"
+                error={errors.description?.message}
+              />
             </div>
-          </div>
-          <div className="mt-5">
-            <label>Deskripsi Produk</label>
-            <Textarea
-              placeholder="Deskripsi Produk"
-              className=" h-52 mt-4"
-              register={register}
-              name="description"
-              error={errors.description?.message}
-            />
-          </div>
 
-          <div className=" gap-4 flex items-center justify-end mt-5">
-            <Link
-              to="/produk"
-              className=" bg-white px-10 py-3 rounded text-primary-green border border-primary-green"
-            >
-              Batal
-            </Link>
-            <Button
-              type="submit"
-              label="Tambah Produk"
-              className=" bg-secondary-green px-3 py-3 rounded border text-white"
-            />
-          </div>
-        </form>
+            <div className=" gap-4 flex items-center justify-end mt-5">
+              <Link
+                to="/produk"
+                className=" bg-white px-10 py-3 rounded text-primary-green border border-primary-green"
+              >
+                Batal
+              </Link>
+              <Button
+                type="submit"
+                label="Tambah Produk"
+                className=" bg-secondary-green px-3 py-3 rounded border text-white"
+              />
+            </div>
+          </form>
+        )}
       </Layout>
     </>
   );
