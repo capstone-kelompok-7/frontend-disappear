@@ -9,7 +9,7 @@ import { Input } from "@/components/ui/input";
 import Dropzone from "@/components/dropzone";
 import { Textarea } from "@/components/ui/textarea";
 import Button from "@/components/button";
-import AsyncSelect, { useAsync } from "react-select/async";
+import AsyncSelect from "react-select/async";
 import { Link, useNavigate } from "react-router-dom";
 import { createProducts } from "@/utils/api/products/api";
 import { useToast } from "@/components/ui/use-toast";
@@ -27,6 +27,11 @@ const schema = z.object({
   exp: z.number().min(1, { message: "Field tidak boleh kosong" }),
   gram: z.number().min(1, { message: "Field tidak boleh kosong" }),
   description: z.string().min(1, { message: "Field tidak boleh kosong" }),
+  category: z
+    .array(z.object({ value: z.number(), label: z.string() }))
+    .refine((value) => value.length > 0, {
+      message: "Pilih setidaknya satu kategori",
+    }),
 });
 
 export default function CreateEditProducts() {
@@ -50,6 +55,7 @@ export default function CreateEditProducts() {
       exp: 0,
       gram: 0,
       productsPrice: 0,
+      category: [],
     },
   });
 
@@ -98,7 +104,7 @@ export default function CreateEditProducts() {
         stock: parseInt(data.stock),
         discount: parseInt(data.discount),
         exp: parseInt(data.exp),
-        categories: [4],
+        categories: data.category.map((cat) => cat.value),
       };
       setIsloading(true);
       await createProducts(newProduct);
@@ -149,10 +155,6 @@ export default function CreateEditProducts() {
     },
   };
 
-  function handleChange(selectedOption) {
-    console.log("handleChange", selectedOption);
-  }
-
   const loadOptions = async (searchValue, callback) => {
     await fetchCategoryOptions(searchValue, callback);
   };
@@ -165,6 +167,7 @@ export default function CreateEditProducts() {
           <Loading />
         ) : (
           <form
+            id="formCreateProducts"
             className="bg-white rounded border my-5 p-5 flex flex-col"
             onSubmit={handleSubmit(onSubmit)}
           >
@@ -173,6 +176,7 @@ export default function CreateEditProducts() {
                 <div>
                   <label>Nama Produk</label>
                   <Input
+                    id="inputNameProducts"
                     register={register}
                     name="productsName"
                     placeholder="Nama Produk"
@@ -184,16 +188,25 @@ export default function CreateEditProducts() {
                 <div className="mt-5">
                   <label>Kategori Produk</label>
                   <AsyncSelect
+                    id="selectCategoryProducts"
                     loadOptions={loadOptions}
                     defaultOptions={defaultOptions}
-                    onChange={handleChange}
+                    onChange={(selectedOptions) =>
+                      setValue("category", selectedOptions)
+                    }
                     isMulti
                     styles={colorStyles}
                   />
+                  {errors.category && (
+                    <p className="text-xs text-left text-[#e50000] mt-1">
+                      {errors.category?.message}
+                    </p>
+                  )}
                 </div>
                 <div className="mt-5">
                   <label>Harga Produk</label>
                   <Input
+                    id="inputPriceProducts"
                     placeholder="Rp."
                     type="number"
                     className=" mt-4"
@@ -205,6 +218,7 @@ export default function CreateEditProducts() {
                 <div className="mt-5">
                   <label>Diskon (Rp.)</label>
                   <Input
+                    id="inputdiscountProducts"
                     placeholder="Rp."
                     type="number"
                     className=" mt-4"
@@ -216,6 +230,7 @@ export default function CreateEditProducts() {
                 <div className="mt-5">
                   <label>Stock Produk</label>
                   <Input
+                    id="inputStockProducts"
                     placeholder="Stock Produk"
                     type="number"
                     className=" mt-4"
@@ -228,6 +243,7 @@ export default function CreateEditProducts() {
                   <div>
                     <label>EXP</label>
                     <Input
+                      id="inputExpProducts"
                       placeholder="00"
                       type="number"
                       className=" mt-4"
@@ -239,6 +255,7 @@ export default function CreateEditProducts() {
                   <div>
                     <label>Kalkulasi Gram Plastik</label>
                     <Input
+                      id="inputGramProducts"
                       placeholder="Gram"
                       type="number"
                       className=" mt-4"
@@ -250,12 +267,16 @@ export default function CreateEditProducts() {
                 </div>
               </div>
               <div className="w-full">
-                <Dropzone className=" border-dashed bg-gray-300 border-black w-full border-2 rounded cursor-pointer" />
+                <Dropzone
+                  className=" border-dashed bg-gray-300 border-black w-full border-2 rounded cursor-pointer"
+                  id="inputImageProducts"
+                />
               </div>
             </div>
             <div className="mt-5">
               <label>Deskripsi Produk</label>
               <Textarea
+                id="inputDescriptionProducts"
                 placeholder="Deskripsi Produk"
                 className=" h-52 mt-4"
                 register={register}
@@ -272,6 +293,7 @@ export default function CreateEditProducts() {
                 Batal
               </Link>
               <Button
+                id="submitCreatedProducts"
                 type="submit"
                 label="Tambah Produk"
                 className=" bg-secondary-green px-3 py-3 rounded border text-white"
