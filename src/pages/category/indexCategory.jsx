@@ -17,7 +17,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getCategory } from "@/utils/api/category/api";
+import { getCategory, deleteCategory } from "@/utils/api/category/api";
 import Pagination from "@/components/pagenation";
 import { Loading } from "@/components/loading";
 import { useSearchParams } from "react-router-dom";
@@ -57,11 +57,6 @@ export default function IndexCategory() {
     }
   }
 
-  function handlePrevNextPage(page) {
-    searchParams.set("page", String(page));
-    setSearchParams(searchParams);
-  }
-
   const openModal = (label, data = null) => {
     setPopupLabel(label);
     setInputName(data ? data.Nama : "");
@@ -85,12 +80,46 @@ export default function IndexCategory() {
     setFile(selectedFile);
   };
 
-  const handleDelete = () => {
-    Delete({
-      title: "Yakin mau hapus data?",
-      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-    });
-  };
+  async function onClickDelete(id) {
+    try {
+      const result = await Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+
+      if (result.isConfirmed) {
+        await deleteCategory(id);
+        toast({
+          title: (
+            <div className="flex items-center">
+              <FaRegCheckCircle />
+              <span className="ml-2">Berhasil Menghapus Category! </span>
+            </div>
+          ),
+          description:
+            "Data category telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+        });
+        fetchData();
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menghapus Category!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penghapusan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    }
+  }
+
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
 
   const columns = [
     { Header: "No", accessor: "id" },
@@ -130,7 +159,7 @@ export default function IndexCategory() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
-                onClick={handleDelete}
+                onClick={() => onClickDelete(row.original.id)}
               >
                 <RiDeleteBinLine />
                 Delete Kategori
