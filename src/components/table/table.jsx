@@ -29,7 +29,9 @@ function Tabel({ columns, data, dashboardTable }) {
                     ? "text-black border-none"
                     : "text-white uppercase border-[#ACACAC]"
                 } ${
-                  column.id === "StatusDashboard" ? "text-left" : "text-center"
+                  column.id === "payment_status" || column.id === "username"
+                    ? "text-left "
+                    : "text-center"
                 }  px-6 py-3  font-semibold tracking-wider border `}
               >
                 {column.render("Header")}
@@ -46,7 +48,7 @@ function Tabel({ columns, data, dashboardTable }) {
               key={index}
               {...row.getRowProps()}
               className={`${
-                row.index % 2 === 0 ? "bg-[#ECECEC]" : "bg-[#FFFFFF]"
+                row.index % 2 === 0 ? "bg-[#ECECEC]" : "bg-[#ECECEC]"
               } ${dashboardTable ? "bg-white" : ""}`}
             >
               {row.cells.map((cell, cellIndex) => {
@@ -58,7 +60,8 @@ function Tabel({ columns, data, dashboardTable }) {
                       dashboardTable ? "border-none" : "border border-[#ACACAC]"
                     } table-cell px-6 py-4 whitespace-nowrap `}
                   >
-                    {cell.column.id === "StatusDashboard" && (
+                    {/* Styling for cell Status Dashboard */}
+                    {cell.column.id === "payment_status" && (
                       <div className="flex items-center">
                         <div
                           className={`rounded-full w-4 h-4 ${
@@ -70,7 +73,15 @@ function Tabel({ columns, data, dashboardTable }) {
                         <p className="text-sm ml-2">{cell.value}</p>
                       </div>
                     )}
-                    {cell.column.id !== "StatusDashboard" &&
+
+                    {/* Styling cell for name dashboard */}
+                    {cell.column.id === "username" && (
+                      <div className="flex items-start">
+                        <p className="text-sm ml-2">{cell.value}</p>
+                      </div>
+                    )}
+                    {cell.column.id !== "payment_status" &&
+                      cell.column.id !== "username" &&
                       cell.render("Cell")}
                   </td>
                 );
