@@ -47,11 +47,11 @@ export default function Dashboard() {
   async function fetchData() {
     try {
       setIsLoading(true);
-      const result = await getDashboardCard();
+      const cardResult = await getDashboardCard();
       const chartResult = await getDashboardChart();
       const transactionResult = await getDashboardTransaction();
 
-      setDashboardCard(result.data);
+      setDashboardCard(cardResult.data);
       setTransaction(transactionResult.data);
 
       const chartLabels = chartResult.data.map((entry) => entry.week);
