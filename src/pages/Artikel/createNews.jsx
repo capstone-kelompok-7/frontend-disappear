@@ -150,6 +150,7 @@ function CreateNews() {
                     register={register}
                     type="file"
                     name="photo"
+                    className="hidden"
                     error={errors.photo?.message}
                   />
                 </label>
