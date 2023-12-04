@@ -1,6 +1,5 @@
 /* eslint-disable no-unused-vars */
 import { CrossCircledIcon } from "@radix-ui/react-icons";
-import { Link, useNavigate } from "react-router-dom";
 import React, { useEffect, useState } from "react";
 import { Chart as ChartJS } from "chart.js/auto";
 import { Line } from "react-chartjs-2";
@@ -24,8 +23,6 @@ import IconNotes from "../../assets/icon-note.svg";
 import IconHero from "../../assets/icon-hero.svg";
 
 export default function Dashboard() {
-  const navigate = useNavigate();
-
   const [dashboardCard, setDashboardCard] = useState({});
   const [transaction, setTransaction] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -134,27 +131,6 @@ export default function Dashboard() {
     { Header: "Status", accessor: "payment_status" },
   ];
 
-  const transactionData = [
-    {
-      username: "Dimas Banyuwangis",
-      date: "24-11-2023",
-      total_price: "Rp.200.000",
-      payment_status: "Konfirmasi",
-    },
-    {
-      username: "Dimas Banyuwangis",
-      date: "24-11-2023",
-      total_price: "Rp.200.000",
-      payment_status: "Menunggu Konfirmasi",
-    },
-    {
-      username: "Dimas Banyuwangis",
-      date: "24-11-2023",
-      total_price: "Rp.200.000",
-      payment_status: "Menunggu Konfirmasi",
-    },
-  ];
-
   return (
     <Layout>
       <div className="">
@@ -190,16 +166,19 @@ export default function Dashboard() {
                     iconSrc={IconBasket}
                     title="Produk"
                     value={dashboardCard.product_count}
+                    href="produk"
                   />
                   <DashboardIcon
                     iconSrc={IconUsers}
                     title="Pelanggan"
                     value={dashboardCard.user_count}
+                    href="pelanggan"
                   />
                   <DashboardIcon
                     iconSrc={IconNotes}
                     title="Pesanan"
                     value={dashboardCard.order_count}
+                    href="pesanan"
                   />
                 </div>
               </div>
@@ -229,7 +208,7 @@ export default function Dashboard() {
                   dashboardTable={true}
                   data={transaction}
                   columns={columns}
-                  // isLoading={isLoading}
+                  
                 />
               </div>
             </div>
