@@ -16,7 +16,7 @@ function CardArtikel({ title, content, photo, date }) {
       : text;
   };
 
-  const truncatedContent = truncateContent(content, 50);
+  const truncatedContent = truncateContent(content, 55);
 
   const cleanContent = DOMPurify.sanitize(truncatedContent);
 
