@@ -1,8 +1,9 @@
-import React from "react";
+import { React, useState } from "react";
 import Modal from "react-modal";
+import { Button } from "@/components/ui/button";
 import { useToast } from "@/components/ui/use-toast";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
-import { Button } from "@/components/ui/button";
+import { createCategory } from "@/utils/api/category/api";
 
 const PopUp = ({
   isOpen,
@@ -18,30 +19,48 @@ const PopUp = ({
   onAddPopup,
 }) => {
   const { toast } = useToast();
-  const handlePopUp = () => {
-    let title, description;
+  const [loading, setLoading] = useState(false);
 
-    if (popupLabel === "Tambah Kategori") {
-      title = "Berhasil Menambahkan Kategori!";
-      description =
-        "Kategori produk telah berhasil ditambah, nih. Silahkan nikmati fitur lainnya!";
-    } else if (popupLabel === "Edit Kategori") {
-      title = "Berhasil Mengubah Kategori!";
-      description =
-        "Kategori produk telah berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!";
+  const handlePopUp = async (data) => {
+    try {
+      setLoading(true);
+      await createCategory({
+        name: popupName,
+        photo: file,
+      });
+
+      let title, description;
+      if (popupLabel === "Tambah Kategori") {
+        title = "Berhasil Menambahkan Kategori!";
+        description =
+          "Kategori produk telah berhasil ditambah, nih. Silahkan nikmati fitur lainnya!";
+      } else if (popupLabel === "Edit Kategori") {
+        title = "Berhasil Mengubah Kategori!";
+        description =
+          "Kategori produk telah berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!";
+      }
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <CheckCircledIcon />
+            <span className="ml-2">{title}</span>
+          </div>
+        ),
+        description: description,
+        color: "#000000",
+      });
+
+      onAddPopup(popupName, file);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message || "Terjadi kesalahan saat menyimpan data.",
+        color: "#FF0000",
+      });
+    } finally {
+      setLoading(false);
     }
-    toast({
-      title: (
-        <div className="flex items-center gap-3">
-          <CheckCircledIcon />
-          <span className="ml-2">{title}</span>
-        </div>
-      ),
-      description: description,
-      color: "#000000",
-    });
     closeModal();
-    onAddPopup(popupName, file);
   };
 
   return (
@@ -94,6 +113,7 @@ const PopUp = ({
               <div>
                 <Button
                   className="border-solid flex flex-col items-center text-center h-10 py-1.5 hover:bg-white space-x-2 border-primary-green border bg-white p-2 rounded-full text-lg text-primary-green font-semibold font-['Inter'] mx-8"
+                  to="/category"
                   onClick={closeModal}
                 >
                   {cancelButtonLabel}

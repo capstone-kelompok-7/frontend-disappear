@@ -1,14 +1,3 @@
-// import axiosWithConfig from "../axiosWithConfig";
-
-// export const getCategory = async () => {
-//   try {
-//     const response = await axiosWithConfig.get("api/v1/categories");
-//     return response.data;
-//   } catch (error) {
-//     throw Error(error.response.data.message);
-//   }
-// };
-
 import axiosWithConfig from "../axiosWithConfig";
 
 export const getCategory = async (params) => {
@@ -30,6 +19,33 @@ export const getCategory = async (params) => {
     const response = await axiosWithConfig.get(url);
 
     return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
+
+export const createCategory = async (data) => {
+  try {
+    const newData = {
+      ...data,
+    };
+
+    const response = await axiosWithConfig.post("api/v1/categories", newData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
+
+export const deleteCategory = async (id) => {
+  try {
+    const response = await axiosWithConfig.delete(`api/v1/categories/${id}`);
+    return response.status;
   } catch (error) {
     throw Error(error.response.data.message);
   }
