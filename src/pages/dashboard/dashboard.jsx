@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import React, { useEffect, useState } from "react";
@@ -127,7 +128,7 @@ export default function Dashboard() {
   const columns = [
     { Header: "Nama", accessor: "username" },
     { Header: "Tanggal", accessor: "date" },
-    { Header: "Total Pembayaran", accessor: "total_price" },
+    { Header: "Total Pembayaran", accessor: "total_price" ,Cell: ({row}) => <p>{formatCurrency(row.original.total_price)}</p> },
     { Header: "Status", accessor: "payment_status" },
   ];
 
