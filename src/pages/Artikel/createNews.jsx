@@ -147,6 +147,7 @@ function CreateNews() {
                     </>
                   )}
                   <Input
+                    id="gambar-artikel"
                     register={register}
                     type="file"
                     name="photo"
