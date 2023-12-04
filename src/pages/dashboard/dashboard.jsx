@@ -6,7 +6,11 @@ import { Chart as ChartJS } from "chart.js/auto";
 import { Line } from "react-chartjs-2";
 
 import DashboardIcon from "../../components/dashboard/dashboardIcon";
-import { getDashboardCard, getDashboardChart } from "@/utils/api/dashboard/api";
+import {
+  getDashboardCard,
+  getDashboardChart,
+  getDashboardTransaction,
+} from "@/utils/api/dashboard/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
 import { Loading } from "@/components/loading";
 
@@ -21,8 +25,10 @@ import IconHero from "../../assets/icon-hero.svg";
 
 export default function Dashboard() {
   const navigate = useNavigate();
-  const [isLoading, setIsLoading] = useState(true);
+
   const [dashboardCard, setDashboardCard] = useState({});
+  const [transaction, setTransaction] = useState([]);
+  const [isLoading, setIsLoading] = useState(true);
   const [chartData, setChartData] = useState({
     labels: [],
     datasets: [
@@ -46,8 +52,10 @@ export default function Dashboard() {
       setIsLoading(true);
       const result = await getDashboardCard();
       const chartResult = await getDashboardChart();
+      const transactionResult = await getDashboardTransaction();
 
       setDashboardCard(result.data);
+      setTransaction(transactionResult.data);
 
       const chartLabels = chartResult.data.map((entry) => entry.week);
       const chartDataPoints = chartResult.data.map(
@@ -75,8 +83,6 @@ export default function Dashboard() {
       setIsLoading(false);
     }
   }
-
-  
 
   const options = {
     scales: {
@@ -121,105 +127,114 @@ export default function Dashboard() {
     maxHeight: "60vh",
   };
 
+  const columns = [
+    { Header: "Nama", accessor: "username" },
+    { Header: "Tanggal", accessor: "date" },
+    { Header: "Total Pembayaran", accessor: "total_price" },
+    { Header: "Status", accessor: "payment_status" },
+  ];
+
   const transactionData = [
     {
-      Nama: "Dimas Banyuwangis",
-      Tanggal: "24-11-2023",
-      TotalPembayaran: "Rp.200.000",
-      StatusDashboard: "Konfirmasi",
+      username: "Dimas Banyuwangis",
+      date: "24-11-2023",
+      total_price: "Rp.200.000",
+      payment_status: "Konfirmasi",
     },
     {
-      Nama: "Dimas Banyuwangis",
-      Tanggal: "24-11-2023",
-      TotalPembayaran: "Rp.200.000",
-      StatusDashboard: "Menunggu Konfirmasi",
+      username: "Dimas Banyuwangis",
+      date: "24-11-2023",
+      total_price: "Rp.200.000",
+      payment_status: "Menunggu Konfirmasi",
     },
     {
-      Nama: "Dimas Banyuwangis",
-      Tanggal: "24-11-2023",
-      TotalPembayaran: "Rp.200.000",
-      StatusDashboard: "Menunggu Konfirmasi",
+      username: "Dimas Banyuwangis",
+      date: "24-11-2023",
+      total_price: "Rp.200.000",
+      payment_status: "Menunggu Konfirmasi",
     },
-  ];
-  const columns = [
-    { Header: "Nama", accessor: "Nama" },
-    { Header: "Tanggal", accessor: "Tanggal" },
-    { Header: "Total Pembayaran", accessor: "TotalPembayaran" },
-    { Header: "Status", accessor: "StatusDashboard" },
   ];
 
   return (
     <Layout>
       <div className="">
-        {/* Hero Section */}
-        <div className="flex flex-col bg-[#EFE5DC] relative pb-[10vh] rounded-b-2xl">
-          {/* Section 1 - Hero */}
-          <div className="flex items-center justify-between pl-10">
-            <div className="flex flex-col gap-3">
-              <h1 className="font-bold text-3xl text-primary-green">
-                Selamat Datang!!!
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            {/* Hero Section */}
+            <div className="flex flex-col bg-[#EFE5DC] relative pb-[10vh] rounded-b-2xl">
+              {/* Section 1 - Hero */}
+              <div className="flex items-center justify-between pl-10">
+                <div className="flex flex-col gap-3">
+                  <h1 className="font-bold text-3xl text-primary-green">
+                    Selamat Datang!!!
+                  </h1>
+                  <p className=" text-primary-green">
+                    Saat ini anda berada di halaman dashboard
+                  </p>
+                </div>
+                <div>
+                  <img src={IconHero} className=" w-5/6" />
+                </div>
+              </div>
+              {/* Section 2 - Icon Section */}
+              <div className="flex absolute top-1/2 mt-6 items-center justify-between w-full px-10">
+                <div className="flex items-center justify-center w-full gap-8">
+                  <DashboardIcon
+                    iconSrc={IconWallet}
+                    title="Pendapatan Bulan Ini"
+                    value={formatCurrency(dashboardCard.income_count)}
+                  />
+                  <DashboardIcon
+                    iconSrc={IconBasket}
+                    title="Produk"
+                    value={dashboardCard.product_count}
+                  />
+                  <DashboardIcon
+                    iconSrc={IconUsers}
+                    title="Pelanggan"
+                    value={dashboardCard.user_count}
+                  />
+                  <DashboardIcon
+                    iconSrc={IconNotes}
+                    title="Pesanan"
+                    value={dashboardCard.order_count}
+                  />
+                </div>
+              </div>
+            </div>
+
+            {/* Section 3 - Statistic Section */}
+            <div className="px-5 py-6 mt-20 shadow-lg rounded-lg">
+              <h1 className=" font-semibold text-3xl mb-2">
+                Statistik Gram Plastik
               </h1>
-              <p className=" text-primary-green">
-                Saat ini anda berada di halaman dashboard
-              </p>
-            </div>
-            <div>
-              <img src={IconHero} className=" w-5/6" />
-            </div>
-          </div>
-          {/* Section 2 - Icon Section */}
-          <div className="flex absolute top-1/2 mt-6 items-center justify-between w-full px-10">
-            <div className="flex items-center justify-center w-full gap-8">
-              <DashboardIcon
-                iconSrc={IconWallet}
-                title="Pendapatan Bulan Ini"
-                value={formatCurrency(dashboardCard.income_count)}
-              />
-              <DashboardIcon
-                iconSrc={IconBasket}
-                title="Produk"
-                value={dashboardCard.product_count}
-              />
-              <DashboardIcon
-                iconSrc={IconUsers}
-                title="Pelanggan"
-                value={dashboardCard.user_count}
-              />
-              <DashboardIcon
-                iconSrc={IconNotes}
-                title="Pesanan"
-                value={dashboardCard.order_count}
+              <p>{chartData.label}</p>
+              <Line
+                data={chartData}
+                options={options}
+                style={chartStyle}
+                className="bg-[#F4FBF9] rounded-2xl py-10"
               />
             </div>
-          </div>
-        </div>
 
-        {/* Section 3 - Statistic Section */}
-        <div className="px-5 py-6 mt-20 shadow-lg rounded-lg">
-          <h1 className=" font-semibold text-3xl mb-2">
-            Statistik Gram Plastik
-          </h1>
-          <p>{chartData.label}</p>
-          <Line
-            data={chartData}
-            options={options}
-            style={chartStyle}
-            className="bg-[#F4FBF9] rounded-2xl py-10"
-          />
-        </div>
-
-        {/* Section 4 - Transaction Section */}
-        <div className="px-5 py-6 mt-20 shadow-lg rounded-lg mb-20">
-          <h1 className="font-semibold text-2xl mb-5 ">Transaksi Terakhir</h1>
-          <div>
-            <Tabel
-              dashboardTable={true}
-              data={transactionData}
-              columns={columns}
-              // isLoading={isLoading}
-            />
-          </div>
-        </div>
+            {/* Section 4 - Transaction Section */}
+            <div className="px-5 py-6 mt-20 shadow-lg rounded-lg mb-20">
+              <h1 className="font-semibold text-2xl mb-5 ">
+                Transaksi Terakhir
+              </h1>
+              <div>
+                <Tabel
+                  dashboardTable={true}
+                  data={transaction}
+                  columns={columns}
+                  // isLoading={isLoading}
+                />
+              </div>
+            </div>
+          </>
+        )}
       </div>
     </Layout>
   );
