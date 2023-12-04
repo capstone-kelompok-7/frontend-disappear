@@ -1,10 +1,16 @@
 /* eslint-disable no-unused-vars */
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { Link, useNavigate } from "react-router-dom";
+import React, { useEffect, useState } from "react";
 import { Chart as ChartJS } from "chart.js/auto";
 import { Line } from "react-chartjs-2";
-import React from "react";
 
 import DashboardIcon from "../../components/dashboard/dashboardIcon";
-import Layout from "../../components/layout";
+import { getDashboardCard, getDashboardChart } from "@/utils/api/dashboard/api";
+import formatCurrency from "@/utils/formatter/currencyIdr";
+import { Loading } from "@/components/loading";
+
+import Layout from "@/components/layout";
 import Tabel from "@/components/table/table";
 
 import IconWallet from "../../assets/icon-wallet.svg";
@@ -14,12 +20,14 @@ import IconNotes from "../../assets/icon-note.svg";
 import IconHero from "../../assets/icon-hero.svg";
 
 export default function Dashboard() {
-  const data = {
-    labels: ["1", "2", "3", "4"],
+  const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState(true);
+  const [dashboardCard, setDashboardCard] = useState({});
+  const [chartData, setChartData] = useState({
+    labels: [],
     datasets: [
       {
-        label: "",
-        data: [20, 60, 40, 80, 30],
+        data: [],
         fill: false,
         borderColor: "#25745A",
         pointBackgroundColor: "#AF8050",
@@ -27,7 +35,48 @@ export default function Dashboard() {
         backgroundColor: "#AF8050",
       },
     ],
-  };
+  });
+
+  useEffect(() => {
+    fetchData();
+  }, []);
+
+  async function fetchData() {
+    try {
+      setIsLoading(true);
+      const result = await getDashboardCard();
+      const chartResult = await getDashboardChart();
+
+      setDashboardCard(result.data);
+
+      const chartLabels = chartResult.data.map((entry) => entry.week);
+      const chartDataPoints = chartResult.data.map(
+        (entry) => entry.gram_total_count
+      );
+
+      setChartData({
+        labels: chartLabels,
+        datasets: [
+          {
+            label: "",
+            data: chartDataPoints,
+            fill: false,
+            borderColor: "#25745A",
+            pointBackgroundColor: "#AF8050",
+            tension: "0.4",
+            backgroundColor: "#AF8050",
+          },
+        ],
+        label: chartResult.label,
+      });
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  
 
   const options = {
     scales: {
@@ -39,7 +88,7 @@ export default function Dashboard() {
           color: "black",
         },
         title: {
-          display: true,
+          display: false,
           text: "Minggu",
         },
       },
@@ -60,7 +109,6 @@ export default function Dashboard() {
       },
       tooltip: {
         callbacks: {
-          title: (tooltipItem) => `Minggu Ke- ${tooltipItem[0].label}`,
           label: (tooltipItem) => `${tooltipItem.formattedValue} gram`,
         },
       },
@@ -72,9 +120,6 @@ export default function Dashboard() {
   const chartStyle = {
     maxHeight: "60vh",
   };
-  const classNameTr = "bg-blue-700 text-black";
-  const classNameTh =
-    "bg-blue-700 px-6 py-3 text-center font-semibold text-black";
 
   const transactionData = [
     {
@@ -96,7 +141,6 @@ export default function Dashboard() {
       StatusDashboard: "Menunggu Konfirmasi",
     },
   ];
-
   const columns = [
     { Header: "Nama", accessor: "Nama" },
     { Header: "Tanggal", accessor: "Tanggal" },
@@ -129,11 +173,23 @@ export default function Dashboard() {
               <DashboardIcon
                 iconSrc={IconWallet}
                 title="Pendapatan Bulan Ini"
-                value="Rp 7.000.000"
+                value={formatCurrency(dashboardCard.income_count)}
               />
-              <DashboardIcon iconSrc={IconBasket} title="Produk" value="20" />
-              <DashboardIcon iconSrc={IconUsers} title="Pelanggan" value="10" />
-              <DashboardIcon iconSrc={IconNotes} title="Pesanan" value="30" />
+              <DashboardIcon
+                iconSrc={IconBasket}
+                title="Produk"
+                value={dashboardCard.product_count}
+              />
+              <DashboardIcon
+                iconSrc={IconUsers}
+                title="Pelanggan"
+                value={dashboardCard.user_count}
+              />
+              <DashboardIcon
+                iconSrc={IconNotes}
+                title="Pesanan"
+                value={dashboardCard.order_count}
+              />
             </div>
           </div>
         </div>
@@ -143,8 +199,9 @@ export default function Dashboard() {
           <h1 className=" font-semibold text-3xl mb-2">
             Statistik Gram Plastik
           </h1>
+          <p>{chartData.label}</p>
           <Line
-            data={data}
+            data={chartData}
             options={options}
             style={chartStyle}
             className="bg-[#F4FBF9] rounded-2xl py-10"
@@ -156,9 +213,10 @@ export default function Dashboard() {
           <h1 className="font-semibold text-2xl mb-5 ">Transaksi Terakhir</h1>
           <div>
             <Tabel
-              columns={columns}
-              data={transactionData}
               dashboardTable={true}
+              data={transactionData}
+              columns={columns}
+              // isLoading={isLoading}
             />
           </div>
         </div>
