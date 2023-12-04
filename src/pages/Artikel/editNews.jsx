@@ -46,8 +46,7 @@ function EditNews() {
                     name="image"
                     hidden
                   />
-                  <IoMdCloudUpload className="mr-2" />
-                  Pilih File
+                  <p className="mx-auto">Pilih File</p>
                 </label>
               </div>
             </div>
