@@ -53,7 +53,12 @@ export default function Dashboard() {
       const transactionResult = await getDashboardTransaction();
 
       setDashboardCard(cardResult.data);
-      setTransaction(transactionResult.data);
+      
+      const filteredTransactions = transactionResult.data.filter(
+        (transaction) => transaction.payment_status !== "Gagal"
+      );
+  
+      setTransaction(filteredTransactions);
 
       const chartLabels = chartResult.data.map((entry) => entry.week);
       const chartDataPoints = chartResult.data.map(
