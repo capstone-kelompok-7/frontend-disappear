@@ -53,12 +53,7 @@ export default function Dashboard() {
       const transactionResult = await getDashboardTransaction();
 
       setDashboardCard(cardResult.data);
-      
-      const filteredTransactions = transactionResult.data.filter(
-        (transaction) => transaction.payment_status !== "Gagal"
-      );
-  
-      setTransaction(filteredTransactions);
+      setTransaction(transactionResult.data);
 
       const chartLabels = chartResult.data.map((entry) => entry.week);
       const chartDataPoints = chartResult.data.map(
@@ -131,10 +126,37 @@ export default function Dashboard() {
   };
 
   const columns = [
-    { Header: "Nama", accessor: "username" },
+    {
+      Header: "Nama",
+      accessor: "username",
+      Cell: ({ row }) => (
+        <div className="flex items-start">
+          <p className="text-sm ml-2">{row.original.username}</p>
+        </div>
+      ),
+    },
     { Header: "Tanggal", accessor: "date" },
-    { Header: "Total Pembayaran", accessor: "total_price" ,Cell: ({row}) => <p>{formatCurrency(row.original.total_price)}</p> },
-    { Header: "Status", accessor: "payment_status" },
+    {
+      Header: "Total Pembayaran",
+      accessor: "total_price",
+      Cell: ({ row }) => <p>{formatCurrency(row.original.total_price)}</p>,
+    },
+    {
+      Header: "Status",
+      accessor: "payment_status",
+      Cell: ({ row }) => (
+        <div className="flex items-center">
+          <div
+            className={`rounded-full w-4 h-4 ${
+              row.original.payment_status === "Menunggu Konfirmasi"
+                ? "bg-[#F7BC3B]"
+                : "bg-[#37FF33]"
+            }`}
+          ></div>
+          <p className="text-sm ml-2">{row.original.payment_status}</p>
+        </div>
+      ),
+    },
   ];
 
   return (
@@ -214,7 +236,6 @@ export default function Dashboard() {
                   dashboardTable={true}
                   data={transaction}
                   columns={columns}
-                  
                 />
               </div>
             </div>
