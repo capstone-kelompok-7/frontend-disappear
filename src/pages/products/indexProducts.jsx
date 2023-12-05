@@ -23,10 +23,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { Loading } from "@/components/loading";
+import { debounce } from "lodash";
 
 export default function IndexProducts() {
   const [products, setProducts] = useState([]);
-  const [search, setSearch] = useState("");
+  const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
@@ -42,18 +43,19 @@ export default function IndexProducts() {
     navigate("/produk/edit-produk");
   };
 
-  const searchProducts = products.filter((item) =>
-    item.name.toLowerCase().includes(search.toLowerCase())
-  );
-
   useEffect(() => {
-    fetchData();
-  }, [searchParams]);
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
+  }, [searchValue, searchParams]);
 
   async function fetchData() {
-    let query = {};
+    let query = { search: searchValue };
     for (const entry of searchParams.entries()) {
-      query[entry[0]] = entry[1];
+      if (entry[0] !== "search") {
+        query[entry[0]] = entry[1];
+      }
     }
     try {
       setIsLoading(true);
@@ -74,11 +76,12 @@ export default function IndexProducts() {
     setSearchParams(searchParams);
   }
 
-  const setSearchAndParams = (value) => {
-    setSearch(value);
-    searchParams.set("produk", value);
-    setSearchParams(searchParams);
-  };
+  function handleSearchInputParams(search) {
+    setSearchValue(search);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("search", String(search));
+    setSearchParams(newSearchParams);
+  }
 
   async function handleDeleteClick(id) {
     try {
@@ -233,8 +236,8 @@ export default function IndexProducts() {
                 type="text"
                 placeholder="Cari Produk"
                 className=" border-primary-green py-6"
-                onChange={(e) => setSearchAndParams(e.target.value)}
-                value={search}
+                onChange={(e) => handleSearchInputParams(e.target.value)}
+                value={searchValue}
               />
               <svg
                 className="absolute right-3 top-4 text-primary-green"
@@ -292,7 +295,7 @@ export default function IndexProducts() {
           <Loading />
         ) : (
           <div className="mt-5">
-            <Tabel columns={columns} data={searchProducts} />
+            <Tabel columns={columns} data={products} />
             <Pagination
               meta={meta}
               onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
