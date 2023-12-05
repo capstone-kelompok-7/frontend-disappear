@@ -22,6 +22,7 @@ module.exports = {
       },
       colors: {
         "primary-green": "#25745A",
+        "primary-btn": "#39AD85",
         "secondary-green": "#39AD85",
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",

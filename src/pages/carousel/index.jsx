@@ -1,19 +1,27 @@
+/* eslint-disable no-undef */
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
 import { BiEdit } from "react-icons/bi";
-import { useState } from "react";
+
+import { useSearchParams } from "react-router-dom";
+import { useState, useEffect } from "react";
 import Modal from "react-modal";
 
+import { getAllCarousel } from "@/utils/api/carousel/api";
 import Breadcrumbs from "@/components/breadcrumbs";
+import Pagination from "@/components/pagenation";
 import Delete from "@/components/delete/delete";
+import { Loading } from "@/components/loading";
 import { Input } from "@/components/ui/input";
 import Tabel from "@/components/table/table";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
+
 import PopUp from "./popUp";
+
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -23,11 +31,41 @@ import {
 
 Modal.setAppElement("#root");
 
-export default function IndexPopup() {
+export default function Carousel() {
+  const [searchParams, setSearchParams] = useSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const [carousel, setCarousel] = useState([]);
   const [popupLabel, setPopupLabel] = useState("");
   const [inputName, setInputName] = useState("");
   const [file, setFile] = useState(null);
+  const [meta, setMeta] = useState();
+
+  useEffect(() => {
+    fetchData();
+  }, [searchParams]);
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
+    try {
+      setIsLoading(true);
+      const result = await getAllCarousel({ ...query });
+      const { ...rest } = result.meta;
+      setCarousel(result.data);
+      setMeta(rest);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
 
   const openModal = (label, data = null) => {
     setPopupLabel(label);
@@ -59,33 +97,25 @@ export default function IndexPopup() {
     });
   };
 
-  const data = [
-    {
-      No: 1,
-      Foto: " ",
-      Nama: "Tantangan Baru",
-    },
-    {
-      No: 2,
-      Foto: " ",
-      Nama: "Tas",
-    },
-    {
-      No: 3,
-      Foto: " ",
-      Nama: "Alat Makan",
-    },
-  ];
-
   const columns = [
-    { Header: "No", accessor: "No" },
-    { Header: "Foto", accessor: "Foto" },
+    { Header: "No", accessor: "id" },
+    {
+      Header: "Foto",
+      accessor: "photo",
+      Cell: ({ row }) => (
+        <img
+          src={row.original.photo}
+          alt="Product"
+          className="w-20 h-28 rounded m-auto object-cover"
+        />
+      ),
+    },
     {
       Header: "Nama",
-      accessor: "Nama",
+      accessor: "name",
       Cell: ({ row }) => (
         <div className="Nama-cell flex items-center justify-between">
-          <div className="text-center">{row.original.Nama}</div>
+          <div className="text-center">{row.original.name}</div>
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="three-dots">
@@ -120,7 +150,7 @@ export default function IndexPopup() {
         <div className=" flex flex-col min-h-screen flex-grow overflow-y-auto mx-5 mt-6 px-[15px] py-5 shadow-md rounded-[3px]">
           <div className="flex items-center pb-7 gap-6">
             <Button
-              label="Tambah Carousel"
+              label="Tambahkan Carousel"
               icon={
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -139,8 +169,8 @@ export default function IndexPopup() {
                   />
                 </svg>
               }
-              onClick={() => openModal("Tambah Carousel")}
-              className="flex items-center space-x-2 border bg-[#25745A] text-white p-2  rounded-md"
+              onClick={() => openModal("Tambahkan Carousel")}
+              className="flex items-center space-x-2 border bg-primary-btn text-white p-2  rounded-md"
             />
 
             <div className="flex w-64 relative">
@@ -152,8 +182,15 @@ export default function IndexPopup() {
               />
             </div>
           </div>
-
-          <Tabel columns={columns} data={data} />
+          <div>
+            <Tabel columns={columns} data={carousel} />
+            <Pagination
+              meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </div>
         </div>
       </Layout>
 
@@ -166,7 +203,7 @@ export default function IndexPopup() {
         }
         cancelButtonLabel="Batal"
         confirmButtonLabel={
-          popupLabel === "Tambahkan Carousel" ? "Edit" : "Tambah"
+          popupLabel === "Tambahkan Carousel" ? "Tambah" : "Edit"
         }
         onAddPopup={handlePopup}
         onNameChange={onNameChange}
