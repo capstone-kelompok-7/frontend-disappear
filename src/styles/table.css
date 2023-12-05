@@ -1,9 +1,5 @@
-tbody tr:nth-child(even) {
-  background-color: #ECECEC; 
-}
-
 tbody tr:nth-child(odd) {
-  background-color: #FFFFFF; 
+  background-color: #ffffff;
 }
 
 table {
@@ -11,7 +7,7 @@ table {
   border-collapse: collapse; /* Menggabungkan border antar sel */
   overflow: hidden;
   border-radius: 0.375rem;
-  border: #ACACAC;
+  border: #acacac;
 }
 
 .table-cell {
