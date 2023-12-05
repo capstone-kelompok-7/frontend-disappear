@@ -7,6 +7,7 @@ import { IoEyeSharp } from "react-icons/io5";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { format } from "date-fns";
+import { debounce } from "lodash";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -30,31 +31,39 @@ import {
 } from "@/utils/api/challenge/challenge/api";
 
 function IndexChallenge() {
+  const { toast } = useToast();
   const [challenge, setChallenge] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
-  const [isLoading, setIsLoading] = useState(true);
-  const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData();
-  }, [searchParams]);
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
+  }, [searchValue, searchParams]);
 
   async function fetchData() {
-    let query = {};
+    let query = { search: searchValue };
     for (const entry of searchParams.entries()) {
-      query[entry[0]] = entry[1];
+      if (entry[0] !== "search") {
+        query[entry[0]] = entry[1];
+      }
     }
     try {
+      setIsLoading(true);
       const result = await getChallenge({ ...query });
       const { ...rest } = result.meta;
       setChallenge(result.data);
-      setIsLoading(false);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -99,8 +108,16 @@ function IndexChallenge() {
   }
 
   function handlePrevNextPage(page) {
-    searchParams.set("page", String(page));
-    setSearchParams(searchParams);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("page", String(page));
+    setSearchParams(newSearchParams);
+  }
+
+  function handleSearchInputParams(search) {
+    setSearchValue(search);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("search", String(search));
+    setSearchParams(newSearchParams);
   }
 
   const formatNumber = (pageIndex, itemIndex) => {
@@ -206,6 +223,8 @@ function IndexChallenge() {
                 type="text"
                 placeholder="Cari Tantangan"
                 className="pr-32 py-6 border border-primary-green"
+                value={searchValue}
+                onChange={(e) => handleSearchInputParams(e.target.value)}
               />
               <FiSearch className="absolute ml-72 text-primary-green" />
             </div>

@@ -2,16 +2,18 @@ import { useEffect, useState } from "react";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import { useNavigate, useParams } from "react-router-dom";
+import { format } from "date-fns";
 
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import Breadcrumbs from "@/components/breadcrumbs";
+import Dropzone from "@/components/dropzone";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
-import { challengeSchema } from "@/utils/api/challenge/challenge/schema";
+import { ChallengeSchema } from "@/utils/api/challenge/challenge/schema";
 import {
-  getChallenge,
+  getDetailChallenge,
   createChallenge,
   updateChallenge,
 } from "@/utils/api/challenge/challenge/api";
@@ -20,7 +22,6 @@ import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 function CreateChallenge() {
   const { id } = useParams();
-  const [gambar, setGambar] = useState(null);
   const [selectedId, setSelectedId] = useState(0);
   const [challenge, setChallenge] = useState([]);
   const { toast } = useToast();
@@ -33,7 +34,7 @@ function CreateChallenge() {
     handleSubmit,
     formState: { errors },
   } = useForm({
-    resolver: zodResolver(challengeSchema),
+    resolver: zodResolver(ChallengeSchema),
     defaultValues: {
       exp: 0,
     },
@@ -45,17 +46,22 @@ function CreateChallenge() {
 
   async function fetchData() {
     try {
-      const result = await getChallenge();
+      const result = await getDetailChallenge(id);
+      setChallenge(result.data);
 
-      const dataChallenge = result.find((item) => item.id === id);
-
-      if (dataChallenge) {
-        setSelectedId(dataChallenge.id);
-        setValue("challengeName", dataChallenge.title);
-        setValue("challengeStart", dataChallenge.start_date);
-        setValue("challengeEnd", dataChallenge.end_date);
-        setValue("description", dataChallenge.description);
-        setValue("exp", dataChallenge.exp);
+      if (result.data) {
+        setSelectedId(result.data.id);
+        setValue("challengeName", result.data.title);
+        setValue(
+          "challengeStart",
+          format(new Date(result.data.start_date), "yyyy-MM-dd")
+        );
+        setValue(
+          "challengeEnd",
+          format(new Date(result.data.end_date), "yyyy-MM-dd")
+        );
+        setValue("description", result.data.description);
+        setValue("exp", result.data.exp);
         // setValue("image", result.photo);
       }
     } catch (error) {
@@ -68,8 +74,14 @@ function CreateChallenge() {
       const newChallenge = {
         // photo: data.image,
         title: data.challengeName,
-        start_date: new Date(data.challengeStart).toISOString(),
-        end_date: new Date(data.challengeEnd).toISOString(),
+        start_date: format(
+          new Date(data.challengeStart + "T00:00:00Z"),
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        ),
+        end_date: format(
+          new Date(data.challengeEnd + "T00:00:00Z"),
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        ),
         description: data.description,
         exp: data.exp,
       };
@@ -103,47 +115,53 @@ function CreateChallenge() {
     }
   }
 
-  /*BUG EDIT*/
-  // async function onSubmitEdit(data) {
-  //   try {
-  //     const editChallenge = {
-  //       // photo: data.image,
-  //       id: selectedId,
-  //       title: data.challengeName,
-  //       start_date: new Date(data.challengeStart).toISOString(),
-  //       end_date: new Date(data.challengeEnd).toISOString(),
-  //       description: data.description,
-  //       exp: data.exp,
-  //     };
-  //     await updateChallenge(editChallenge);
-  //     toast({
-  //       title: (
-  //         <div className="flex items-center gap-3">
-  //           <FaRegCheckCircle className="text-[#05E500] text-3xl" />
-  //           <span className=" text-base font-semibold">
-  //             Berhasil Mengubah Tantangan!
-  //           </span>
-  //         </div>
-  //       ),
-  //       description:
-  //         "Data tantangan berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!!",
-  //     });
-  //     setSelectedId(0);
-  //     reset();
-  //   } catch (error) {
-  //     toast({
-  //       variant: "destructive",
-  //       title: (
-  //         <div className="flex items-center">
-  //           <CrossCircledIcon />
-  //           <span className="ml-2">Gagal Menambahkan Tantangan!</span>
-  //         </div>
-  //       ),
-  //       description:
-  //         "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
-  //     });
-  //   }
-  // }
+  async function onSubmitEdit(data) {
+    try {
+      const editChallenge = {
+        // photo: data.image,
+        id: selectedId,
+        title: data.challengeName,
+        start_date: format(
+          new Date(data.challengeStart + "T00:00:00Z"),
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        ),
+        end_date: format(
+          new Date(data.challengeEnd + "T00:00:00Z"),
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        ),
+        description: data.description,
+        exp: data.exp,
+      };
+      await updateChallenge(editChallenge);
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Berhasil Mengubah Tantangan!
+            </span>
+          </div>
+        ),
+        description:
+          "Data tantangan berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!!",
+      });
+      navigate("/tantangan");
+      setSelectedId(0);
+      reset();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menambahkan Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    }
+  }
 
   return (
     <Layout>
@@ -224,7 +242,7 @@ function CreateChallenge() {
               </label>
               <div className="mt-3 flex items-center">
                 <div className="flex w-full items-center justify-center border border-slate-200 rounded-md">
-                  <label className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 text-blue rounded-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue">
+                  {/* <label className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 text-blue rounded-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue">
                     {!gambar ? (
                       <>
                         <svg
@@ -263,17 +281,24 @@ function CreateChallenge() {
                           className="h-full w-full object-cover"
                         />
                       </>
-                    )}
-                    <Input
+                    )} */}
+                  {/* <Input
                       register={register}
                       type="file"
                       className="hidden"
                       name="image"
+                    /> */}
+                  <div className="w-full">
+                    <Dropzone
+                      register={register}
+                      name="image"
+                      className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 rounded-md tracking-wide cursor-pointer"
+                      isCreateChallenge={true}
                     />
-                  </label>
+                  </div>
                 </div>
               </div>
-              <div className={`text-xs mt-1 ${"text-gray-500"}`}>
+              {/* <div className={`text-xs mt-1 ${"text-gray-500"}`}>
                 {errors.image ? (
                   <div className="text-red-500 text-xs mt-1">
                     {errors.image.message}
@@ -281,7 +306,7 @@ function CreateChallenge() {
                 ) : (
                   "*maksimal 2MB dengan format PNG, JPG, JPEG"
                 )}
-              </div>
+              </div> */}
             </div>
 
             <div className="flex-col w-1/2 pl-8">
