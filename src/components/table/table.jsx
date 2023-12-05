@@ -59,7 +59,7 @@ function Tabel({ columns, data, dashboardTable }) {
                     {...cell.getCellProps()}
                     className={`${
                       dashboardTable ? "border-none" : "border border-[#ACACAC]"
-                    } table-cell px-6 py-4 whitespace-nowrap `}
+                    } table-cell px-6 py-20 whitespace-nowrap `}
                   >
                     {cell.render("Cell")}
                   </td>

@@ -12,5 +12,5 @@ table {
 
 .table-cell {
   text-align: center; /* Rata tengah teks pada kolom header dan data */
-  padding: 10px; /* Menambahkan ruang dalam di dalam sel */
+  padding: 20px; /* Menambahkan ruang dalam di dalam sel */
 }
