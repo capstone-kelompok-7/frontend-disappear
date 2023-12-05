@@ -26,6 +26,7 @@ import { Loading } from "@/components/loading";
 
 export default function IndexProducts() {
   const [products, setProducts] = useState([]);
+  const [search, setSearch] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
@@ -40,6 +41,10 @@ export default function IndexProducts() {
   const toEditProduct = () => {
     navigate("/produk/edit-produk");
   };
+
+  const searchProducts = products.filter((item) =>
+    item.name.toLowerCase().includes(search.toLowerCase())
+  );
 
   useEffect(() => {
     fetchData();
@@ -68,6 +73,12 @@ export default function IndexProducts() {
     searchParams.set("page", String(page));
     setSearchParams(searchParams);
   }
+
+  const setSearchAndParams = (value) => {
+    setSearch(value);
+    searchParams.set("produk", value);
+    setSearchParams(searchParams);
+  };
 
   async function handleDeleteClick(id) {
     try {
@@ -222,6 +233,8 @@ export default function IndexProducts() {
                 type="text"
                 placeholder="Cari Produk"
                 className=" border-primary-green py-6"
+                onChange={(e) => setSearchAndParams(e.target.value)}
+                value={search}
               />
               <svg
                 className="absolute right-3 top-4 text-primary-green"
@@ -279,7 +292,7 @@ export default function IndexProducts() {
           <Loading />
         ) : (
           <div className="mt-5">
-            <Tabel columns={columns} data={products} />
+            <Tabel columns={columns} data={searchProducts} />
             <Pagination
               meta={meta}
               onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
