@@ -9,6 +9,45 @@ import { Link } from "react-router-dom";
 import Breadcrumbs from "@/components/breadcrumbs";
 
 function EditNews() {
+  
+  async function onSubmitEdit(data) {
+    try {
+      const editArtikel = {
+        id: selectedId,
+        // photo: data.photo,
+        title: data.title,
+        content: data.content,
+      };
+      await updateArtikel(editArtikel);
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Berhasil Mengubah Artikel!
+            </span>
+          </div>
+        ),
+        description:
+          "Data Artikel berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!!",
+      });
+      setSelectedId(0);
+      reset();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menambahkan Artikel!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    }
+  }
+
   return (
     <Layout>
       <div>

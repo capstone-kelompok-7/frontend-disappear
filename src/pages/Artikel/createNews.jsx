@@ -14,9 +14,6 @@ import { FaRegCheckCircle } from "react-icons/fa";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 function CreateNews() {
-  const { id } = useParams();
-  const [photo, setPhoto] = useState(null);
-  const [selectedId, setSelectedId] = useState(0);
   const { toast } = useToast();
   const navigate = useNavigate();
   const {
@@ -27,16 +24,21 @@ function CreateNews() {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(artikelSchema),
-    defaultValues: {},
   });
+
+  const [fileName, setFileName] = useState("");
+
+  const handleFileNameChange = (event) => {
+    setFileName(event.target.files[0]?.name || "");
+  };
 
   async function onSubmit(data) {
     try {
-      const newArtikel = {
-        // photo: data.photo,
-        title: data.title,
-        content: data.content,
-      };
+      const newArtikel = new FormData();
+      newArtikel.append("photo", data.photo[0]);
+      newArtikel.append("title", data.title);
+      newArtikel.append("content", data.content);
+
       await createArtikel(newArtikel);
       navigate("/artikel");
       toast({
@@ -63,43 +65,6 @@ function CreateNews() {
           </div>
         ),
         description: "Gagal menambahkan Artikel",
-      });
-    }
-  }
-  async function onSubmitEdit(data) {
-    try {
-      const editArtikel = {
-        id: selectedId,
-        // photo: data.photo,
-        title: data.title,
-        content: data.content,
-      };
-      await updateArtikel(editArtikel);
-      toast({
-        title: (
-          <div className="flex items-center gap-3">
-            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
-            <span className=" text-base font-semibold">
-              Berhasil Mengubah Artikel!
-            </span>
-          </div>
-        ),
-        description:
-          "Data Artikel berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!!",
-      });
-      setSelectedId(0);
-      reset();
-    } catch (error) {
-      toast({
-        variant: "destructive",
-        title: (
-          <div className="flex items-center">
-            <CrossCircledIcon />
-            <span className="ml-2">Gagal Menambahkan Artikel!</span>
-          </div>
-        ),
-        description:
-          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
       });
     }
   }
@@ -135,27 +100,24 @@ function CreateNews() {
                   htmlFor="gambar-artikel"
                   className="cursor-pointer flex items-center px-5 bg-[#404040] w-[6.5rem] text-white rounded-md"
                 >
-                  {!photo ? (
-                    <p className="my-1 text-xs text-white">Pilih Foto</p>
-                  ) : (
-                    <>
-                      <img
-                        src={URL.createObjectURL(photo)}
-                        alt="gambar-artikel"
-                        className="w-[60rem] h-[12rem] rounded-mdobject-cover"
-                      />
-                    </>
-                  )}
-                  <Input
-                    id="gambar-artikel"
-                    register={register}
-                    type="file"
-                    name="photo"
-                    className="hidden"
-                    error={errors.photo?.message}
-                  />
+                  <p className="my-1 text-xs text-white">Pilih Foto</p>
                 </label>
+                <Input
+                  id="gambar-artikel"
+                  register={register}
+                  type="file"
+                  name="photo"
+                  className="hidden"
+                  onChange={handleFileNameChange}
+                  error={errors.photo?.message}
+                />
+                {fileName && (
+                  <p className="ml-2 text-sm text-gray-500">{`${fileName}`}</p>
+                )}
               </div>
+              <p className="text-xs font-light mt-1">
+                *maksimal 2MB dengan format PNG, JPG, JPEG
+              </p>
             </div>
           </div>
           <div className="mt-6 ml-4">
