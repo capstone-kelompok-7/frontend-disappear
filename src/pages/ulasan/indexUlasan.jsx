@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { FiSearch } from "react-icons/fi";
 import { Link, useSearchParams } from "react-router-dom";
+import { debounce } from "lodash";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -20,37 +21,58 @@ export default function Ulasan() {
   const [ulasan, setUlasan] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
-    fetchData();
-  }, [searchParams]);
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
+  }, [searchValue, searchParams]);
 
   async function fetchData() {
-    let query = {};
+    let query = { search: searchValue };
     for (const entry of searchParams.entries()) {
-      query[entry[0]] = entry[1];
+      if (entry[0] !== "search") {
+        query[entry[0]] = entry[1];
+      }
     }
     try {
+      setIsLoading(true);
       const result = await getUlasan({ ...query });
       const { ...rest } = result.meta;
       setUlasan(result.data);
-      setIsLoading(false);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   function handlePrevNextPage(page) {
-    searchParams.set("page", String(page));
-    setSearchParams(searchParams);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("page", String(page));
+    setSearchParams(newSearchParams);
   }
+
+  function handleSearchInputParams(search) {
+    setSearchValue(search);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("search", String(search));
+    setSearchParams(newSearchParams);
+  }
+
+  const numberPage = (pageIndex, itemIndex) => {
+    const itemsPerPage = meta?.per_page || 8;
+    return pageIndex * itemsPerPage + itemIndex + 1;
+  };
 
   const columns = [
     {
       Header: "No",
-      accessor: "id",
+      accessor: (_, index) => numberPage(meta?.current_page - 1, index),
     },
     {
       Header: "Nama Produk",
@@ -74,8 +96,10 @@ export default function Ulasan() {
           <div className="flex items-center">
             <Input
               type="text"
-              placeholder="Cari Tantangan"
+              placeholder="Cari Produk"
               className="pr-32 py-6 border border-primary-green"
+              value={searchValue}
+              onChange={(e) => handleSearchInputParams(e.target.value)}
             />
             <FiSearch className="absolute ml-72 text-primary-green" />
           </div>
