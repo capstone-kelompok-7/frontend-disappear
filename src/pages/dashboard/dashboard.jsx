@@ -14,8 +14,8 @@ import {
 import formatCurrency from "@/utils/formatter/currencyIdr";
 import { Loading } from "@/components/loading";
 
-import Layout from "@/components/layout";
 import Tabel from "@/components/table/table";
+import Layout from "@/components/layout";
 
 import IconWallet from "../../assets/icon-wallet.svg";
 import IconBasket from "../../assets/icon-basket.svg";
@@ -150,6 +150,8 @@ export default function Dashboard() {
             className={`rounded-full w-4 h-4 ${
               row.original.payment_status === "Menunggu Konfirmasi"
                 ? "bg-[#F7BC3B]"
+                : row.original.payment_status === "Gagal"
+                ? "bg-[#E50000]"
                 : "bg-[#37FF33]"
             }`}
           ></div>
