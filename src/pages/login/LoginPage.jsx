@@ -95,7 +95,7 @@ const LoginPage = () => {
   return (
     <div className="w-full h-full flex items-start bg-white">
       <div className="w-1/2 h-screen relative overflow-hidden">
-        <img src={rectangle} className="w-full h-full" alt="" />
+        <img src={rectangle} className="w-full h-full object-cover" alt="" />
       </div>
       <div className="flex flex-col items-center justify-center px-6 py-8 mx-auto md:h-screen lg:py-0">
         <div className="w-full">
