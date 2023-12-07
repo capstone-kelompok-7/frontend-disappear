@@ -53,13 +53,12 @@ const LoginPage = () => {
     setRememberChecked(!rememberChecked);
 
     if (!rememberChecked) {
+      sessionStorage.setItem("rememberedEmail", email);
+      sessionStorage.setItem("rememberedPassword", password);
+    } else {
       localStorage.setItem("rememberedEmail", email);
       localStorage.setItem("rememberedPassword", password);
       localStorage.setItem("rememberedCheckbox", "checked");
-    } else {
-      localStorage.removeItem("rememberedEmail");
-      localStorage.removeItem("rememberedPassword");
-      localStorage.removeItem("rememberedCheckbox");
     }
   };
 
@@ -76,9 +75,12 @@ const LoginPage = () => {
         localStorage.setItem("rememberedEmail", data.email);
         localStorage.setItem("rememberedPassword", data.password);
         localStorage.setItem("rememberedCheckbox", "checked");
+        localStorage.setItem("accessToken", result.data.access_token);
+      } else {
+        sessionStorage.setItem("rememberedEmail", data.email);
+        sessionStorage.setItem("rememberedPassword", data.password);
+        sessionStorage.setItem("accessToken", result.data.access_token);
       }
-
-      localStorage.setItem("accessToken", result.data.access_token);
 
       console.log(result.message);
       navigate("/dashboard");
@@ -135,7 +137,7 @@ const LoginPage = () => {
                   error={errors.password?.message}
                 />
                 {showIcon ? (
-                  <IoEyeOffOutline
+                  <IoEyeOutline
                     onClick={handleShowPassword}
                     className="w-5 h-5 absolute right-2 cursor-pointer"
                     style={{
@@ -146,7 +148,7 @@ const LoginPage = () => {
                     }}
                   />
                 ) : (
-                  <IoEyeOutline
+                  <IoEyeOffOutline
                     onClick={handleShowPassword}
                     className="w-5 h-5 absolute right-2 cursor-pointer"
                     style={{
