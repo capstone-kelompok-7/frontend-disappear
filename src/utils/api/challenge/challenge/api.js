@@ -35,11 +35,18 @@ export const getDetailChallenge = async (id) => {
 
 export const createChallenge = async (data) => {
   try {
-    const newData = {
-      ...data,
-    };
+    const formData = new FormData();
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key) && data[key]) {
+        formData.append(key, data[key]);
+      }
+    }
 
-    const response = await axiosWithConfig.post(`api/v1/challenges`, newData);
+    const response = await axiosWithConfig.post(`api/v1/challenges`, formData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return response.data;
   } catch (error) {
