@@ -16,7 +16,7 @@ function CardArtikel({ title, content, photo, date }) {
       : text;
   };
 
-  const truncatedContent = truncateContent(content, 55);
+  const truncatedContent = truncateContent(content, 35);
   const cleanContent = DOMPurify.sanitize(truncatedContent);
 
   const formattedDatee = new Date(date).toLocaleDateString("en-US", {
@@ -57,12 +57,12 @@ function CardArtikel({ title, content, photo, date }) {
   }, []);
 
   return (
-    <div className="flex border-y-4 p-4 mt-4 mb-4 space-x-8 shadow-md items-center justify-between">
+    <div className="flex border-y-4 p-4 mt-4 mb-4 space-x-8 shadow-md items-center">
       <div className="p-4">
         <p className="mb-2">{formattedDatee}</p>
         <h2 className="text-xl font-bold mb-2">{title}</h2>
         <p
-          className="text-black"
+          className="text-black mr-5"
           dangerouslySetInnerHTML={{ __html: cleanContent }}
         />
         <div className="flex justify-between pt-3">
@@ -107,9 +107,9 @@ function CardArtikel({ title, content, photo, date }) {
           </DropdownMenu>
         </div>
       </div>
-      <div className="items-center ">
+      <div className="items-center pl-">
         <img
-          className="w-[20rem] h-[12rem] rounded-md object-cover"
+          className="w-[55rem] h-[15rem] rounded-md object-contain"
           src={photo}
           alt=""
         />
