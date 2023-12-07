@@ -10,13 +10,15 @@ import { Textarea } from "@/components/ui/textarea";
 import Button from "@/components/button";
 import AsyncSelect from "react-select/async";
 import { Link, useNavigate } from "react-router-dom";
-import { createProducts } from "@/utils/api/products/api";
+import { createImageProducts, createProducts } from "@/utils/api/products/api";
 import { useToast } from "@/components/ui/use-toast";
 import { FaRegCheckCircle } from "react-icons/fa";
-import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { getCategory } from "@/utils/api/category/api";
 import { Loading } from "@/components/loading";
-import { IoImagesOutline } from "react-icons/io5";
+import { IoImagesOutline, IoTrashOutline } from "react-icons/io5";
+
+const MAX_FILE_SIZE = 1024 * 2000;
+const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 const schema = z.object({
   productsName: z.string().min(1, { message: "Field tidak boleh kosong" }),
@@ -32,11 +34,23 @@ const schema = z.object({
     .refine((value) => value.length > 0, {
       message: "Pilih setidaknya satu kategori",
     }),
+  image: z
+    .any()
+    .refine(
+      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+      "*maksimal 2MB dengan format PNG, JPG, JPEG"
+    )
+    .refine(
+      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      "*format PNG, JPG, JPEG"
+    ),
 });
 
 export default function CreateEditProducts() {
   const [defaultOptions, setDefaultOptions] = useState([]);
   const [isLoading, setIsloading] = useState(false);
+  const [gambar, setGambar] = useState([]);
+  const [previewImage, setPreviewImage] = useState([]);
 
   const { toast } = useToast();
   const navigate = useNavigate();
@@ -107,7 +121,17 @@ export default function CreateEditProducts() {
         categories: data.category.map((cat) => cat.value),
       };
       setIsloading(true);
-      await createProducts(newProduct);
+
+      const createdProduct = await createProducts(newProduct);
+
+      const formData = new FormData();
+      formData.append("product_id", createdProduct.data.id);
+      formData.append("photo", gambar);
+
+      const imageResponse = await createImageProducts(formData);
+
+      newProduct.image_url = imageResponse.data.image_url;
+
       navigate("/produk");
       toast({
         title: (
@@ -124,16 +148,6 @@ export default function CreateEditProducts() {
       reset();
     } catch (error) {
       console.log(error);
-      toast({
-        variant: "destructive",
-        title: (
-          <div className="flex items-center">
-            <CrossCircledIcon />
-            <span className="ml-2">Gagal Menambahkan Produk!</span>
-          </div>
-        ),
-        description: { error },
-      });
     } finally {
       setIsloading(false);
     }
@@ -157,6 +171,21 @@ export default function CreateEditProducts() {
 
   const loadOptions = async (searchValue, callback) => {
     await fetchCategoryOptions(searchValue, callback);
+  };
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setGambar(file);
+      setValue("image", [file]);
+      const previewURL = URL.createObjectURL(file);
+      setPreviewImage([previewURL]);
+      console.log(file);
+    }
+  };
+
+  const removeFile = (index) => {
+    setPreviewImage((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   return (
@@ -296,8 +325,43 @@ export default function CreateEditProducts() {
                     type="file"
                     className="hidden"
                     name="image"
+                    onChange={handleImageChange}
                   />
                 </label>
+                {errors.image ? (
+                  <div className="text-red-500 text-xs mt-1">
+                    {errors.image.message}
+                  </div>
+                ) : (
+                  "*maksimal 2MB dengan format PNG, JPG, JPEG"
+                )}
+                {previewImage.length > 0 && (
+                  <ul className="mt-3">
+                    <li
+                      key={0}
+                      className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between p-4 rounded"
+                    >
+                      <div className="flex items-center gap-2">
+                        <img
+                          src={previewImage[0]}
+                          alt={`preview-0`}
+                          className="w-12 h-14 rounded object-cover"
+                          onLoad={() => {
+                            URL.revokeObjectURL(previewImage[0]);
+                          }}
+                        />
+                        <div>
+                          <p>{gambar.name}</p>
+                          <p>{gambar.size / 1000} kb</p>
+                        </div>
+                      </div>
+                      <IoTrashOutline
+                        className="text-base cursor-pointer"
+                        onClick={() => removeFile(0)}
+                      />
+                    </li>
+                  </ul>
+                )}
               </div>
             </div>
             <div className="mt-5">
