@@ -57,6 +57,12 @@ export default function IndexProducts() {
         query[entry[0]] = entry[1];
       }
     }
+
+    if (searchValue.trim() === "") {
+      delete query["search"];
+    } else {
+      query.search = searchValue;
+    }
     try {
       setIsLoading(true);
       const result = await getAllProducts({ ...query });
@@ -79,7 +85,14 @@ export default function IndexProducts() {
   function handleSearchInputParams(search) {
     setSearchValue(search);
     const newSearchParams = new URLSearchParams(searchParams.toString());
-    newSearchParams.set("search", String(search));
+
+    // Hapus parameter 'search' jika nilai search kosong
+    if (search.trim() === "") {
+      newSearchParams.delete("search");
+    } else {
+      newSearchParams.set("search", String(search));
+    }
+
     setSearchParams(newSearchParams);
   }
 
