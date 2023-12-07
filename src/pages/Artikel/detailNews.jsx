@@ -2,8 +2,10 @@ import React from "react";
 import Layout from "../../components/layout";
 import { IoArrowBack } from "react-icons/io5";
 import { Link } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
-function DetailNews() {
+function DetailNews({ title, content, photo }) {
+  const { id } = useParams();
   return (
     <Layout>
       <div className="mt-5 text-xl">
@@ -16,8 +18,9 @@ function DetailNews() {
       </div>
       <div className="mt-5 mx-8 border-t-2 border-l-2 p-4 flex">
         <div>
-          <h1>apa</h1>
-          <h1>apa</h1>
+          <h2>{title}</h2>
+          <img src={photo} alt={title} />
+          <p>{content}</p>
         </div>
       </div>
     </Layout>
