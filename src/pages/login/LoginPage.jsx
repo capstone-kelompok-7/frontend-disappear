@@ -72,13 +72,9 @@ const LoginPage = () => {
       const result = await login(data.email, data.password);
 
       if (rememberChecked) {
-        localStorage.setItem("rememberedEmail", data.email);
-        localStorage.setItem("rememberedPassword", data.password);
         localStorage.setItem("rememberedCheckbox", "checked");
         localStorage.setItem("accessToken", result.data.access_token);
       } else {
-        sessionStorage.setItem("rememberedEmail", data.email);
-        sessionStorage.setItem("rememberedPassword", data.password);
         sessionStorage.setItem("accessToken", result.data.access_token);
       }
 
