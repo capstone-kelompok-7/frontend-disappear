@@ -129,7 +129,7 @@ export default function Router() {
       element: <EditNews />,
     },
     {
-      path: "/detail-news",
+      path: "/detail-news/:id",
       element: <DetailNews />,
     },
     {

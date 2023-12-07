@@ -1,21 +1,22 @@
-import React, { useState, useEffect } from "react";
-import { useNavigate, useParams } from "react-router-dom";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
-
 import Layout from "../../components/layout";
 import TextEditor from "@/components/texteditor/tipTap";
 import { artikelSchema } from "@/utils/api/artikel/schemaArtikel";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { Input } from "@/components/ui/input";
 import { useToast } from "@/components/ui/use-toast";
-import { createArtikel, updateArtikel } from "@/utils/api/artikel/api";
+import { createArtikel } from "@/utils/api/artikel/api";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 function CreateNews() {
   const { toast } = useToast();
   const navigate = useNavigate();
+  const [fileName, setFileName] = useState([]);
+  const [images, setImages] = useState([]);
   const {
     reset,
     register,
@@ -26,18 +27,21 @@ function CreateNews() {
     resolver: zodResolver(artikelSchema),
   });
 
-  const [fileName, setFileName] = useState("");
-
   const handleFileNameChange = (event) => {
-    setFileName(event.target.files[0]?.name || "");
+    const selectedFile = event.target.files[0];
+    if (selectedFile) {
+      setFileName(selectedFile.name);
+      setValue("photo", [selectedFile]);
+    }
   };
 
   async function onSubmit(data) {
     try {
-      const newArtikel = new FormData();
-      newArtikel.append("photo", data.photo[0]);
-      newArtikel.append("title", data.title);
-      newArtikel.append("content", data.content);
+      const newArtikel = {
+        title: data.title,
+        photo: data.photo[0],
+        content: data.content,
+      };
 
       await createArtikel(newArtikel);
       navigate("/artikel");
@@ -68,7 +72,6 @@ function CreateNews() {
       });
     }
   }
-
   return (
     <Layout>
       <div>
@@ -109,6 +112,7 @@ function CreateNews() {
                   name="photo"
                   className="hidden"
                   onChange={handleFileNameChange}
+                  accept="image/jpeg, image/jpg, image/png"
                   error={errors.photo?.message}
                 />
                 {fileName && (
