@@ -65,7 +65,7 @@ export default function Router() {
           element: <Pelanggan />,
         },
         {
-          path: "/pelanggan/pelanggandetail",
+          path: "/pelanggan/:id",
           element: <PelangganDetail />,
         },
         {

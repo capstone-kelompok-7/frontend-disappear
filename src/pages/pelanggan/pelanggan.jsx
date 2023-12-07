@@ -12,21 +12,51 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Link } from "react-router-dom";
+import { Link, useSearchParams } from "react-router-dom";
 import Delete from "@/components/delete/delete";
 import { BiEdit, BiTrash } from "react-icons/bi";
-import { useSearchParams } from "react-router-dom";
-import { getAllUsers } from "@/utils/api/pelanggan/api";
+import { deleteUsers, getAllUsers } from "@/utils/api/pelanggan/api";
 import { Loading } from "@/components/loading";
 import Pagination from "@/components/pagenation";
 
-function App() {
-  const handleDelete = () => {
-    Delete({
-      title: "Yakin mau hapus data?",
-      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-    });
-  };
+function Pelanggan() {
+  async function handleDelete(id) {
+    try {
+      const result = await Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        await deleteUsers(id);
+        toast({
+          title: (
+            <div className="flex items-center">
+              <FaRegCheckCircle />
+              <span className="ml-2">Produk berhasil dihapus!</span>
+            </div>
+          ),
+          description:
+            "Data pelanggan telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+        });
+        fetchData();
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menghapus pelanggan!</span>
+          </div>
+        ),
+        description: "Terjadi kesalahan saat menghapus pelanggan.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
   const [users, setUsers] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -66,7 +96,7 @@ function App() {
         <img
           src={row.original.photo_profile}
           alt={row.original.name}
-          className="w-20 h-20 rounded-md"
+          className="w-20 h-28 rounded block m-auto"
         />
       ),
     },
@@ -89,15 +119,16 @@ function App() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <Link to="/pelanggan/pelanggandetail">
+              <Link to={`/pelanggan/${row.original.id}`}>
                 <DropdownMenuItem className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white">
                   <BiEdit />
-                  <p>Edit</p>
+                  <p>Detail</p>
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuItem
                 className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
-                onClick={handleDelete}
+                onClick={() => handleDelete(row.original.id)}
+                id="deleteUser"
               >
                 <BiTrash />
                 <p>Hapus</p>
@@ -182,4 +213,4 @@ function App() {
   );
 }
 
-export default App;
+export default Pelanggan;
