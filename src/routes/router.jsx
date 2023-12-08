@@ -28,9 +28,8 @@ import DetailOrder from "@/pages/order/detailOrder";
 import Pesanan from "@/pages/order/order";
 
 import DetailNews from "@/pages/Artikel/detailNews";
-import CreateNews from "@/pages/Artikel/createNews";
+import CreateEditNews from "@/pages/Artikel/createEditNews";
 import IndexNews from "@/pages/Artikel/indexNews";
-import EditNews from "@/pages/Artikel/editNews";
 
 import DetailUlasan from "@/pages/ulasan/detailUlasan/detailUlasan";
 import IndexUlasan from "@/pages/ulasan/indexUlasan";
@@ -121,15 +120,15 @@ export default function Router() {
       element: <EditVoucher />,
     },
     {
-      path: "/create-news",
-      element: <CreateNews />,
+      path: "/artikel/create-news",
+      element: <CreateEditNews />,
     },
     {
-      path: "/edit-news",
-      element: <EditNews />,
+      path: "/artikel/edit-news/:id",
+      element: <CreateEditNews />,
     },
     {
-      path: "/detail-news/:id",
+      path: "/artikel/detail-news/:id",
       element: <DetailNews />,
     },
     {
