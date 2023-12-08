@@ -1,8 +1,12 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
 /* eslint-disable no-undef */
+import React, { useState } from "react";
 import Modal from "react-modal";
-import React from "react";
+
+import { createCarousel } from "@/utils/api/carousel/api";
+import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { useToast } from "@/components/ui/use-toast";
 
 const PopUp = ({
   isOpen,
@@ -15,9 +19,50 @@ const PopUp = ({
   onFileChange,
   popupName,
   onAddPopup,
+  file,
 }) => {
-  const handlePopUp = () => {
-    onAddPopup(popupName, file);
+  const { toast } = useToast();
+  const [loading, setLoading] = useState(false);
+
+  const handlePopUp = async (data) => {
+    try {
+      setLoading(true);
+      await createCarousel({
+        name: popupName,
+        photo: file,
+      });
+
+      let title, description;
+      if (popupLabel === "Tambah Carousel") {
+        title = "Berhasil Menambahkan Carousel!";
+        description =
+          "Data Carousel telah berhasil ditambahkan, nih. Silahkan nikmati fitur lainnya!";
+      } else if (popupLabel === "Edit Carousel") {
+        title = "Berhasil Mengubah Carousel!";
+        description =
+          "Data Carousel berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!";
+      }
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <CheckCircledIcon />
+            <span className="ml-2">{title}</span>
+          </div>
+        ),
+        description: description,
+        color: "#000000",
+      });
+
+      onAddPopup(popupName, file);
+    } catch (error) {
+      toast({
+        title: "Error",
+        description: error.message || "Terjadi kesalahan saat menyimpan data.",
+        color: "#FF0000",
+      });
+    } finally {
+      setLoading(false);
+    }
     closeModal();
   };
 
@@ -74,6 +119,7 @@ const PopUp = ({
                 <button
                   className="text-xl font-semibold font-['Inter'] tracking-[0.2] leading-[19.6px] mr-8"
                   style={{ color: "#25745A" }}
+                  to="/carousel"
                   onClick={closeModal}
                 >
                   {cancelButtonLabel}
