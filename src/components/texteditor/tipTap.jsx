@@ -4,7 +4,7 @@ import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
 import "@/styles/titap.css";
 
-const configureEditor = (setContent) => {
+const configureEditor = (setContent, initialContent = "") => {
   return useEditor({
     extensions: [
       StarterKit,
@@ -13,15 +13,16 @@ const configureEditor = (setContent) => {
       }),
       Highlight,
     ],
-    content: ``,
+    content: initialContent,
     onBlur: ({ editor }) => {
-      setContent(editor.getHTML());
+      const newContent = editor.getHTML();
+      setContent(newContent);
     },
   });
 };
 
-const TextEditor = ({ setContent }) => {
-  const editor = configureEditor(setContent);
+const TextEditor = ({ setContent, initialContent }) => {
+  const editor = configureEditor(setContent, initialContent);
 
   return (
     <div className="text-editor-container">
