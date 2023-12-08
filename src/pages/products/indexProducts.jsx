@@ -39,8 +39,8 @@ export default function IndexProducts() {
     navigate(`/produk/${productId}`);
   };
 
-  const toEditProduct = () => {
-    navigate("/produk/edit-produk");
+  const toEditProduct = (id) => {
+    navigate(`/produk/${id}/edit-produk`);
   };
 
   useEffect(() => {
@@ -192,12 +192,15 @@ export default function IndexProducts() {
                   <p>Detail Produk</p>
                 </DropdownMenuItem>
               </Link>
-              <Link onClick={toEditProduct} id="toEditProduct">
-                <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white">
-                  <BiEdit />
-                  <p>Edit Produk</p>
-                </DropdownMenuItem>
-              </Link>
+
+              <DropdownMenuItem
+                className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
+                onClick={() => toEditProduct(row.original.id)}
+                id="toEditProduct"
+              >
+                <BiEdit />
+                <p>Edit Produk</p>
+              </DropdownMenuItem>
 
               <DropdownMenuItem
                 className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"

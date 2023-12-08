@@ -9,13 +9,19 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import Button from "@/components/button";
 import AsyncSelect from "react-select/async";
-import { Link, useNavigate } from "react-router-dom";
-import { createImageProducts, createProducts } from "@/utils/api/products/api";
+import { Link, useNavigate, useParams } from "react-router-dom";
+import {
+  createImageProducts,
+  createProducts,
+  getDetailProducts,
+  updateProducts,
+} from "@/utils/api/products/api";
 import { useToast } from "@/components/ui/use-toast";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { getCategory } from "@/utils/api/category/api";
 import { Loading } from "@/components/loading";
 import { IoImagesOutline, IoTrashOutline } from "react-icons/io5";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 const MAX_FILE_SIZE = 1024 * 2000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
@@ -47,6 +53,9 @@ const schema = z.object({
 });
 
 export default function CreateEditProducts() {
+  const { id } = useParams();
+  const [products, setProducts] = useState([]);
+  const [selectedId, setSelectedId] = useState(0);
   const [defaultOptions, setDefaultOptions] = useState([]);
   const [isLoading, setIsloading] = useState(false);
   const [gambar, setGambar] = useState([]);
@@ -90,6 +99,29 @@ export default function CreateEditProducts() {
     }
   }
 
+  async function fetchDataDetail() {
+    try {
+      setIsloading(true);
+      const result = await getDetailProducts(id);
+      setProducts(result.data);
+      console.log(result.data);
+      if (result.data) {
+        setSelectedId(result.data.id);
+        setValue("productsName", result.data.name);
+        setValue("productsPrice", result.data.price);
+        setValue("discount", result.data.discount);
+        setValue("exp", result.data.exp);
+        setValue("stock", result.data.stock);
+        setValue("gram", result.data.gram_plastic);
+        setValue("description", result.data.description);
+      }
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsloading(false);
+    }
+  }
+
   useEffect(() => {
     const fetchDefaultOptions = async () => {
       try {
@@ -106,6 +138,7 @@ export default function CreateEditProducts() {
     };
 
     fetchDefaultOptions();
+    fetchDataDetail();
   }, []);
 
   async function onSubmit(data) {
@@ -153,6 +186,54 @@ export default function CreateEditProducts() {
     }
   }
 
+  async function onSubmitEdit(data) {
+    try {
+      const editProducts = {
+        id: selectedId,
+        name: data.productsName,
+        price: data.productsPrice,
+        discount: data.discount,
+        stock: data.stock,
+        exp: data.exp,
+        gram_plastic: data.gram,
+        description: data.description,
+        categories: data.category.map((cat) => cat.value),
+      };
+      setIsloading(true);
+      await updateProducts(editProducts);
+
+      navigate("/produk");
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Berhasil Mengubah Produk!
+            </span>
+          </div>
+        ),
+        description:
+          "Data Produk berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!!",
+      });
+      setSelectedId(0);
+      reset();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menambahkan Produk!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    } finally {
+      setIsloading(false);
+    }
+  }
+
   const colorStyles = {
     control: (styles) => ({ ...styles, backgroundColor: "white" }),
     multiValue: (styles) => {
@@ -191,14 +272,16 @@ export default function CreateEditProducts() {
   return (
     <>
       <Layout>
-        <Breadcrumbs pages="Tambah Produk" />
+        <Breadcrumbs
+          pages={selectedId === 0 ? "Tambah Produk" : "Edit tantangan"}
+        />
         {isLoading ? (
           <Loading />
         ) : (
           <form
             id="formCreateProducts"
             className="bg-white rounded border my-5 p-5 flex flex-col"
-            onSubmit={handleSubmit(onSubmit)}
+            onSubmit={handleSubmit(selectedId === 0 ? onSubmit : onSubmitEdit)}
           >
             <div className="flex w-full justify-between gap-14">
               <div className=" w-full">
@@ -386,7 +469,7 @@ export default function CreateEditProducts() {
               <Button
                 id="submitCreatedProducts"
                 type="submit"
-                label="Tambah Produk"
+                label={selectedId === 0 ? "Tambah Produk " : "Simpan Perubahan"}
                 className=" bg-secondary-green px-3 py-3 rounded border text-white"
               />
             </div>

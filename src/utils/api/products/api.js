@@ -61,18 +61,23 @@ export const createImageProducts = async (formData) => {
   }
 };
 
-// export const updateProductWithImage = async (productId, productData) => {
-//   try {
-//     const response = await axiosWithConfig.put(
-//       `api/v1/products/${productId}`,
-//       productData
-//     );
+export const updateProducts = async (data) => {
+  const { id } = data;
+  try {
+    const newData = {
+      ...data,
+    };
 
-//     return response.data;
-//   } catch (error) {
-//     throw Error(error.response.data.message);
-//   }
-// };
+    const response = await axiosWithConfig.put(
+      `api/v1/products/${id}`,
+      newData
+    );
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
 
 export const deleteProducts = async (id) => {
   try {

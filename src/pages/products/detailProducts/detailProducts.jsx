@@ -37,8 +37,8 @@ export default function DetailProducts() {
     }
   }
 
-  function toRoute() {
-    navigate("/produk/edit-produk");
+  function toEditProduct(id) {
+    navigate(`/produk/${id}/edit-produk`);
   }
 
   async function handleDeleteClick() {
@@ -166,7 +166,7 @@ export default function DetailProducts() {
               <Button
                 label="Edit Produk"
                 className="bg-primary-green text-white border rounded py-4 px-7 text-sm font-medium ml-5"
-                onClick={toRoute}
+                onClick={() => toEditProduct(products.id)}
               />
             </div>
           </div>

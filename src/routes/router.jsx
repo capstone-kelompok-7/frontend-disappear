@@ -46,125 +46,121 @@ export default function Router() {
       element: <Landingpage />,
     },
     {
+      path: "/category",
+      element: <IndexCategory />,
+    },
+    {
+      path: "/dashboard",
+      element: <Dashboard />,
+    },
+    {
       path: "/login",
       element: <LoginPage />,
     },
+
     {
-      element: <ProtectedRoute />,
-      children: [
-        {
-          path: "/category",
-          element: <IndexCategory />,
-        },
-        {
-          path: "/dashboard",
-          element: <Dashboard />,
-        },
-        {
-          path: "/pelanggan",
-          element: <Pelanggan />,
-        },
-        {
-          path: "/pelanggan/pelanggandetail",
-          element: <PelangganDetail />,
-        },
-        {
-          path: "/tantangan",
-          element: <IndexChallenge />,
-        },
-        {
-          path: "/tantangan/buat-tantangan",
-          element: <CreateEditChallenge />,
-        },
-        {
-          path: "/tantangan/:id/edit-tantangan",
-          element: <CreateEditChallenge />,
-        },
-        {
-          path: "/tantangan/:id",
-          element: <DetailChallenge />,
-        },
-        {
-          path: "/peserta-tantangan",
-          element: <ParticipantChallange />,
-        },
-        {
-          path: "/peserta-tantangan/:id/edit-peserta-tantangan",
-          element: <EditParticipantChallenge />,
-        },
-        {
-          path: "/produk",
-          element: <IndexProducts />,
-        },
-        {
-          path: "/produk/buat-Produk",
-          element: <CreateEditProducts />,
-        },
-        {
-          path: "/produk/edit-produk",
-          element: <CreateEditProducts />,
-        },
-        {
-          path: "/produk/:id",
-          element: <DetailProducts />,
-        },
-        {
-          path: "/kupon",
-          element: <VoucherApp />,
-        },
-        {
-          path: "/kupon/buat-kupon",
-          element: <CreateVoucher />,
-        },
-        {
-          path: "/kupon/edit-kupon",
-          element: <EditVoucher />,
-        },
-        {
-          path: "/create-news",
-          element: <CreateNews />,
-        },
-        {
-          path: "/edit-news",
-          element: <EditNews />,
-        },
-        {
-          path: "/detail-news",
-          element: <DetailNews />,
-        },
-        {
-          path: "/artikel",
-          element: <IndexNews />,
-        },
-        {
-          path: "/pesanan",
-          element: <Pesanan />,
-        },
-        {
-          path: "/pesanan/detail-pesanan",
-          element: <DetailOrder />,
-        },
-        {
-          path: "/pembayaran",
-          element: <IndexPayment />,
-        },
-        {
-          path: "/pembayaran/:id",
-          element: <ConfirmPayment />,
-        },
-        {
-          path: "/ulasan",
-          element: <IndexUlasan />,
-        },
-        {
-          path: "/ulasan/:id",
-          element: <DetailUlasan />,
-        },
-        {
-          path: "/carousel",
-          element: <Carousel />,
-        },
-      ],
+      path: "/pelanggan",
+      element: <Pelanggan />,
+    },
+    {
+      path: "/pelanggan/pelanggandetail",
+      element: <PelangganDetail />,
+    },
+    {
+      path: "/tantangan",
+      element: <IndexChallenge />,
+    },
+    {
+      path: "/tantangan/buat-tantangan",
+      element: <CreateEditChallenge />,
+    },
+    {
+      path: "/tantangan/:id/edit-tantangan",
+      element: <CreateEditChallenge />,
+    },
+    {
+      path: "/tantangan/:id",
+      element: <DetailChallenge />,
+    },
+    {
+      path: "/peserta-tantangan",
+      element: <ParticipantChallange />,
+    },
+    {
+      path: "/peserta-tantangan/:id/edit-peserta-tantangan",
+      element: <EditParticipantChallenge />,
+    },
+    {
+      path: "/produk",
+      element: <IndexProducts />,
+    },
+    {
+      path: "/produk/buat-Produk",
+      element: <CreateEditProducts />,
+    },
+    {
+      path: "/produk/:id/edit-produk",
+      element: <CreateEditProducts />,
+    },
+    {
+      path: "/produk/:id",
+      element: <DetailProducts />,
+    },
+    {
+      path: "/kupon",
+      element: <VoucherApp />,
+    },
+    {
+      path: "/kupon/buat-kupon",
+      element: <CreateVoucher />,
+    },
+    {
+      path: "/kupon/edit-kupon",
+      element: <EditVoucher />,
+    },
+    {
+      path: "/create-news",
+      element: <CreateNews />,
+    },
+    {
+      path: "/edit-news",
+      element: <EditNews />,
+    },
+    {
+      path: "/detail-news",
+      element: <DetailNews />,
+    },
+    {
+      path: "/artikel",
+      element: <IndexNews />,
+    },
+    {
+      path: "/pesanan",
+      element: <Pesanan />,
+    },
+    {
+      path: "/pesanan/detail-pesanan",
+      element: <DetailOrder />,
+    },
+    {
+      path: "/pembayaran",
+      element: <IndexPayment />,
+    },
+    {
+      path: "/pembayaran/:id",
+      element: <ConfirmPayment />,
+    },
+    {
+      path: "/ulasan",
+      element: <IndexUlasan />,
+    },
+    {
+      path: "/ulasan/:id",
+      element: <DetailUlasan />,
+    },
+    {
+      path: "/carousel",
+      element: <Carousel />,
     },
   ]);
   return <RouterProvider router={router} />;
