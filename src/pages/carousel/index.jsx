@@ -6,8 +6,9 @@ import { RiDeleteBinLine } from "react-icons/ri";
 import { FiSearch } from "react-icons/fi";
 import { BiEdit } from "react-icons/bi";
 
-import { useSearchParams } from "react-router-dom";
-import { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { useState, useEffect, useCallback } from "react";
+import { debounce } from "lodash";
 import Modal from "react-modal";
 
 import { getAllCarousel, deleteCarousel } from "@/utils/api/carousel/api";
@@ -35,6 +36,7 @@ export default function Carousel() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
   const [popupLabel, setPopupLabel] = useState("");
   const [inputName, setInputName] = useState("");
   const [carousel, setCarousel] = useState([]);
@@ -42,8 +44,27 @@ export default function Carousel() {
   const [meta, setMeta] = useState();
 
   useEffect(() => {
-    fetchData();
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
   }, [searchParams]);
+
+  const getSuggestions = useCallback(
+    async function (query) {
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+
+      if (!query) {
+        newSearchParams.delete("search");
+      } else {
+        newSearchParams.set("search", query);
+        newSearchParams.delete("page");
+      }
+
+      setSearchParams(newSearchParams);
+    },
+    [searchParams, setSearchParams]
+  );
 
   async function fetchData() {
     let query = {};
@@ -98,9 +119,21 @@ export default function Carousel() {
   }
 
   function handlePrevNextPage(page) {
-    searchParams.set("page", String(page));
-    setSearchParams(searchParams);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("page", String(page));
+    setSearchParams(newSearchParams);
   }
+
+  function handleSearchInputParams(search) {
+    setSearchValue(search);
+    getSuggestions(search);
+  }
+
+  const formatNumber = (pageIndex, itemIndex) => {
+    const itemsPerPage = meta?.per_page || 8;
+    return pageIndex * itemsPerPage + itemIndex + 1;
+  };
+
 
   const openModal = (label, data = null) => {
     setPopupLabel(label);
@@ -125,15 +158,8 @@ export default function Carousel() {
     setFile(selectedFile);
   };
 
-  const handleDelete = () => {
-    Delete({
-      title: "Yakin mau hapus data?",
-      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-    });
-  };
-
   const columns = [
-    { Header: "No", accessor: "id" },
+    { Header: "No", accessor: (_, index) => formatNumber(meta?.current_page - 1, index), },
     {
       Header: "Foto",
       accessor: "photo",
@@ -218,6 +244,8 @@ export default function Carousel() {
                 placeholder="Cari Carousel"
                 className="border-primary-green pr-36 placeholder:text-left"
                 icon={<FiSearch />}
+                value={searchValue}
+                onChange={(e) => handleSearchInputParams(e.target.value)}
               />
             </div>
           </div>
