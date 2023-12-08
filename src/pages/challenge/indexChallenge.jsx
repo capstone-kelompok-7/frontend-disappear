@@ -94,6 +94,7 @@ function IndexChallenge() {
       });
 
       if (result.isConfirmed) {
+        setIsLoading(true);
         await deleteChallenge(id);
         toast({
           title: (
@@ -119,6 +120,8 @@ function IndexChallenge() {
         description:
           "Oh, noo! Sepertinya ada kesalahan saat proses penghapusan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
