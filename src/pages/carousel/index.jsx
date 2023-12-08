@@ -10,7 +10,7 @@ import { useSearchParams } from "react-router-dom";
 import { useState, useEffect } from "react";
 import Modal from "react-modal";
 
-import { getAllCarousel } from "@/utils/api/carousel/api";
+import { getAllCarousel, deleteCarousel } from "@/utils/api/carousel/api";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Pagination from "@/components/pagenation";
 import Delete from "@/components/delete/delete";
@@ -35,9 +35,9 @@ export default function Carousel() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [carousel, setCarousel] = useState([]);
   const [popupLabel, setPopupLabel] = useState("");
   const [inputName, setInputName] = useState("");
+  const [carousel, setCarousel] = useState([]);
   const [file, setFile] = useState(null);
   const [meta, setMeta] = useState();
 
@@ -62,6 +62,41 @@ export default function Carousel() {
       setIsLoading(false);
     }
   }
+
+  async function onClickDelete(id) {
+    try {
+      const result = await Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+
+      if (result.isConfirmed) {
+        await deleteCarousel(id);
+        toast({
+          title: (
+            <div className="flex items-center">
+              <span className="ml-2">Berhasil Menghapus Carousel! </span>
+            </div>
+          ),
+          description:
+            "Data carousel berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+        });
+        fetchData();
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <span className="ml-2">Gagal Menghapus Carousel!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penghapusan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    }
+  }
+
   function handlePrevNextPage(page) {
     searchParams.set("page", String(page));
     setSearchParams(searchParams);
@@ -125,13 +160,17 @@ export default function Carousel() {
 
             <DropdownMenuContent>
               <DropdownMenuItem
-                onClick={() => openModal("Edit Carousel", data[0])}
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
+                onClick={() => openModal("Edit Carousel", row.original.id)}
                 style={{ cursor: "pointer" }}
               >
                 <BiEdit />
                 Edit Carousel
               </DropdownMenuItem>
-              <DropdownMenuItem onClick={handleDelete}>
+              <DropdownMenuItem
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
+                onClick={() => onClickDelete(row.original.id)}
+              >
                 <RiDeleteBinLine />
                 Delete Carousel
               </DropdownMenuItem>
