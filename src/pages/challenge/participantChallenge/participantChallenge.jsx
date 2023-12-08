@@ -54,7 +54,7 @@ export default function IndexPesertaTantangan() {
       accessor: "username",
       Cell: ({ row }) => (
         <Link
-          to={`/peserta-tantangan/${row.original.id}/edit-peserta-tantangan/`}
+          to={`/peserta-tantangan/${row.original.id}/edit-peserta-tantangan`}
         >
           {row.original.username}
         </Link>
