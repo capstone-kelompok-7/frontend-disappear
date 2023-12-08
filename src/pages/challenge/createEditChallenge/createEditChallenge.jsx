@@ -135,7 +135,7 @@ function CreateChallenge() {
   async function onSubmitEdit(data) {
     try {
       const editChallenge = {
-        // photo: data.image[0],
+        photo: data.image[0],
         id: selectedId,
         title: data.challengeName,
         start_date: format(
@@ -191,9 +191,6 @@ function CreateChallenge() {
       const previewURL = URL.createObjectURL(file);
       setPreviewImage([previewURL]);
     }
-    // setGambar(file);
-    // const previewURL = URL.createObjectURL(file);
-    // setPreviewImage((prevImages) => [...prevImages, previewURL]);
   };
 
   const removeFile = (index) => {
