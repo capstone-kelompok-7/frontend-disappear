@@ -138,7 +138,9 @@ export default function CreateEditProducts() {
     };
 
     fetchDefaultOptions();
-    fetchDataDetail();
+    if (id !== undefined) {
+      fetchDataDetail();
+    }
   }, []);
 
   async function onSubmit(data) {
