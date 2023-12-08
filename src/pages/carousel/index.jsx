@@ -147,10 +147,10 @@ export default function Carousel() {
       <Layout>
         <Breadcrumbs pages="Carousel" />
 
-        <div className=" flex flex-col min-h-screen flex-grow overflow-y-auto mx-5 mt-6 px-[15px] py-5 shadow-md rounded-[3px]">
+        <div className="justify-between  mt-6  py-5">
           <div className="flex items-center pb-7 gap-6">
             <Button
-              label="Tambahkan Carousel"
+              label="Tambah Carousel"
               icon={
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -169,11 +169,11 @@ export default function Carousel() {
                   />
                 </svg>
               }
-              onClick={() => openModal("Tambahkan Carousel")}
-              className="flex items-center space-x-2 border bg-primary-btn text-white p-2  rounded-md"
+              onClick={() => openModal("Tambah Carousel")}
+              className="flex items-center space-x-2 border bg-secondary-green text-white p-2 rounded-sm"
             />
 
-            <div className="flex w-64 relative">
+            <div className="flex items-center w-64 relative">
               <Input
                 type="text"
                 placeholder="Cari Carousel"
@@ -182,15 +182,21 @@ export default function Carousel() {
               />
             </div>
           </div>
-          <div>
-            <Tabel columns={columns} data={carousel} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
-          </div>
+          {isLoading ? (
+            <Loading />
+          ) : (
+            <div className="mt-5">
+              <Tabel columns={columns} data={carousel} />
+              <Pagination
+                meta={meta}
+                onClickPrevious={() =>
+                  handlePrevNextPage(meta?.current_page - 1)
+                }
+                onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                onClickPage={(page) => handlePrevNextPage(page)}
+              />
+            </div>
+          )}
         </div>
       </Layout>
 
@@ -199,11 +205,11 @@ export default function Carousel() {
         closeModal={closeModal}
         popupLabel={popupLabel}
         placeholder={
-          popupLabel === "Tambahkan Carousel" ? "Nama Carousel" : "Nama Data"
+          popupLabel === "Tambah Carousel" ? "Nama Carousel" : "Nama Data"
         }
         cancelButtonLabel="Batal"
         confirmButtonLabel={
-          popupLabel === "Tambahkan Carousel" ? "Tambah" : "Edit"
+          popupLabel === "Tambah Carousel" ? "Tambah" : "Edit"
         }
         onAddPopup={handlePopup}
         onNameChange={onNameChange}
