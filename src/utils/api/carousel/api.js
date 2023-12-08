@@ -24,14 +24,17 @@ export const getAllCarousel = async (params) => {
   }
 };
 
-
 export const createCarousel = async (data) => {
   try {
     const newData = {
       ...data,
     };
 
-    const response = await axiosWithConfig.post(`api/v1/carousel`, newData);
+    const response = await axiosWithConfig.post("api/v1/carousel", newData, {
+      headers: {
+        "Content-Type": "multipart/form-data",
+      },
+    });
 
     return response.data;
   } catch (error) {
