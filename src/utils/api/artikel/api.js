@@ -34,13 +34,42 @@ export const createArtikel = async (data) => {
 export const updateArtikel = async (data) => {
   const { id } = data;
   try {
-    const newData = {
-      ...data,
-    };
+    const formData = new FormData();
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key) && data[key]) {
+        formData.append(key, data[key]);
+      }
+    }
+
     const response = await axiosWithConfig.put(
       `/api/v1/articles/${id}`,
-      newData
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
     );
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
+
+export const getDetailArtikel = async (id) => {
+  try {
+    const response = await axiosWithConfig.get(`/api/v1/articles/${id}`);
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
+
+export const deleteArtikel = async (id) => {
+  try {
+    const response = await axiosWithConfig.delete(`/api/v1/articles/${id}`);
 
     return response.data;
   } catch (error) {

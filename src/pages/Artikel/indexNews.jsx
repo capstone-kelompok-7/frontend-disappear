@@ -14,9 +14,11 @@ import Layout from "../../components/layout";
 import { Link } from "react-router-dom";
 import { getArtikel } from "@/utils/api/artikel/api";
 import CardArtikel from "@/components/cardartikel/cardArtikel";
+import { Loading } from "@/components/loading";
 
 function IndexNews() {
   const [artikel, setArtikel] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
 
   useEffect(() => {
     fetchArtikel();
@@ -24,10 +26,13 @@ function IndexNews() {
 
   async function fetchArtikel() {
     try {
+      setIsLoading(true);
       const result = await getArtikel();
       setArtikel(result.data);
     } catch (error) {
       toast.error(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -36,7 +41,7 @@ function IndexNews() {
       <div>
         <Breadcrumbs pages="Artikel" />
       </div>
-      <div className="mt-9 border-t-2 border-l-2 px-4 pt-4">
+      <div className="mt-9 border-t-2 px-4 pt-4">
         <div className="flex justify-between">
           <div className="flex space-x-3">
             <Link to="/create-news">
@@ -83,17 +88,22 @@ function IndexNews() {
             </DropdownMenu>
           </div>
         </div>
-        <div className="max-h-[38rem] overflow-y-auto">
-          {artikel.map((data) => (
-            <CardArtikel
-              date={data.date}
-              key={data.id}
-              title={data.title}
-              content={data.content}
-              photo={data.photo}
-            />
-          ))}
-        </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div className="max-h-[38rem] overflow-y-auto">
+            {artikel.map((data) => (
+              <CardArtikel
+                key={data.id}
+                artikelId={data.id}
+                date={data.date}
+                title={data.title}
+                content={data.content}
+                photo={data.photo}
+              />
+            ))}
+          </div>
+        )}
       </div>
     </Layout>
   );

@@ -24,9 +24,8 @@ import DetailOrder from "@/pages/order/detailOrder";
 import Pesanan from "@/pages/order/order";
 
 import DetailNews from "@/pages/Artikel/detailNews";
-import CreateNews from "@/pages/Artikel/createNews";
+import CreateEditNews from "@/pages/Artikel/createEditNews";
 import IndexNews from "@/pages/Artikel/indexNews";
-import EditNews from "@/pages/Artikel/editNews";
 
 import DetailUlasan from "@/pages/ulasan/detailUlasan/detailUlasan";
 import IndexUlasan from "@/pages/ulasan/indexUlasan";
