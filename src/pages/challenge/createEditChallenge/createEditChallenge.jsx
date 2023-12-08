@@ -52,6 +52,7 @@ function CreateChallenge() {
 
   async function fetchData() {
     try {
+      setIsLoading(true);
       const result = await getDetailChallenge(id);
       setChallenge(result.data);
 
@@ -70,13 +71,15 @@ function CreateChallenge() {
         setValue("exp", result.data.exp);
         // setValue("image", result.data.photo);
 
-        if (result.data.photo) {
-          const previewURL = URL.createObjectURL(result.data.photo);
-          setPreviewImage([previewURL]);
-        }
+        // if (result.data.photo) {
+        //   const previewURL = URL.createObjectURL(result.data.photo);
+        //   setPreviewImage([previewURL]);
+        // }
       }
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -132,7 +135,7 @@ function CreateChallenge() {
   async function onSubmitEdit(data) {
     try {
       const editChallenge = {
-        photo: data.image[0],
+        // photo: data.image[0],
         id: selectedId,
         title: data.challengeName,
         start_date: format(
@@ -356,7 +359,7 @@ function CreateChallenge() {
                   </ul>
                 )}
 
-                {previewImage.length === 0 && selectedId !== 0 && (
+                {/* {previewImage.length === 0 && selectedId !== 0 && (
                   <ul className="mt-3">
                     <li
                       key={0}
@@ -382,7 +385,7 @@ function CreateChallenge() {
                       />
                     </li>
                   </ul>
-                )}
+                )} */}
               </div>
 
               <div className="flex-col w-1/2 pl-8">
@@ -406,7 +409,7 @@ function CreateChallenge() {
             <div className="flex justify-end gap-3">
               <Button
                 label="Batal"
-                type="submit"
+                type="button"
                 className="w-24 h-12 rounded-md border border-primary-green p-3.5 text-primary-green text-sm font-semibold items-center justify-center inline-flex"
                 onClick={() => navigate(`/tantangan`)}
               />
