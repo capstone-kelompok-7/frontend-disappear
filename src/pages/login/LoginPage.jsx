@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { TokenProvider, useToken } from "@/utils/context/TokenContext";
 import { toast } from "@/components/ui/use-toast";
 import login from "@/utils/api/auth/login";
 import { Input } from "@/components/ui/input";
@@ -22,12 +23,21 @@ const schema = z.object({
     .min(6, { message: "Kata sandi harus terdiri dari 6 karakter" }),
 });
 
+const LoginPageWrapper = () => {
+  return (
+    <TokenProvider>
+      <LoginPage />
+    </TokenProvider>
+  );
+};
+
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberChecked, setRememberChecked] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
+  const { saveTokenAndUser } = useToken();
   const navigate = useNavigate();
   const {
     register,
@@ -38,12 +48,13 @@ const LoginPage = () => {
   });
 
   useEffect(() => {
-    const rememberedEmail = localStorage.getItem("rememberedEmail");
-    const rememberedPassword = localStorage.getItem("rememberedPassword");
     const rememberedCheckbox = localStorage.getItem("rememberedCheckbox");
 
     if (rememberedCheckbox === "checked") {
       setRememberChecked(true);
+      const rememberedEmail = sessionStorage.getItem("rememberedEmail");
+      const rememberedPassword = sessionStorage.getItem("rememberedPassword");
+
       setEmail(rememberedEmail);
       setPassword(rememberedPassword);
     }
@@ -53,12 +64,10 @@ const LoginPage = () => {
     setRememberChecked(!rememberChecked);
 
     if (!rememberChecked) {
+      localStorage.setItem("rememberedCheckbox", "checked");
+    } else {
       sessionStorage.setItem("rememberedEmail", email);
       sessionStorage.setItem("rememberedPassword", password);
-    } else {
-      localStorage.setItem("rememberedEmail", email);
-      localStorage.setItem("rememberedPassword", password);
-      localStorage.setItem("rememberedCheckbox", "checked");
     }
   };
 
@@ -72,8 +81,8 @@ const LoginPage = () => {
       const result = await login(data.email, data.password);
 
       if (rememberChecked) {
+        saveTokenAndUser(result.data.access_token);
         localStorage.setItem("rememberedCheckbox", "checked");
-        localStorage.setItem("accessToken", result.data.access_token);
       } else {
         sessionStorage.setItem("accessToken", result.data.access_token);
       }
