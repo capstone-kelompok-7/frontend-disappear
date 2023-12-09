@@ -1,3 +1,4 @@
+/* eslint-disable no-unused-vars */
 import {
   RouterProvider,
   createBrowserRouter,
@@ -35,11 +36,14 @@ import EditNews from "@/pages/Artikel/editNews";
 import DetailUlasan from "@/pages/ulasan/detailUlasan/detailUlasan";
 import IndexUlasan from "@/pages/ulasan/indexUlasan";
 
+import Carousel from "@/pages/carousel/caraoselPage";
+import CarouselModal from "@/pages/carousel/caraouselModal"
+
 import IndexCategory from "@/pages/category/indexCategory";
 import Landingpage from "@/pages/landingpage/landingpage";
 import Dashboard from "@/pages/dashboard/dashboard";
 import LoginPage from "@/pages/login/LoginPage";
-import Carousel from "@/pages/carousel/index";
+
 
 export default function Router() {
   const router = createBrowserRouter([
@@ -162,6 +166,10 @@ export default function Router() {
     },
     {
       path: "/carousel",
+      element: <Carousel />,
+    },
+    {
+      path: "/carousel/modal",
       element: <Carousel />,
     },
   ]);

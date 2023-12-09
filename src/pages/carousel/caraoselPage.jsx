@@ -21,7 +21,7 @@ import Tabel from "@/components/table/table";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 
-import PopUp from "./popUp";
+import PopUp from "./caraouselModal";
 
 import {
   DropdownMenu,
