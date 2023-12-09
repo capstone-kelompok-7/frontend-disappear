@@ -1,59 +1,53 @@
-/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-/* eslint-disable no-undef */
-import React, { useState } from "react";
-import Modal from "react-modal";
-
-import { createCarousel } from "@/utils/api/carousel/api";
 import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useNavigate } from "react-router-dom";
+import { useForm } from "react-hook-form";
+import React, { useState } from "react";
+
+import { CarouselSchema } from "@/utils/api/carousel/schema";
+import { createCarousel } from "@/utils/api/carousel/api";
 import { useToast } from "@/components/ui/use-toast";
+import { Loading } from "@/components/loading";
+import { Input } from "@/components/ui/input";
+import Button from "@/components/button";
 
-const PopUp = ({
-  isOpen,
-  closeModal,
-  popupLabel,
-  placeholder,
-  cancelButtonLabel,
-  confirmButtonLabel,
-  onNameChange,
-  onFileChange,
-  popupName,
-  onAddPopup,
-  file,
-}) => {
+function PopUp() {
   const { toast } = useToast();
-  const [loading, setLoading] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
-  const handlePopUp = async (data) => {
+  const {
+    reset,
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm({
+    resolver: zodResolver(CarouselSchema),
+  });
+
+  const onSubmit = async (data) => {
     try {
-      setLoading(true);
-      await createCarousel({
-        name: popupName,
-        photo: file,
-      });
+      const newCarousel = {
+        name: data.carouselName,
+        photo: data.image[0],
+      };
+      setIsLoading(true);
+      await createCarousel(newCarousel);
+      navigate("/carousel");
 
-      let title, description;
-      if (popupLabel === "Tambah Carousel") {
-        title = "Berhasil Menambahkan Carousel!";
-        description =
-          "Data Carousel telah berhasil ditambahkan, nih. Silahkan nikmati fitur lainnya!";
-      } else if (popupLabel === "Edit Carousel") {
-        title = "Berhasil Mengubah Carousel!";
-        description =
-          "Data Carousel berhasil diperbarui, nih. Silahkan nikmati fitur lainnya!";
-      }
       toast({
         title: (
           <div className="flex items-center gap-3">
             <CheckCircledIcon />
-            <span className="ml-2">{title}</span>
+            <span className="ml-2">berhasil</span>
           </div>
         ),
-        description: description,
+        description: "berhasil deh",
         color: "#000000",
       });
-
-      onAddPopup(popupName, file);
+      reset();
     } catch (error) {
       toast({
         title: "Error",
@@ -61,85 +55,59 @@ const PopUp = ({
         color: "#FF0000",
       });
     } finally {
-      setLoading(false);
+      setIsLoading(false);
     }
-    closeModal();
   };
 
   return (
-    <Modal
-      isOpen={isOpen}
-      onRequestClose={closeModal}
-      style={{
-        overlay: {
-          backgroundColor: "rgba(0, 0, 0, 0.5)",
-        },
-        content: {
-          width: "100%",
-          maxWidth: "500px",
-          maxHeight: "80vh",
-          margin: "auto",
-          background: "none",
-          border: "none",
-          overflow: "hidden",
-        },
-      }}
-    >
-      <div className="flex items-center justify-center font-poppins">
-        <div className="w-full p-6 space-y-6 rounded-xl shadow-lg bg-white">
-          <div className="bg-white flex flex-col gap-4 w-full h-[400px] items-center px-12 py-20 rounded">
-            <div className="text-3xl font-bold tracking-[0.32] leading-[19.6px]">
-              {popupLabel}
-            </div>
-            <div className="flex flex-col gap-4 w-full h-40 mt-10">
-              <div>
-                <input
-                  className="w-full rounded-[5px] font-poppins p-2 border"
-                  type="text"
-                  id="inputName"
-                  name="inputName"
-                  placeholder={placeholder}
-                  value={popupName}
-                  onChange={(e) => onNameChange(e.target.value)}
-                />
-              </div>
-              <div>
-                <input
-                  type="file"
-                  className="w-full rounded-[5px] font-poppins p-2 border"
-                  id="fileInput"
-                  name="fileInput"
-                  onChange={(e) => onFileChange(e.target.files[0])}
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <dialog
+            id="my_modal_5"
+            className="modal modal-bottom sm:modal-middle"
+          >
+            <div className="modal-box">
+              <h3 className="font-semibold text-4xl text-center">
+                Tambah Carousel
+              </h3>
+              <Input
+                placeholder="Nama Carousel"
+                type="text"
+                className="my-10 "
+                register={register}
+                name="carouselName"
+                error={errors.carouselName?.message}
+              />
+              <Input
+                placeholder="Nama Carousel"
+                type="file"
+                register={register}
+                name="image"
+                error={errors.image?.message}
+              />
+              <div className="modal-action justify-around">
+                <form method="dialog">
+                  {/* if there is a button in form, it will close the modal */}
+                  <Button
+                    className="bg-white rounded-full border-secondary-green border px-10 py-3 text-base font-semibold text-primary-green"
+                    label="Batal"
+                  />
+                </form>
+                <Button
+                  type="submit"
+                  className="rounded-full border px-10 bg-secondary-green text-white py-3"
+                  label="Tambah"
                 />
               </div>
             </div>
-
-            <div className="flex flex-row justify-between items-start gap-x-10 mt-10">
-              <div className="border-solid shadow-[0px_2px_4px_0px_rgba(0,_0,_0,_0.15)] bg-white flex flex-col h-10 items-center text-center pl-6 py-2 border-[#25745A] border rounded-full">
-                <button
-                  className="text-xl font-semibold font-['Inter'] tracking-[0.2] leading-[19.6px] mr-8"
-                  style={{ color: "#25745A" }}
-                  to="/carousel"
-                  onClick={closeModal}
-                >
-                  {cancelButtonLabel}
-                </button>
-              </div>
-              <div className="border-solid shadow-[0px_2px_4px_0px_rgba(0,_0,_0,_0.15)] bg-[#25745A] flex flex-col h-10 items-center py-2 rounded-full">
-                <button
-                  type="button"
-                  className="text-xl text-white font-['Inter'] tracking-[0.2] leading-[19.6px] mx-8"
-                  onClick={handlePopUp}
-                >
-                  {confirmButtonLabel}
-                </button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </Modal>
+          </dialog>
+        </form>
+      )}
+    </>
   );
-};
+}
 
 export default PopUp;
