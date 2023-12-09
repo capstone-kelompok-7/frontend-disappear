@@ -5,7 +5,6 @@ import { FiSearch } from "react-icons/fi";
 import { BiEdit } from "react-icons/bi";
 import Button from "@/components/button";
 import { Input } from "@/components/ui/input";
-import Modal from "react-modal";
 import PopUp from "./popUp";
 import Tabel from "@/components/table/table";
 import Delete from "../../components/delete/delete";
@@ -22,23 +21,18 @@ import Pagination from "@/components/pagenation";
 import { Loading } from "@/components/loading";
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { debounce } from "lodash";
-
-Modal.setAppElement("#root");
+import { useToast } from "@/components/ui/use-toast";
 
 export default function IndexCategory() {
   const [categories, setCategories] = useState([]);
-  const [isModalOpen, setIsModalOpen] = useState(false);
-  const [inputName, setInputName] = useState("");
-  const [file, setFile] = useState(null);
-  const [popupLabel, setPopupLabel] = useState("");
-
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const { toast } = useToast();
 
   useEffect(() => {
-    fetchData();
+    // fetchData();
     const delayedFetchData = debounce(fetchData, 1000);
     delayedFetchData();
 
@@ -79,29 +73,6 @@ export default function IndexCategory() {
     }
   }
 
-  const openModal = (label, data = null) => {
-    setPopupLabel(label);
-    setInputName(data ? data.Nama : "");
-    setFile(null);
-    setIsModalOpen(true);
-  };
-
-  const closeModal = () => {
-    setIsModalOpen(false);
-  };
-
-  const handlePopup = (popupName, file) => {
-    closeModal();
-  };
-
-  const onNameChange = (value) => {
-    setInputName(value);
-  };
-
-  const onFileChange = (selectedFile) => {
-    setFile(selectedFile);
-  };
-
   async function onClickDelete(id) {
     try {
       const result = await Delete({
@@ -110,6 +81,7 @@ export default function IndexCategory() {
       });
 
       if (result.isConfirmed) {
+        setIsLoading(true);
         await deleteCategory(id);
         toast({
           title: (
@@ -135,6 +107,8 @@ export default function IndexCategory() {
         description:
           "Oh, noo! Sepertinya ada kesalahan saat proses penghapusan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -153,7 +127,6 @@ export default function IndexCategory() {
     const itemsPerPage = meta?.per_page || 8;
     return pageIndex * itemsPerPage + itemIndex + 1;
   };
-
   const columns = [
     {
       Header: "No",
@@ -166,7 +139,7 @@ export default function IndexCategory() {
         <img
           src={row.original.photo}
           alt="Product"
-          className="w-20 h-28 rounded block m-auto"
+          className="w-20 h-28 rounded m-auto object-cover"
         />
       ),
     },
@@ -187,8 +160,10 @@ export default function IndexCategory() {
             <DropdownMenuContent>
               <DropdownMenuItem
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
-                onClick={() => openModal("Edit Kategori", row.original.id)}
                 style={{ cursor: "pointer" }}
+                onClick={() =>
+                  document.getElementById("my_modal_5").showModal()
+                }
               >
                 <BiEdit />
                 Edit Kategori
@@ -212,77 +187,57 @@ export default function IndexCategory() {
       <Layout>
         <Breadcrumbs pages="Kategori Produk" />
 
-        <div className="justify-between  mt-6  py-5">
-          <div className="flex items-center pb-7 gap-6">
-            <Button
-              label="Tambah Kategori"
-              icon={
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="24"
-                  height="24"
-                  viewBox="0 0 24 24"
-                  fill="none"
-                >
-                  <path
-                    d="M18 12.75H6C5.59 12.75 5.25 12.41 5.25 12C5.25 11.59 5.59 11.25 6 11.25H18C18.41 11.25 18.75 11.59 18.75 12C18.75 12.41 18.41 12.75 18 12.75Z"
-                    fill="white"
-                  />
-                  <path
-                    d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V6C11.25 5.59 11.59 5.25 12 5.25C12.41 5.25 12.75 5.59 12.75 6V18C12.75 18.41 12.41 18.75 12 18.75Z"
-                    fill="white"
-                  />
-                </svg>
-              }
-              onClick={() => openModal("Tambah Kategori")}
-              className="flex items-center space-x-2 border bg-secondary-green text-white p-2 rounded-sm"
+        <div className=" items-center flex mt-6 py-5 gap-6">
+          <Button
+            label="Tambah Kategori"
+            icon={
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+              >
+                <path
+                  d="M18 12.75H6C5.59 12.75 5.25 12.41 5.25 12C5.25 11.59 5.59 11.25 6 11.25H18C18.41 11.25 18.75 11.59 18.75 12C18.75 12.41 18.41 12.75 18 12.75Z"
+                  fill="white"
+                />
+                <path
+                  d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V6C11.25 5.59 11.59 5.25 12 5.25C12.41 5.25 12.75 5.59 12.75 6V18C12.75 18.41 12.41 18.75 12 18.75Z"
+                  fill="white"
+                />
+              </svg>
+            }
+            className=" bg-secondary-green text-white p-2 rounded-sm"
+            onClick={() => document.getElementById("my_modal_5").showModal()}
+          />
+
+          <div className="flex items-center w-64 relative">
+            <Input
+              type="text"
+              placeholder="Cari Kategori"
+              className="border-primary-green pr-36 placeholder:text-left"
+              icon={<FiSearch />}
+              value={searchValue}
+              onChange={(e) => handleSearchInputParams(e.target.value)}
             />
-
-            <div className="flex items-center w-64 relative">
-              <Input
-                type="text"
-                placeholder="Cari Kategori"
-                className="border-primary-green pr-36 placeholder:text-left"
-                icon={<FiSearch />}
-                value={searchValue}
-                onChange={(e) => handleSearchInputParams(e.target.value)}
-              />
-            </div>
           </div>
-          {isLoading ? (
-            <Loading />
-          ) : (
-            <div className="mt-5">
-              <Tabel columns={columns} data={categories} />
-              <Pagination
-                meta={meta}
-                onClickPrevious={() =>
-                  handlePrevNextPage(meta?.current_page - 1)
-                }
-                onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-                onClickPage={(page) => handlePrevNextPage(page)}
-              />
-            </div>
-          )}
+          <PopUp />
         </div>
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <>
+            <Tabel columns={columns} data={categories} />
+            <Pagination
+              meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </>
+        )}
       </Layout>
-
-      <PopUp
-        isOpen={isModalOpen}
-        closeModal={closeModal}
-        popupLabel={popupLabel}
-        placeholder={
-          popupLabel === "Tambah Kategori" ? "Nama Kategori" : "Nama data"
-        }
-        cancelButtonLabel="Batal"
-        confirmButtonLabel={
-          popupLabel === "Tambah Kategori" ? "Tambah" : "Edit"
-        }
-        onAddPopup={handlePopup}
-        onNameChange={onNameChange}
-        onFileChange={onFileChange}
-        popupName={inputName}
-      />
     </>
   );
 }
