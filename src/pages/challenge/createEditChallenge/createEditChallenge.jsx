@@ -8,9 +8,9 @@ import { IoTrashOutline } from "react-icons/io5";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import Breadcrumbs from "@/components/breadcrumbs";
+import TextEditor from "@/components/textEditorChallenge/tipTap";
 import { useToast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { ChallengeSchema } from "@/utils/api/challenge/challenge/schema";
 import {
   getDetailChallenge,
@@ -37,6 +37,7 @@ function CreateChallenge() {
     setValue,
     handleSubmit,
     formState: { errors },
+    clearErrors,
   } = useForm({
     resolver: zodResolver(ChallengeSchema),
     defaultValues: {
@@ -186,6 +187,7 @@ function CreateChallenge() {
   const handleImageChange = (e) => {
     const file = e.target.files[0];
     if (file) {
+      clearErrors("image");
       setGambar(file);
       setValue("image", [file]);
       const previewURL = URL.createObjectURL(file);
@@ -277,8 +279,12 @@ function CreateChallenge() {
                   Unggah File
                 </label>
                 <div className="mt-3 flex items-center">
-                  <div className="flex w-full items-center justify-center border border-slate-200 rounded-md">
-                    <label className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 text-blue rounded-lg tracking-wide uppercase border border-blue cursor-pointer hover:bg-blue">
+                  <div
+                    className={`flex w-full items-center justify-center border rounded-md ${
+                      errors.image ? "border-red-500" : "border-slate-200"
+                    }`}
+                  >
+                    <label className="w-full h-[12rem] flex flex-col items-center justify-center p-2 bg-neutral-100 rounded-lg tracking-wide uppercase cursor-pointer">
                       <svg
                         width="80"
                         height="80"
@@ -388,16 +394,17 @@ function CreateChallenge() {
               <div className="flex-col w-1/2 pl-8">
                 <label
                   htmlFor="deskripsi-tantangan"
-                  className="block font-semibold text-black"
+                  className="block font-semibold text-black mb-3"
                 >
                   Deskripsi
                 </label>
-                <Textarea
+                <TextEditor
                   register={register}
-                  id="deskripsi-tantangan"
+                  setContent={(description) =>
+                    setValue("description", description)
+                  }
+                  initialContent={challenge.description}
                   name="description"
-                  placeholder="Deskripsi Tantangan"
-                  className="p-4 mt-3 block w-full h-[12rem] sm:text-sm rounded-md resize-none"
                   error={errors.description?.message}
                 />
               </div>
