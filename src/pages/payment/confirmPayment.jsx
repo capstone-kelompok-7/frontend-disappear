@@ -6,10 +6,14 @@ import Button from "@/components/button";
 import Layout from "@/components/layout";
 import { useToast } from "@/components/ui/use-toast";
 import { FaRegCheckCircle } from "react-icons/fa";
-import { getDetailOrder } from "@/utils/api/paymentAndOrder/api";
+import { getDetailOrder } from "@/utils/api/order/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
 import { format } from "date-fns";
 import { Loading } from "@/components/loading";
+import {
+  createStatusPaymentToCancel,
+  createStatusPaymentToConfirm,
+} from "@/utils/api/payment/api";
 
 export default function ConfirmPayment() {
   const [payment, setPayment] = useState([]);
@@ -38,22 +42,55 @@ export default function ConfirmPayment() {
   }
 
   // Code for handle Confirm Payment
-  const handleConfirmPayment = () => {
-    navigate("/pembayaran");
-    toast({
-      title: (
-        <div className="flex items-center gap-3">
-          <FaRegCheckCircle className="text-[#05E500] text-3xl" />
-          <span className=" text-base font-semibold">
-            Konfirmasi Pembayaran Berhasil!
-          </span>
-        </div>
-      ),
-      description:
-        "Pembayaran telah berhasil dikonfimasi. Silahkan nikmati fitur lainnya!!",
-    });
+  const handleConfirmPayment = async () => {
+    try {
+      setIsLoading(true);
+      await createStatusPaymentToConfirm(payment.id);
+
+      navigate("/pembayaran");
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Konfirmasi Pembayaran Berhasil!
+            </span>
+          </div>
+        ),
+        description:
+          "Pembayaran telah berhasil dikonfimasi. Silahkan nikmati fitur lainnya!!",
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
   };
 
+  const handleCancelPayment = async () => {
+    try {
+      setIsLoading(true);
+      await createStatusPaymentToCancel(payment.id);
+
+      navigate("/pembayaran");
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Konfirmasi Pembayaran Berhasil!
+            </span>
+          </div>
+        ),
+        description:
+          "Pembayaran telah berhasil dikonfimasi. Silahkan nikmati fitur lainnya!!",
+      });
+    } catch (error) {
+      console.log(error);
+    } finally {
+      setIsLoading(false);
+    }
+  };
   const isValidDate = (dateString) => {
     const regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
     return regex.test(dateString);
@@ -71,7 +108,7 @@ export default function ConfirmPayment() {
               <p className="text-[#AF8050] text-sm font-semibold m-4">
                 Informasi Pesanan{" "}
                 <span className="text-[#AF8050] text-xl font-semibold">
-                  P001QW
+                  {payment.id_order}
                 </span>
               </p>
 
@@ -90,7 +127,7 @@ export default function ConfirmPayment() {
                       />
                       <div>
                         <p className="mb-3">{orderDetail.product.name}</p>
-                        <p>ID : P001DR</p>
+                        <p>ID : {payment.id_order}</p>
                       </div>
                     </div>
                     <div className=" flex items-center gap-6">
@@ -172,7 +209,7 @@ export default function ConfirmPayment() {
               className=" bg-secondary-green w-full my-3 text-white py-5 rounded-md text-xl font-medium flex justify-center items-center"
             />
             <Button
-              onClick={handleConfirmPayment}
+              onClick={handleCancelPayment}
               type="submit"
               label="Pembayaran Tidak Valid"
               className=" bg-white w-full my-3 text-[#E50000] py-5 rounded-md text-xl font-medium flex justify-center items-center border border-[#E50000]"

@@ -9,7 +9,7 @@ import {
   DropdownMenuItem,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
-import { getAllOrder } from "@/utils/api/paymentAndOrder/api";
+import { getAllPayment } from "@/utils/api/payment/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
 import React, { useEffect, useState } from "react";
 import { SlCalender } from "react-icons/sl";
@@ -37,7 +37,7 @@ export default function IndexPayment() {
     }
     try {
       setIsLoading(true);
-      const result = await getAllOrder({ ...query });
+      const result = await getAllPayment({ ...query });
       const { ...rest } = result.meta;
       setPayment(result.data);
       console.log(result.data);
@@ -57,14 +57,14 @@ export default function IndexPayment() {
   const columns = [
     {
       Header: "NO",
-      accessor: "id",
+      accessor: "id_order",
     },
     {
       Header: "Pelanggan",
       accessor: "user.name",
       Cell: ({ row }) => (
         <p
-          className=" cursor-pointer"
+          className=" cursor-pointer hover:bg-secondary-green hover:text-white px-10 py-5 duration-300"
           onClick={() => navigate(`/pembayaran/${row.original.id}`)}
         >
           {row.original.user.name}
