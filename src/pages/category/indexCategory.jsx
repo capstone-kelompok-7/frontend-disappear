@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import Layout from "../../components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
 import { FiSearch } from "react-icons/fi";
@@ -17,10 +17,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getCategory, deleteCategory } from "@/utils/api/category/api";
+import { getAllCategory, deleteCategory } from "@/utils/api/category/api";
 import Pagination from "@/components/pagenation";
 import { Loading } from "@/components/loading";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { debounce } from "lodash";
 
 Modal.setAppElement("#root");
 
@@ -34,10 +35,31 @@ export default function IndexCategory() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
   const [isLoading, setIsLoading] = useState(false);
+  const [searchValue, setSearchValue] = useState("");
 
   useEffect(() => {
     fetchData();
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
   }, [searchParams]);
+
+  const getSuggestions = useCallback(
+    async function (query) {
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+
+      if (!query) {
+        newSearchParams.delete("search");
+      } else {
+        newSearchParams.set("search", query);
+        newSearchParams.delete("page");
+      }
+
+      setSearchParams(newSearchParams);
+    },
+    [searchParams, setSearchParams]
+  );
 
   async function fetchData() {
     let query = {};
@@ -46,7 +68,7 @@ export default function IndexCategory() {
     }
     try {
       setIsLoading(true);
-      const result = await getCategory({ ...query });
+      const result = await getAllCategory({ ...query });
       const { ...rest } = result.meta;
       setCategories(result.data);
       setMeta(rest);
@@ -117,12 +139,26 @@ export default function IndexCategory() {
   }
 
   function handlePrevNextPage(page) {
-    searchParams.set("page", String(page));
-    setSearchParams(searchParams);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("page", String(page));
+    setSearchParams(newSearchParams);
   }
 
+  function handleSearchInputParams(search) {
+    setSearchValue(search);
+    getSuggestions(search);
+  }
+
+  const formatNumber = (pageIndex, itemIndex) => {
+    const itemsPerPage = meta?.per_page || 8;
+    return pageIndex * itemsPerPage + itemIndex + 1;
+  };
+
   const columns = [
-    { Header: "No", accessor: "id" },
+    {
+      Header: "No",
+      accessor: (_, index) => formatNumber(meta?.current_page - 1, index),
+    },
     {
       Header: "Foto",
       accessor: "photo",
@@ -206,9 +242,11 @@ export default function IndexCategory() {
               <Input
                 type="text"
                 placeholder="Cari Kategori"
-                className="p-3 rounded pr-10 border-black"
+                className="border-primary-green pr-36 placeholder:text-left"
+                icon={<FiSearch />}
+                value={searchValue}
+                onChange={(e) => handleSearchInputParams(e.target.value)}
               />
-              <FiSearch className="absolute right-10 top-3" />
             </div>
           </div>
           {isLoading ? (

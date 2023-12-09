@@ -1,6 +1,6 @@
 import axiosWithConfig from "../axiosWithConfig";
 
-export const getCategory = async (params) => {
+export const getAllCategory = async (params) => {
   try {
     let query = "";
 
@@ -26,11 +26,14 @@ export const getCategory = async (params) => {
 
 export const createCategory = async (data) => {
   try {
-    const newData = {
-      ...data,
-    };
+    const formData = new FormData();
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key) && data[key]) {
+        formData.append(key, data[key]);
+      }
+    }
 
-    const response = await axiosWithConfig.post("api/v1/categories", newData, {
+    const response = await axiosWithConfig.post("api/v1/categories", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
