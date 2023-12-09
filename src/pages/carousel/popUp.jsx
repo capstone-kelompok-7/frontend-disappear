@@ -1,21 +1,34 @@
+/* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { useNavigate, useParams } from "react-router-dom";
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useNavigate } from "react-router-dom";
+import React, { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
-import React, { useState } from "react";
 
+import { CheckCircledIcon } from "@radix-ui/react-icons";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { FaRegCheckCircle } from "react-icons/fa";
+
+import {
+  createCarousel,
+  getDetailCarousel,
+  updateCarousel,
+} from "@/utils/api/carousel/api";
 import { CarouselSchema } from "@/utils/api/carousel/schema";
-import { createCarousel } from "@/utils/api/carousel/api";
 import { useToast } from "@/components/ui/use-toast";
 import { Loading } from "@/components/loading";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/button";
 
-function PopUp() {
-  const { toast } = useToast();
+function PopUp({handleForceFetch}) {
   const [isLoading, setIsLoading] = useState(false);
+  const [selectedId, setSelectedId] = useState(0);
+  const [carousel, setCarousel] = useState([]);
+  const [photo, setPhoto] = useState([]);
+
   const navigate = useNavigate();
+  const { toast } = useToast();
+  const { id } = useParams();
 
   const {
     reset,
@@ -27,35 +40,121 @@ function PopUp() {
     resolver: zodResolver(CarouselSchema),
   });
 
-  const onSubmit = async (data) => {
+  useEffect(() => {
+    if (id !== undefined) {
+      fetchData();
+    }
+  }, []);
+
+  async function fetchData() {
+    try {
+      setIsLoading(true);
+      const result = await getDetailCarousel(id);
+      setCarousel(result.data);
+
+      if (result.data) {
+        setSelectedId(result.data.id);
+        setValue("carouselName", result.data.title);
+        // setValue("image", result.data.photo);
+        // if (result.data.photo) {
+        //   const previewURL = URL.createObjectURL(result.data.photo);
+        //   setPreviewImage([previewURL]);
+        // }
+      }
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  async function onSubmit(data) {
+    setIsLoading(true);
     try {
       const newCarousel = {
         name: data.carouselName,
         photo: data.image[0],
       };
-      setIsLoading(true);
       await createCarousel(newCarousel);
       navigate("/carousel");
 
       toast({
         title: (
           <div className="flex items-center gap-3">
-            <CheckCircledIcon />
-            <span className="ml-2">berhasil</span>
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Berhasil Menambahkan Carousel!
+            </span>
           </div>
         ),
-        description: "berhasil deh",
-        color: "#000000",
+        description:
+          "Data carousel berhasil ditambahkan, nih. Silahkan nikmati fitur lainnya!",
       });
       reset();
+      handleForceFetch();
     } catch (error) {
       toast({
-        title: "Error",
-        description: error.message || "Terjadi kesalahan saat menyimpan data.",
-        color: "#FF0000",
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menambahkan Carousel!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penambahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
       });
     } finally {
       setIsLoading(false);
+    }
+  }
+
+  async function onSubmitEdit(data) {
+    try {
+      const editCarousel = {
+        photo: data.image[0],
+        id: selectedId,
+        name: data.carouselName,
+      };
+      setIsLoading(true);
+      await updateCarousel(editCarousel);
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Berhasil Mengubah Carousel!
+            </span>
+          </div>
+        ),
+        description:
+          "Data tantangan carousel diperbarui, nih. Silahkan nikmati fitur lainnya!",
+      });
+      navigate("/carousel");
+      setSelectedId(0);
+      reset();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menambahkan Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const handleImageChange = (e) => {
+    const file = e.target.files[0];
+    if (file) {
+      setPhoto(file);
+      setValue("image", [file]);
     }
   };
 

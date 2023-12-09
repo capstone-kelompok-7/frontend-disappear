@@ -1,15 +1,17 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { PiDotsThreeOutlineVerticalFill } from "react-icons/pi";
-import { RiDeleteBinLine } from "react-icons/ri";
-import { FiSearch } from "react-icons/fi";
-import { BiEdit } from "react-icons/bi";
-
 import { useSearchParams, useNavigate } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { debounce } from "lodash";
 
+import { BiEdit, BiTrash, BiDotsVertical } from "react-icons/bi";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { IoEyeSharp } from "react-icons/io5";
+import { FiSearch } from "react-icons/fi";
+
 import { getAllCarousel, deleteCarousel } from "@/utils/api/carousel/api";
+import { useToast } from "@/components/ui/use-toast";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Pagination from "@/components/pagenation";
 import Delete from "@/components/delete/delete";
@@ -27,14 +29,16 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { useToast } from "@/components/ui/use-toast";
 
 export default function Carousel() {
   const [searchParams, setSearchParams] = useSearchParams();
-  const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [forceFetch, setForceFetch] = useState(false);
+  const [isLoading, setIsLoading] = useState(false);
   const [carousel, setCarousel] = useState([]);
   const [meta, setMeta] = useState();
+
+  const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -43,6 +47,10 @@ export default function Carousel() {
 
     return () => delayedFetchData.cancel();
   }, [searchParams]);
+
+  useEffect(() => {
+    fetchData();
+  }, [window.location.pathname, forceFetch]); //
 
   const getSuggestions = useCallback(
     async function (query) {
@@ -61,12 +69,12 @@ export default function Carousel() {
   );
 
   async function fetchData() {
+    setIsLoading(true);
     let query = {};
     for (const entry of searchParams.entries()) {
       query[entry[0]] = entry[1];
     }
     try {
-      setIsLoading(true);
       const result = await getAllCarousel({ ...query });
       const { ...rest } = result.meta;
       setCarousel(result.data);
@@ -79,6 +87,7 @@ export default function Carousel() {
   }
 
   async function onClickDelete(id) {
+    setIsLoading(true);
     try {
       const result = await Delete({
         title: "Yakin mau hapus data?",
@@ -86,11 +95,11 @@ export default function Carousel() {
       });
 
       if (result.isConfirmed) {
-        setIsLoading(true);
         await deleteCarousel(id);
         toast({
           title: (
             <div className="flex items-center">
+              <FaRegCheckCircle />
               <span className="ml-2">Berhasil Menghapus Carousel! </span>
             </div>
           ),
@@ -104,6 +113,7 @@ export default function Carousel() {
         variant: "destructive",
         title: (
           <div className="flex items-center">
+            <CrossCircledIcon />
             <span className="ml-2">Gagal Menghapus Carousel!</span>
           </div>
         ),
@@ -115,15 +125,23 @@ export default function Carousel() {
     }
   }
 
-  function handlePrevNextPage(page) {
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-    newSearchParams.set("page", String(page));
-    setSearchParams(newSearchParams);
+  function onClickEdit(id) {
+    navigate(`/carousel/${id}`);
   }
 
   function handleSearchInputParams(search) {
     setSearchValue(search);
     getSuggestions(search);
+  }
+
+  function handleForceFetch() {
+    setForceFetch((prev) => !prev);
+  }
+
+  function handlePrevNextPage(page) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("page", String(page));
+    setSearchParams(newSearchParams);
   }
 
   const formatNumber = (pageIndex, itemIndex) => {
@@ -156,7 +174,7 @@ export default function Carousel() {
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="three-dots">
-                <PiDotsThreeOutlineVerticalFill />
+                <BiDotsVertical />
               </div>
             </DropdownMenuTrigger>
 
@@ -175,7 +193,7 @@ export default function Carousel() {
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
                 onClick={() => onClickDelete(row.original.id)}
               >
-                <RiDeleteBinLine />
+                <BiTrash />
                 Delete Carousel
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -213,7 +231,6 @@ export default function Carousel() {
             className=" bg-secondary-green text-white p-2 rounded-sm"
             onClick={() => document.getElementById("my_modal_5").showModal()}
           />
-
           <div className="flex items-center w-64 relative">
             <Input
               type="text"
@@ -224,7 +241,7 @@ export default function Carousel() {
               onChange={(e) => handleSearchInputParams(e.target.value)}
             />
           </div>
-          <PopUp />
+          <PopUp handleForceFetch={handleForceFetch} />{" "}
         </div>
         {isLoading ? (
           <Loading />
