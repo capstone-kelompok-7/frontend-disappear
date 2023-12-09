@@ -1,14 +1,24 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect } from "react";
 
 const TokenContext = createContext();
 
 export const TokenProvider = ({ children }) => {
-  const [token, setToken] = useState(null);
+  const [token, setToken] = useState(
+    localStorage.getItem("accessToken") ?? null
+  );
   const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem("accessToken");
+    if (storedToken) {
+      setToken(storedToken);
+    }
+  }, []);
 
   const saveTokenAndUser = (newToken, newUser) => {
     setToken(newToken);
     setUser(newUser);
+    sessionStorage.setItem("accessToken", newToken);
     localStorage.setItem("accessToken", newToken);
   };
 
