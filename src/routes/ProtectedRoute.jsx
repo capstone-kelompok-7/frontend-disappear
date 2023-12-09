@@ -5,6 +5,7 @@ const ProtectedRoute = () => {
   const { pathname } = useLocation();
   const { token, user } = useToken();
 
+  const authProtected = ["/login"];
   const protectedByToken = [
     "/category",
     "/dashboard",
@@ -37,17 +38,35 @@ const ProtectedRoute = () => {
     "/carousel",
   ];
 
-  const isAdmin = user?.role === "admin";
+  const adminProtected = ["/dashboard"];
+  const userProtected = ["/", "/login"];
 
-  if (!token) {
+  // Jika pengguna belum login dan mencoba mengakses rute yang dilindungi oleh token, arahkan ke halaman login
+  if (!token && protectedByToken.includes(pathname)) {
     return <Navigate to="/login" />;
   }
 
-  const isProtectedPath = protectedByToken.includes(pathname);
-  if (isProtectedPath && !isAdmin) {
+  // Jika pengguna adalah admin, berikan akses ke semua rute termasuk yang dilindungi oleh token
+  if (user?.role === "admin") {
+    return <Outlet />;
+  }
+
+  // Jika pengguna adalah customer dan mencoba mengakses rute yang hanya diperbolehkan untuk admin, arahkan ke halaman landing page
+  if (user?.role === "customer" && adminProtected.includes(pathname)) {
     return <Navigate to="/" />;
   }
 
+  // Jika pengguna belum login dan mencoba mengakses rute yang memerlukan autentikasi, arahkan ke halaman login
+  if (authProtected.includes(pathname) && !token) {
+    return <Navigate to="/login" />;
+  }
+
+  // Jika pengguna adalah customer dan mencoba mengakses rute yang dilindungi untuk user, arahkan ke halaman landing page
+  if (user?.role === "customer" && userProtected.includes(pathname)) {
+    return <Navigate to="/" />;
+  }
+
+  // Jika tidak ada kondisi yang memerlukan redireksi, tampilkan Outlet
   return <Outlet />;
 };
 
