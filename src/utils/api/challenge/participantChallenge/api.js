@@ -41,21 +41,13 @@ export const getDetailParticipant = async (id) => {
 export const updateParticipant = async (data) => {
   const { id } = data;
   try {
-    const formData = new FormData();
-    for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key) && data[key]) {
-        formData.append(key, data[key]);
-      }
-    }
+    const newData = {
+      ...data,
+    };
 
     const response = await axiosWithConfig.put(
-      `api/v1/challenges/participants/${id}`,
-      formData,
-      {
-        headers: {
-          "Content-Type": "multipart/form-data",
-        },
-      }
+      `api/v1/challenges/participants/status/${id}`,
+      newData
     );
 
     return response.data;
