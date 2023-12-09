@@ -26,11 +26,14 @@ export const getAllCarousel = async (params) => {
 
 export const createCarousel = async (data) => {
   try {
-    const newData = {
-      ...data,
-    };
+    const formData = new FormData();
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key) && data[key]) {
+        formData.append(key, data[key]);
+      }
+    }
 
-    const response = await axiosWithConfig.post("api/v1/carousel", newData, {
+    const response = await axiosWithConfig.post("api/v1/carousel", formData, {
       headers: {
         "Content-Type": "multipart/form-data",
       },
