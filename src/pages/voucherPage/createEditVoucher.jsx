@@ -181,6 +181,7 @@ function CreateVoucher() {
       setSelectedId(0);
       reset();
     } catch (error) {
+      console.log("something wrong", error);
       toast({
         variant: "destructive",
         title: (
