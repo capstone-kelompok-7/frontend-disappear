@@ -49,13 +49,18 @@ function VoucherApp() {
     }
   }
 
+  const formatNumber = (pageIndex, itemIndex) => {
+    const itemsPerPage = meta?.per_page || 8;
+    return pageIndex * itemsPerPage + itemIndex + 1;
+  };
+
   function handlePrevNextPage(page) {
     searchParams.set("page", String(page));
     setSearchParams(searchParams);
   }
 
   function onClickEdit(id) {
-    navigate(`/tantangan/${id}/edit-tantangan`);
+    navigate(`/kupon/${id}/edit-kupon`);
   }
 
   async function handleDeleteClick(id) {

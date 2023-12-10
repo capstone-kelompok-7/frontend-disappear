@@ -50,7 +50,7 @@ function Select(props) {
           </option>
         ))}
       </select>
-      {error && value !== defaultValue && value !== "" && (
+      {error &&  (
         <label className="label">
           <span className="break-words text-sm font-light text-red-500">
             {error}
@@ -60,5 +60,6 @@ function Select(props) {
     </div>
   );
 }
+
 
 export { Inputt, Select };

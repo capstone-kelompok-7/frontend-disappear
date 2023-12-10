@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Button from "@/components/button";
@@ -7,16 +7,17 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { useToast } from "@/components/ui/use-toast";
 import { CheckCircledIcon, CrossCircledIcon } from "@radix-ui/react-icons";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
+import { FaRegCheckCircle } from "react-icons/fa";
+
+import { Select } from "@/components/input";
 import { Link } from "react-router-dom";
-import { createVouchers, updateVouchers } from "@/utils/api/voucher/api";
-import { useNavigate } from "react-router-dom";
+import {
+  createVouchers,
+  updateVouchers,
+  getDetailVoucher,
+} from "@/utils/api/voucher/api";
+import { format } from "date-fns";
+import { useNavigate, useParams } from "react-router-dom";
 import { Loading } from "@/components/loading";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -32,34 +33,59 @@ const schema = z.object({
   voucherDescription: z
     .string()
     .min(1, { message: "Field tidak boleh kosong" }),
-  voucherTotal: z.string().min(1, { message: "Field tidak boleh kosong" }),
-  discount: z
-    .string()
-    .min(1, { message: "Field tidak boleh kosong" })
-    .refine((value) => !Number.isNaN(parseInt(value)), {
-      message: "Harus berupa angka",
-    }),
-  minPurchase: z
-    .string()
-    .min(1, { message: "Field tidak boleh kosong" })
-    .refine((value) => !Number.isNaN(parseInt(value)), {
-      message: "Harus berupa angka",
-    }),
+  voucherTotal:  z.number().min(1, { message: "Field tidak boleh kosong" }),
+  discount:  z.number().min(1, { message: "Field tidak boleh kosong" }),
+  minPurchase:  z.number().min(1, { message: "Field tidak boleh kosong" }),
 });
 
 function CreateVoucher() {
   const { toast } = useToast();
   const [isLoading, setIsLoading] = useState(false);
+  const { id } = useParams();
+  const [selectedId, setSelectedId] = useState(0);
+  const [vouchers, setVouchers] = useState([]);
   const navigate = useNavigate();
 
   const {
     handleSubmit,
     register,
+    reset,
     setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
+    defaultValues: {discount:0, minPurchase:0, voucherTotal:0,}, 
   });
+
+  useEffect(() => {
+    if (id !== undefined) {
+      fetchData();
+    }
+  }, []);
+
+  async function fetchData() {
+    try {
+      setIsLoading(true);
+      const result = await getDetailVoucher(id);
+      setVouchers(result.data);
+
+      if (result.data) {
+        setSelectedId(result.data.id);
+        setValue("voucherName", result.data.name);
+        setValue("startDate", format(new Date(result.data.start_date), "yyyy-MM-dd"));
+        setValue("endDate", format(new Date(result.data.end_date), "yyyy-MM-dd"));
+        setValue("voucherDescription", result.data.description);
+        setValue("voucherFor", result.data.category);
+        setValue("voucherTotal", result.data.stock);
+        setValue("discount", result.data.discount);
+        setValue("minPurchase", result.data.min_purchase);
+      }
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   async function onSubmit(data) {
     try {
@@ -68,47 +94,117 @@ function CreateVoucher() {
         description: data.voucherDescription,
         code: data.voucherCode,
         category: data.voucherFor,
-        discount: parseInt(data.discount),
-        start_date: data.startDate,
-        end_date: data.endDate,
-        min_purchase: parseInt(data.minPurchase),
-        stock: parseInt(data.voucherTotal),
+        discount: data.discount,
+        start_date: format(
+          new Date(data.startDate + "T00:00:00Z"),
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        ),
+        end_date: format(
+          new Date(data.endDate + "T00:00:00Z"),
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        ),
+        min_purchase: data.minPurchase,
+        stock: data.voucherTotal,
       };
+      setIsLoading(true);
       await createVouchers(newVoucher);
-      navigate("/kupon");
+       navigate("/kupon");
       toast({
         title: (
           <div className="flex items-center gap-3">
             <FaRegCheckCircle className="text-[#05E500] text-3xl" />
             <span className=" text-base font-semibold">
-              Berhasil Menambah Produk!
+              Berhasil Menambah Voucher!
             </span>
           </div>
         ),
         description:
-          "Data Produk berhasil ditambahkan, nih. Silahkan nikmati fitur lainnya!!",
+          "Data Voucher berhasil ditambahkan, nih. Silahkan nikmati fitur lainnya!!",
       });
-      reset();
+     
     } catch (error) {
+      console.log(error);
       toast({
-        title: "Error",
-        description: error.message || "Terjadi kesalahan saat menyimpan data.",
-        color: "#FF0000",
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menambahkan Voucher!</span>
+          </div>
+        ),
+        description: "Gagal menambahkan tantangan",
       });
     } finally {
       setIsLoading(false);
     }
   }
 
+  async function onSubmitEdit(data) {
+    try {
+      const editVoucher = {
+        id: selectedId,
+        name: data.voucherName,
+        code: data.voucherCode,
+        category: data.voucherFor,
+        description: data.voucherDescription,
+        discount: data.discount,
+        start_date: format(
+          new Date(data.startDate + "T00:00:00Z"),
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        ),
+        end_date: format(
+          new Date(data.endDate + "T00:00:00Z"),
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        ),
+        min_purchase: data.minPurchase,
+        stock: data.voucherTotal,
+      };
+      setIsLoading(true);
+      await updateVouchers(editVoucher);
+
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <CheckCircledIcon className="text-[#05E500] text-3xl" />
+            <span className="text-base font-semibold">
+              Berhasil Mengubah Kupon!
+            </span>
+          </div>
+        ),
+        description:
+          "Data kupon berhasil diperbarui, nih. Nikmati fitur lainnya!",
+      });
+
+      navigate("/kupon");
+      setSelectedId(0);
+      reset();
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menambahkan Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
+    }
+    finally {
+      setIsLoading(false);
+    }
+  }
+
   return (
     <Layout>
-      <Breadcrumbs pages="Buat Kupon" />
+      <Breadcrumbs pages={selectedId === 0 ? "Tambah Kupon" : "Edit Kupon"}/>
 
       <div className="my-5 py-5 px-11 rounded-md shadow-lg border-2">
         {isLoading ? (
           <Loading />
         ) : (
-          <form onSubmit={handleSubmit(onSubmit)}>
+          <form onSubmit={handleSubmit(selectedId === 0 ? onSubmit : onSubmitEdit)}>
             {/* baris 1 */}
             <div className="flex gap-28 pt-5">
               <div className="w-full">
@@ -159,42 +255,18 @@ function CreateVoucher() {
             <div className="flex gap-28 pt-5">
               <div className="w-full">
                 <label htmlFor="voucherFor">Kategori</label>
-                <Select register={register} error={errors.voucherFor?.message}>
-                  <SelectTrigger>
-                    <SelectValue placeholder="Kategori Kupon" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem className="cursor-pointer" value="Bronze">
-                      Bronze
-                    </SelectItem>
-                    <SelectItem className="cursor-pointer" value="Silver">
-                      Silver
-                    </SelectItem>
-                    <SelectItem className="cursor-pointer" value="Gold">
-                      Gold
-                    </SelectItem>
-                    <SelectItem
-                      className="cursor-pointer"
-                      value="Semua Pelanggan"
-                    >
-                      Semua Pelanggan
-                    </SelectItem>
-                    <SelectItem className="cursor-pointer" value="Kadaluwarsa">
-                      Kadaluwarsa
-                    </SelectItem>
-                    <SelectItem
-                      className="cursor-pointer"
-                      value="Belum Kadaluwarsa"
-                    >
-                      Belum Kadaluwarsa
-                    </SelectItem>
-                  </SelectContent>
-                </Select>
+                <Select
+                    name="voucherFor"
+                    options={["bronze", "silver", "gold", "semua pelanggan"]}
+                    placeholder="Status"
+                    register={register}
+                    error={errors.voucherFor?.message}
+                  />
               </div>
               <div className="w-full">
                 <label htmlFor="voucherTotal">Total Yang Tersedia</label>
                 <Input
-                  type="text"
+                  type="number"
                   placeholder="Total Yang Tersedia"
                   name="voucherTotal"
                   register={register}
@@ -207,7 +279,7 @@ function CreateVoucher() {
               <div className="w-full">
                 <label htmlFor="discount">Diskon</label>
                 <Input
-                  type="text"
+                  type="number"
                   placeholder="Diskon"
                   name="discount"
                   register={register}
@@ -217,7 +289,7 @@ function CreateVoucher() {
               <div className="w-full">
                 <label htmlFor="minPurchase">Minimal Pembelian</label>
                 <Input
-                  type="text"
+                  type="number"
                   placeholder="Minimal Pembelian"
                   name="minPurchase"
                   register={register}
@@ -245,7 +317,7 @@ function CreateVoucher() {
               </Link>
               <Button
                 type="submit"
-                label="Buat Voucher"
+                label={selectedId === 0 ? "Buat Voucher" : "Simpan Perubahan"}
                 className="bg-[#25745A] text-white py-2 px-3 rounded-lg"
               />
             </div>

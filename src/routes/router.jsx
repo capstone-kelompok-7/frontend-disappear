@@ -14,9 +14,8 @@ import IndexProducts from "@/pages/products/indexProducts";
 import PelangganDetail from "@/pages/pelanggan/pelangganDetail";
 import Pelanggan from "@/pages/pelanggan/pelanggan";
 
-import CreateVoucher from "@/pages/voucherpage/createVoucher";
+import CreateVoucher from "@/pages/voucherpage/createEditVoucher";
 import VoucherApp from "@/pages/voucherpage/voucherIndex";
-import EditVoucher from "@/pages/voucherpage/editVoucher";
 
 import ConfirmPayment from "@/pages/payment/confirmPayment";
 import IndexPayment from "@/pages/payment/indexPayment";
@@ -117,8 +116,8 @@ export default function Router() {
           element: <CreateVoucher />,
         },
         {
-          path: "/kupon/edit-kupon",
-          element: <EditVoucher />,
+          path: "/kupon/:id/edit-kupon",
+          element: <CreateVoucher />,
         },
         {
           path: "/create-news",
