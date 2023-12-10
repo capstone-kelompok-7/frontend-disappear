@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
+
 import { zodResolver } from "@hookform/resolvers/zod";
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
@@ -21,9 +22,7 @@ import Button from "@/components/button";
 
 function PopUp({ handleForceFetch, selectedId, data }) {
   const [isLoading, setIsLoading] = useState(false);
-  const [carousel, setCarousel] = useState([]);
   const [photo, setPhoto] = useState([]);
-
   const navigate = useNavigate();
   const { toast } = useToast();
 
@@ -104,7 +103,6 @@ function PopUp({ handleForceFetch, selectedId, data }) {
       setIsLoading(false);
     }
   }
-
   async function onSubmitEdit(data) {
     setIsLoading(true);
     try {
@@ -159,7 +157,7 @@ function PopUp({ handleForceFetch, selectedId, data }) {
             id="my_modal_5"
             className="modal modal-bottom sm:modal-middle"
           >
-            <div className="modal-box flex flex-col justify-center px-20 py-20">
+            <div className="modal-box px-20 py-20">
               <h3 className="font-semibold text-4xl text-center">
                 {selectedId === null ? "Tambah Carousel" : "Edit Carousel"}
               </h3>
@@ -176,7 +174,6 @@ function PopUp({ handleForceFetch, selectedId, data }) {
                 register={register}
                 name="image"
                 error={errors.image?.message}
-                // value={photo?.name || ""}
               />
               {!errors.image && (
                 <p className="text-xs mt-1">
