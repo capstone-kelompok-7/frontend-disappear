@@ -1,13 +1,12 @@
 /* eslint-disable react/prop-types */
 /* eslint-disable no-unused-vars */
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { useState, useEffect, useCallback } from "react";
 import { debounce } from "lodash";
 
 import { BiEdit, BiTrash, BiDotsVertical } from "react-icons/bi";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { FaRegCheckCircle } from "react-icons/fa";
-import { IoEyeSharp } from "react-icons/io5";
 import { FiSearch } from "react-icons/fi";
 
 import { getAllCarousel, deleteCarousel } from "@/utils/api/carousel/api";
@@ -34,11 +33,11 @@ export default function Carousel() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState("");
   const [forceFetch, setForceFetch] = useState(false);
+  const [selectedId, setSelectedId] = useState(null);
   const [isLoading, setIsLoading] = useState(false);
   const [carousel, setCarousel] = useState([]);
   const [meta, setMeta] = useState();
 
-  const navigate = useNavigate();
   const { toast } = useToast();
 
   useEffect(() => {
@@ -50,7 +49,7 @@ export default function Carousel() {
 
   useEffect(() => {
     fetchData();
-  }, [window.location.pathname, forceFetch]); //
+  }, [window.location.pathname, forceFetch]);
 
   const getSuggestions = useCallback(
     async function (query) {
@@ -126,7 +125,8 @@ export default function Carousel() {
   }
 
   function onClickEdit(id) {
-    navigate(`/carousel/${id}`);
+    setSelectedId(id);
+    document.getElementById("my_modal_5").showModal();
   }
 
   function handleSearchInputParams(search) {
@@ -180,11 +180,8 @@ export default function Carousel() {
 
             <DropdownMenuContent>
               <DropdownMenuItem
-                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
-                style={{ cursor: "pointer" }}
-                onClick={() =>
-                  document.getElementById("my_modal_5").showModal()
-                }
+                className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
+                onClick={() => onClickEdit(row.original.id)}
               >
                 <BiEdit />
                 Edit Carousel
@@ -241,7 +238,7 @@ export default function Carousel() {
               onChange={(e) => handleSearchInputParams(e.target.value)}
             />
           </div>
-          <PopUp handleForceFetch={handleForceFetch} />{" "}
+          <PopUp handleForceFetch={handleForceFetch} selectedId={selectedId} />
         </div>
         {isLoading ? (
           <Loading />
