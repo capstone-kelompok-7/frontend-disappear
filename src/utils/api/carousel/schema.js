@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-const MAX_FILE_SIZE = 1024 * 2000;
+const MAX_FILE_SIZE = 200000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const CarouselSchema = z.object({
@@ -8,11 +8,13 @@ export const CarouselSchema = z.object({
   image: z
     .any()
     .refine(
-      (files) => files?.[0]?.size <= MAX_FILE_SIZE,
+      (files) => files?.size <= MAX_FILE_SIZE,
       `*maksimal 2MB dengan format PNG, JPG, JPEG`
     )
     .refine(
-      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
+      (files) => ACCEPTED_IMAGE_TYPES.includes(files?.type),
       "*format PNG, JPG, JPEG"
-    ),
+    )
+    .optional()
+    .or(z.literal("")),
 });
