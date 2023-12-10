@@ -4,11 +4,18 @@ import React from "react";
 import { Link, useLocation } from "react-router-dom";
 
 export default function SidebarList(props) {
-  const { label, icon, isSidebarOpen, to } = props;
+  const { label, icon, isSidebarOpen, to, onClick } = props;
 
   const location = useLocation();
 
   const isActive = location.pathname === to;
+
+  const handleLogout = () => {
+    if (onClick) {
+      onClick();
+    }
+  };
+
   return (
     isSidebarOpen && (
       <Link
@@ -18,6 +25,7 @@ export default function SidebarList(props) {
             ? "bg-primary-green text-white"
             : "hover:bg-primary-green hover:text-white"
         }`}
+        onClick={handleLogout}
       >
         <div className="flex gap-3">
           <p className="text-xl ">{icon}</p>
