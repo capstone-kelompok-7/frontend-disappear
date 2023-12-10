@@ -77,8 +77,12 @@ export default function DetailChallange() {
             <p>EXP : {challenge.exp}</p>
           </div>
 
-          <div className="w-full h-60 bg-zinc-300 my-5 rounded-md">
-            <img src={challenge.photo} alt={challenge.photo} />
+          <div>
+            <img
+              src={challenge.photo}
+              alt={challenge.photo}
+              className="w-full h-80 my-10 rounded-md object-contain"
+            />
           </div>
           <p className="text-base">{challenge.description}</p>
         </div>

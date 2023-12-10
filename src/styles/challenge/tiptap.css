@@ -1,0 +1,32 @@
+.text-container {
+  width: 100%;
+  margin-top: 1rem;
+  height: 10rem;
+}
+
+.text-container .ProseMirror {
+  border: 1px solid #000;
+  height: 12rem;
+  padding: 16px;
+  border-radius: 0.25rem;
+  overflow: auto;
+}
+
+.text-container .ProseMirror h1,
+.text-container .ProseMirror h2,
+.text-container .ProseMirror h3 {
+  margin-top: 6rem;
+  margin-bottom: 2rem;
+  font-weight: bold;
+}
+
+.text-container .ProseMirror ul,
+.text-container .ProseMirror ol {
+  margin-left: 6px;
+  margin-bottom: 4rem;
+  list-style-type: disc;
+}
+
+.text-container .ProseMirror li {
+  margin-bottom: 2rem;
+}

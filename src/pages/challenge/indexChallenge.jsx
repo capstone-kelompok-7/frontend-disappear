@@ -1,6 +1,6 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 
-import { useNavigate, Link, useSearchParams } from "react-router-dom";
+import { useNavigate, useSearchParams } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { BiDotsVerticalRounded, BiEdit, BiTrash } from "react-icons/bi";
 import { IoEyeSharp } from "react-icons/io5";
@@ -47,13 +47,28 @@ function IndexChallenge() {
     return () => delayedFetchData.cancel();
   }, [searchValue, searchParams]);
 
-  async function fetchData() {
-    let query = { search: searchValue };
-    for (const entry of searchParams.entries()) {
-      if (entry[0] !== "search") {
-        query[entry[0]] = entry[1];
+  const getSuggestions = useCallback(
+    async function (query) {
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+
+      if (!query) {
+        newSearchParams.delete("search");
+      } else {
+        newSearchParams.set("search", query);
+        newSearchParams.delete("page");
       }
+
+      setSearchParams(newSearchParams);
+    },
+    [searchParams, setSearchParams]
+  );
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
     }
+
     try {
       setIsLoading(true);
       const result = await getChallenge({ ...query });
@@ -79,6 +94,7 @@ function IndexChallenge() {
       });
 
       if (result.isConfirmed) {
+        setIsLoading(true);
         await deleteChallenge(id);
         toast({
           title: (
@@ -104,6 +120,8 @@ function IndexChallenge() {
         description:
           "Oh, noo! Sepertinya ada kesalahan saat proses penghapusan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -115,9 +133,7 @@ function IndexChallenge() {
 
   function handleSearchInputParams(search) {
     setSearchValue(search);
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-    newSearchParams.set("search", String(search));
-    setSearchParams(newSearchParams);
+    getSuggestions(search);
   }
 
   const formatNumber = (pageIndex, itemIndex) => {
@@ -218,7 +234,7 @@ function IndexChallenge() {
           />
 
           <div className="flex ml-auto gap-4">
-            <div className="flex items-center w-full ">
+            <div className="relative flex items-center w-full ">
               <Input
                 type="text"
                 placeholder="Cari Tantangan"
@@ -226,7 +242,7 @@ function IndexChallenge() {
                 value={searchValue}
                 onChange={(e) => handleSearchInputParams(e.target.value)}
               />
-              <FiSearch className="absolute ml-72 text-primary-green" />
+              <FiSearch className="absolute right-3 text-primary-green" />
             </div>
 
             <DropdownMenu>
