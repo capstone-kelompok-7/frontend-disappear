@@ -275,7 +275,7 @@ export default function CreateEditProducts() {
     <>
       <Layout>
         <Breadcrumbs
-          pages={selectedId === 0 ? "Tambah Produk" : "Edit tantangan"}
+          pages={selectedId === 0 ? "Tambah Produk" : "Edit Produk"}
         />
         {isLoading ? (
           <Loading />
