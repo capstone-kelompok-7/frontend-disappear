@@ -43,6 +43,7 @@ function PopUp({ handleForceFetch, selectedId, data }) {
         fetchData();
       } else {
         setValue("carouselName", data.name);
+        setPhoto(data.photo);
       }
     }
   }, [selectedId, data]);
@@ -175,6 +176,7 @@ function PopUp({ handleForceFetch, selectedId, data }) {
                 register={register}
                 name="image"
                 error={errors.image?.message}
+                value={photo?.name || ""}
               />
               {!errors.image && (
                 <p className="text-xs mt-1">
@@ -190,7 +192,11 @@ function PopUp({ handleForceFetch, selectedId, data }) {
                 </form>
                 <Button
                   type="submit"
-                  className="rounded-full border px-10 bg-secondary-green text-white py-3"
+                  className={
+                    selectedId === null
+                      ? "rounded-full border bg-secondary-green text-white px-10 py-3"
+                      : "rounded-full border bg-secondary-green text-white px-14 py-3"
+                  }
                   label={selectedId === null ? "Tambah" : "Edit"}
                 />
               </div>
