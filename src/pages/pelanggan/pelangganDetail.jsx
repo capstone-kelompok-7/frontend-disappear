@@ -17,19 +17,50 @@ import { Loading } from "@/components/loading";
 import { useToast } from "@/components/ui/use-toast";
 
 function PelangganDetail() {
-  const handleDelete = () => {
-    Delete({
-      title: "Yakin mau hapus data?",
-      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-    });
-  };
-
   const [users, setUsers] = useState([]);
   const [activity, setActivity] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const { id } = useParams();
   const { toast } = useToast();
+
+  async function handleDelete() {
+    try {
+      const result = await Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        await deleteUsers(id);
+        navigate("/pelanggan");
+        toast({
+          title: (
+            <div className="flex items-center">
+              <FaRegCheckCircle />
+              <span className="ml-2">Produk berhasil dihapus!</span>
+            </div>
+          ),
+          description:
+            "Data pelanggan telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+        });
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menghapus Produk!</span>
+          </div>
+        ),
+        description: "Terjadi kesalahan saat menghapus pelanggan.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   useEffect(() => {
     fetchData();
@@ -175,7 +206,7 @@ function PelangganDetail() {
         </div>
         <div className="flex  justify-end relative mt-4 mr-[15.5%] whitespace-nowrap">
           <Button
-            onClick={handleDelete}
+            onClick={() => handleDelete(users.id)}
             label="Hapus Pelanggan"
             className="text-white rounded-md bg-black py-3 px-3"
           />

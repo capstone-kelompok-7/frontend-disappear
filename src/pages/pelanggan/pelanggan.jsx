@@ -18,8 +18,14 @@ import { BiEdit, BiTrash } from "react-icons/bi";
 import { deleteUsers, getAllUsers } from "@/utils/api/pelanggan/api";
 import { Loading } from "@/components/loading";
 import Pagination from "@/components/pagenation";
+import { useToast } from "@/components/ui/use-toast";
 
 function Pelanggan() {
+  const { toast } = useToast();
+  const [users, setUsers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
   async function handleDelete(id) {
     try {
       const result = await Delete({
@@ -57,10 +63,6 @@ function Pelanggan() {
       setIsLoading(false);
     }
   }
-  const [users, setUsers] = useState([]);
-  const [isLoading, setIsLoading] = useState(false);
-  const [searchParams, setSearchParams] = useSearchParams();
-  const [meta, setMeta] = useState();
 
   useEffect(() => {
     fetchData();
