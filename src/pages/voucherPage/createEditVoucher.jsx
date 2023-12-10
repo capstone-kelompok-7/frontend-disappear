@@ -67,14 +67,16 @@ function CreateVoucher() {
     try {
       setIsLoading(true);
       const result = await getDetailVoucher(id);
+      console.log('Result.data:', result.data);
       setVouchers(result.data);
 
       if (result.data) {
         setSelectedId(result.data.id);
         setValue("voucherName", result.data.name);
         setValue("startDate", format(new Date(result.data.start_date), "yyyy-MM-dd"));
-        setValue("endDate", format(new Date(result.data.end_date), "yyyy-MM-dd"));
+        setValue("endDate", format(new Date(result.data['end-date']), "yyyy-MM-dd"));
         setValue("voucherDescription", result.data.description);
+        setValue("voucherCode", result.data.code);
         setValue("voucherFor", result.data.category);
         setValue("voucherTotal", result.data.stock);
         setValue("discount", result.data.discount);
@@ -257,7 +259,7 @@ function CreateVoucher() {
                 <label htmlFor="voucherFor">Kategori</label>
                 <Select
                     name="voucherFor"
-                    options={["bronze", "silver", "gold", "semua pelanggan"]}
+                    options={["Bronze", "Silver", "Gold", "All Customer"]}
                     placeholder="Status"
                     register={register}
                     error={errors.voucherFor?.message}
