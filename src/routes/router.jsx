@@ -140,7 +140,7 @@ export default function Router() {
           element: <Pesanan />,
         },
         {
-          path: "/pesanan/detail-pesanan",
+          path: "/pesanan/:id",
           element: <DetailOrder />,
         },
         {
