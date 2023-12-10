@@ -2,7 +2,10 @@ import React, { useState, useEffect } from "react";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import { Link } from "react-router-dom";
+import { useToast } from "@/components/ui/use-toast";
 import { IoAddOutline } from "react-icons/io5";
+import { CrossCircledIcon,  } from "@radix-ui/react-icons";
+import { FaRegCheckCircle } from "react-icons/fa";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -26,6 +29,7 @@ function VoucherApp() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
   const navigate = useNavigate();
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchData();
@@ -102,7 +106,7 @@ function VoucherApp() {
   }
 
   const columns = [
-    { Header: "NO", accessor: "id" },
+    { Header: "NO", accessor: (_, index) => formatNumber(meta?.current_page - 1, index), },
     { Header: "NAMA KUPON", accessor: "name" },
     { Header: "KODE", accessor: "code" },
     { Header: "KATEGORI", accessor: "category" },
