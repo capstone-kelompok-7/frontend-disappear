@@ -100,12 +100,12 @@ function VoucherApp() {
               <Link to="/kupon/edit-kupon">
                 <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center">
                   <BiEdit />
-                  <p>Edit Produk</p>
+                  <p>Edit Kupon</p>
                 </DropdownMenuItem>
               </Link>
               <DropdownMenuItem onClick={handleDeleteClick} className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center">
                 <BiTrash />
-                <p>Hapus Produk</p>
+                <p>Hapus Kupon</p>
               </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
@@ -124,35 +124,43 @@ function VoucherApp() {
             <Button
               label="Tambahkan Kupon"
               icon={<IoAddOutline />}
-              className="bg-[#25745A] text-white py-3 px-5 rounded-lg"
+              className="bg-primary-green text-white py-3 px-5 rounded-lg font-medium text-sm mr-3"
             />
           </Link>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border gap-20">
-              <p>Filter</p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="10"
-                height="5"
-                viewBox="0 0 10 5"
-                fill="none"
+              <DropdownMenuTrigger
+                className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-10"
+                id="filterVoucher"
               >
-                <path
-                  d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
-                  fill="#373737"
-                />
-              </svg>
-            </DropdownMenuTrigger>
+                <p className=" text-primary-green">Filter</p>
 
-            <DropdownMenuContent>
-              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer items-center">Bronze</DropdownMenuItem>
-              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer items-center">Silver</DropdownMenuItem>
-              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer items-center">Gold</DropdownMenuItem>
-              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer items-center">Kadaluwarsa</DropdownMenuItem>
-              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer items-center">Belum Kadaluwarsa</DropdownMenuItem>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="10"
+                  height="5"
+                  viewBox="0 0 10 5"
+                  fill="none"
+                >
+                  <path
+                    d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z"
+                    fill="#257157"
+                  />
+                </svg>
+              </DropdownMenuTrigger>
+
+              <DropdownMenuContent>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Bronze</DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Silver</DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Gold</DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Semua Pelanggan</DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Kadaluwarsa</DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Belum Kadaluwarsa</DropdownMenuItem>
             </DropdownMenuContent>
-          </DropdownMenu>
+          
+
+              
+            </DropdownMenu>
         </div>
 
         {isLoading ? (
