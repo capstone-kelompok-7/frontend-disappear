@@ -53,3 +53,43 @@ export const deleteCategory = async (id) => {
     throw Error(error.response.data.message);
   }
 };
+
+export const getDetailCategory = async (id) => {
+  try {
+    const response = await axiosWithConfig.get(`api/v1/categories/${id}`);
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
+
+export const updateCategory = async (id, data) => {
+  // const { id } = data;
+  console.log(id);
+  try {
+    const formData = new FormData();
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key) && data[key]) {
+        formData.append(key, data[key]);
+      }
+    }
+    // const newData = {
+    //   ...data,
+    // };
+
+    const response = await axiosWithConfig.put(
+      `api/v1/categories/${id}`,
+      formData,
+      {
+        headers: {
+          "Content-Type": "multipart/form-data",
+        },
+      }
+    );
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};

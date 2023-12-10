@@ -18,7 +18,11 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { getAllCategory, deleteCategory } from "@/utils/api/category/api";
+import {
+  getAllCategory,
+  deleteCategory,
+  getDetailCategory,
+} from "@/utils/api/category/api";
 import Pagination from "@/components/pagenation";
 import { Loading } from "@/components/loading";
 import { useSearchParams, useNavigate } from "react-router-dom";
@@ -33,13 +37,18 @@ export default function IndexCategory() {
   const [searchValue, setSearchValue] = useState("");
   const { toast } = useToast();
 
+  const [categoryId, setCategoryId] = useState(0);
+  const [update, setUpdate] = useState(false);
+  const [popLoading, setPopLoading] = useState(false);
+  const [popUpTitle, setPopUpTitle] = useState("Tambah");
+  const [reload, setReload] = useState(false);
+
   useEffect(() => {
-    // fetchData();
     const delayedFetchData = debounce(fetchData, 1000);
     delayedFetchData();
 
     return () => delayedFetchData.cancel();
-  }, [searchParams]);
+  }, [searchParams, reload]);
 
   const getSuggestions = useCallback(
     async function (query) {
@@ -163,9 +172,13 @@ export default function IndexCategory() {
               <DropdownMenuItem
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
                 style={{ cursor: "pointer" }}
-                onClick={() =>
-                  document.getElementById("my_modal_5").showModal()
-                }
+                onClick={() => {
+                  setCategoryId(row.original.id);
+                  setUpdate(true);
+                  setPopLoading(true);
+                  setPopUpTitle("Edit");
+                  return document.getElementById("my_modal_5").showModal();
+                }}
               >
                 <BiEdit />
                 Edit Kategori
@@ -211,7 +224,11 @@ export default function IndexCategory() {
               </svg>
             }
             className=" bg-secondary-green text-white p-2 rounded-sm"
-            onClick={() => document.getElementById("my_modal_5").showModal()}
+            onClick={() => {
+              setPopUpTitle("Tambah");
+              setCategoryId(0);
+              return document.getElementById("my_modal_5").showModal();
+            }}
           />
 
           <div className="flex items-center w-64 relative">
@@ -224,7 +241,14 @@ export default function IndexCategory() {
               onChange={(e) => handleSearchInputParams(e.target.value)}
             />
           </div>
-          <PopUp />
+          <PopUp
+            categoryId={categoryId}
+            update={update}
+            popLoading={popLoading}
+            setPopLoading={setPopLoading}
+            popUpTitle={popUpTitle}
+            setReload={setReload}
+          />
         </div>
         {isLoading ? (
           <Loading />
