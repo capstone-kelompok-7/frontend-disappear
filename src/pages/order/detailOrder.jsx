@@ -26,6 +26,10 @@ export default function DetailOrder() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { id } = useParams();
   const { toast } = useToast();
+  const isValidDate = (dateString) => {
+    const regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
+    return regex.test(dateString);
+  };
 
   useEffect(() => {
     fetchData();
@@ -36,6 +40,7 @@ export default function DetailOrder() {
       setIsLoading(true);
       const detail_order = await getDetailOrder(id);
       setOrder(detail_order.data);
+      console.log(detail_order.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -116,7 +121,7 @@ export default function DetailOrder() {
               </div>
               <div className="flex items-center text-sm justify-between mb-5 mx-6">
                 <p>Voucher</p>
-                <p>{formatCurrency(order.voucher.discount)}</p>
+                <p>{formatCurrency(order.grand_total_discount)}</p>
               </div>
               <div className="flex items-center text-sm justify-between mb-5 mx-6">
                 <p>Diskon Produk</p>
@@ -153,7 +158,11 @@ export default function DetailOrder() {
                 </div>
                 <div className="flex text-xs justify-between mb-1 gap-[780px]">
                   <p>Tanggal</p>
-                  <p>{format(new Date(order.created_at), "dd-MM-yyyy")}</p>
+                  <p>
+                    {isValidDate(order.created_at)
+                      ? format(new Date(order.created_at), "dd-MM-yyyy")
+                      : "Invalid Date"}
+                  </p>
                 </div>
                 <div className="flex text-xs justify-between mb-1 gap-[795px]">
                   <p>Status</p>
@@ -201,7 +210,11 @@ export default function DetailOrder() {
                   </p>
                 </div>
                 <div className="flex text-sm mt-1 ">
-                  <p>{order.user.name}</p>
+                  <p>
+                    {order.address
+                      ? order.address.accepted_name
+                      : "Alamat tidak tersedia"}
+                  </p>
                 </div>
                 <div className="flex items-center ">
                   <p className="font-semibold text-sm text-primary-green">
@@ -209,7 +222,9 @@ export default function DetailOrder() {
                   </p>
                 </div>
                 <div className="flex text-sm mt-1">
-                  <p>{order.user.email}</p>
+                  <p>
+                    {order.user ? order.user.email : "email tidak tersedia"}
+                  </p>
                 </div>
                 <div className="flex items-center ">
                   <p className="font-semibold text-sm text-primary-green">
@@ -217,7 +232,11 @@ export default function DetailOrder() {
                   </p>
                 </div>
                 <div className="flex text-sm mt-1">
-                  <p>{order.address.address}</p>
+                  <p>
+                    {order.address
+                      ? order.address.address
+                      : "Alamat tidak tersedia"}
+                  </p>
                 </div>
               </div>
             </div>
