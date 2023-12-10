@@ -20,7 +20,7 @@ import { Loading } from "@/components/loading";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/button";
 
-function PopUp({handleForceFetch}) {
+function PopUp({ handleForceFetch }) {
   const [isLoading, setIsLoading] = useState(false);
   const [selectedId, setSelectedId] = useState(0);
   const [carousel, setCarousel] = useState([]);
@@ -163,33 +163,38 @@ function PopUp({handleForceFetch}) {
       {isLoading ? (
         <Loading />
       ) : (
-        <form onSubmit={handleSubmit(onSubmit)}>
+        <form
+          onSubmit={handleSubmit(selectedId === 0 ? onSubmit : onSubmitEdit)}
+        >
           <dialog
             id="my_modal_5"
             className="modal modal-bottom sm:modal-middle"
           >
-            <div className="modal-box">
+            <div className="modal-box flex flex-col justify-center h-[50vh] px-20">
               <h3 className="font-semibold text-4xl text-center">
-                Tambah Carousel
+                {selectedId === 0 ? "Tambah Carousel" : "Edit Carousel"}
               </h3>
               <Input
                 placeholder="Nama Carousel"
                 type="text"
-                className="my-10 "
+                className="my-10"
                 register={register}
                 name="carouselName"
                 error={errors.carouselName?.message}
               />
               <Input
-                placeholder="Nama Carousel"
                 type="file"
                 register={register}
                 name="image"
                 error={errors.image?.message}
               />
-              <div className="modal-action justify-around">
+              {!errors.image && (
+                <p className="text-xs mt-1">
+                  *maksimal 2MB dengan format PNG, JPG, JPEG
+                </p>
+              )}
+              <div className="modal-action flex justify-center gap-5 pt-5">
                 <form method="dialog">
-                  {/* if there is a button in form, it will close the modal */}
                   <Button
                     className="bg-white rounded-full border-secondary-green border px-10 py-3 text-base font-semibold text-primary-green"
                     label="Batal"
@@ -198,7 +203,7 @@ function PopUp({handleForceFetch}) {
                 <Button
                   type="submit"
                   className="rounded-full border px-10 bg-secondary-green text-white py-3"
-                  label="Tambah"
+                  label={selectedId === 0 ? "Tambah" : "Edit"}
                 />
               </div>
             </div>
