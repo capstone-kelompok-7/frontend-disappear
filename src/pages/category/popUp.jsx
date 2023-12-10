@@ -113,7 +113,7 @@ const PopUp = ({
             id="my_modal_5"
             className="modal modal-bottom sm:modal-middle"
           >
-            <div className="modal-box flex flex-col justify-center h-[70vh] px-20">
+            <div className="modal-box px-20 py-20">
               <h3 className="font-semibold text-4xl text-center">
                 {popUpTitle + " Kategori"}
               </h3>
