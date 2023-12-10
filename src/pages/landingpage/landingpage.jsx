@@ -32,6 +32,8 @@ import { getReviews, getLandingPage } from "@/utils/api/landingpage/api";
 
 export default function Landingpage() {
   const [reviews, setReviews] = useState([]);
+  const [landingPageData, setLandingPageData] = useState({});
+
 
   useEffect(() => {
     const fetchReviews = async () => {
@@ -45,6 +47,20 @@ export default function Landingpage() {
 
     fetchReviews();
   }, []);
+
+  useEffect(() => {
+    const fetchData = async () => {
+      try {
+        const landingPageResponse = await getLandingPage();
+        setLandingPageData(landingPageResponse.data);
+      } catch (error) {
+        console.error("Error fetching landing page data:", error);
+      }
+    };
+  
+    fetchData();
+  }, []);
+  
 
   return (
     <>
@@ -237,15 +253,15 @@ export default function Landingpage() {
 
         <div className="flex gap-16 py-20 px-32 text-white text-center sm:justify-center">
           <div>
-            <h1 className="pb-5 font-semibold md:text-6xl sm:text-4xl">480</h1>
+            <h1 className="pb-5 font-semibold md:text-6xl sm:text-4xl">{landingPageData.user_count}</h1>
             <p>Total pengguna aktif dalam penggunaan aplikasi </p>
           </div>
           <div>
-            <h1 className="pb-5 font-semibold md:text-6xl sm:text-4xl">1.750</h1>
+            <h1 className="pb-5 font-semibold md:text-6xl sm:text-4xl">{landingPageData.gram_plastic}</h1>
             <p>Gram sampah dari pembelian produk ramah lingkungan</p>
           </div>
           <div>
-            <h1 className="pb-5 font-semibold md:text-6xl sm:text-4xl">2.450</h1>
+            <h1 className="pb-5 font-semibold md:text-6xl sm:text-4xl">{landingPageData.order_count}</h1>
             <p>Total penjualan produk ramah lingkungan</p>
           </div>
         </div>
