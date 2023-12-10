@@ -3,27 +3,47 @@ import React, { createContext, useContext, useState, useEffect } from "react";
 const TokenContext = createContext();
 
 export const TokenProvider = ({ children }) => {
-  const [token, setToken] = useState(
+  const [tokenLocal, setTokenLocal] = useState(
     localStorage.getItem("accessToken") ?? null
+  );
+  const [tokenSession, setTokenSession] = useState(
+    sessionStorage.getItem("accessToken") ?? null
   );
   const [user, setUser] = useState(null);
 
   useEffect(() => {
     const storedToken = localStorage.getItem("accessToken");
+    const storedTokenSession = sessionStorage.getItem("accessToken");
     if (storedToken) {
-      setToken(storedToken);
+      setTokenLocal(storedToken);
+    }
+    if (storedTokenSession) {
+      setTokenSession(storedTokenSession);
     }
   }, []);
 
   const saveTokenAndUser = (newToken, newUser) => {
-    setToken(newToken);
+    setTokenLocal(newToken);
     setUser(newUser);
-    sessionStorage.setItem("accessToken", newToken);
     localStorage.setItem("accessToken", newToken);
   };
 
+  const saveTokenToSessionAndUser = (newToken, newUser) => {
+    setTokenSession(newToken);
+    setUser(newUser);
+    sessionStorage.setItem("accessToken", newToken);
+  };
+
   return (
-    <TokenContext.Provider value={{ token, user, saveTokenAndUser }}>
+    <TokenContext.Provider
+      value={{
+        tokenLocal,
+        tokenSession,
+        user,
+        saveTokenAndUser,
+        saveTokenToSessionAndUser,
+      }}
+    >
       {children}
     </TokenContext.Provider>
   );
