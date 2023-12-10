@@ -10,7 +10,7 @@ import { FaRegCheckCircle } from "react-icons/fa";
 
 import {
   createCarousel,
-  getDetailCarousel,
+  getAllCarousel,
   updateCarousel,
 } from "@/utils/api/carousel/api";
 import { CarouselSchema } from "@/utils/api/carousel/schema";
@@ -19,9 +19,8 @@ import { Loading } from "@/components/loading";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/button";
 
-function PopUp({ handleForceFetch, selectedId }) {
+function PopUp({ handleForceFetch, selectedId, data }) {
   const [isLoading, setIsLoading] = useState(false);
-  // const [selectedId, setSelectedId] = useState(0);
   const [carousel, setCarousel] = useState([]);
   const [photo, setPhoto] = useState([]);
 
@@ -40,24 +39,22 @@ function PopUp({ handleForceFetch, selectedId }) {
 
   useEffect(() => {
     if (selectedId !== null) {
-      fetchData();
+      if (!data) {
+        fetchData();
+      } else {
+        setValue("carouselName", data.name);
+      }
     }
-  }, [selectedId]);
+  }, [selectedId, data]);
 
   async function fetchData() {
     try {
       setIsLoading(true);
-      const result = await getDetailCarousel(selectedId);
-      setCarousel(result.data);
+      const result = await getAllCarousel(selectedId);
+      const carouselData = result.data;
 
-      if (result.data) {
-        // setSelectedId(result.data.id);
-        setValue("carouselName", result.data.title);
-        // setValue("image", result.data.photo);
-        // if (result.data.photo) {
-        //   const previewURL = URL.createObjectURL(result.data.photo);
-        //   setPreviewImage([previewURL]);
-        // }
+      if (carouselData) {
+        setValue("carouselName", carouselData.name);
       }
     } catch (error) {
       console.log(error.message);
@@ -108,14 +105,16 @@ function PopUp({ handleForceFetch, selectedId }) {
   }
 
   async function onSubmitEdit(data) {
+    setIsLoading(true);
     try {
       const editCarousel = {
         photo: data.image[0],
         id: selectedId,
         name: data.carouselName,
       };
-      setIsLoading(true);
+
       await updateCarousel(editCarousel);
+      navigate("/carousel");
       toast({
         title: (
           <div className="flex items-center gap-3">
@@ -129,7 +128,6 @@ function PopUp({ handleForceFetch, selectedId }) {
           "Data carousel diperbarui, nih. Silahkan nikmati fitur lainnya!",
       });
       navigate("/carousel");
-      // setSelectedId(0);
       reset();
     } catch (error) {
       toast({
@@ -147,14 +145,6 @@ function PopUp({ handleForceFetch, selectedId }) {
       setIsLoading(false);
     }
   }
-
-  const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setPhoto(file);
-      setValue("image", [file]);
-    }
-  };
 
   return (
     <>
@@ -192,12 +182,12 @@ function PopUp({ handleForceFetch, selectedId }) {
                 </p>
               )}
               <div className="modal-action flex justify-center gap-5 pt-5">
-                <div method="dialog">
+                <form method="dialog">
                   <Button
                     className="bg-white rounded-full border-secondary-green border px-10 py-3 text-base font-semibold text-primary-green"
                     label="Batal"
                   />
-                </div>
+                </form>
                 <Button
                   type="submit"
                   className="rounded-full border px-10 bg-secondary-green text-white py-3"

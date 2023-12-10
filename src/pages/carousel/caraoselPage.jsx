@@ -238,7 +238,11 @@ export default function Carousel() {
               onChange={(e) => handleSearchInputParams(e.target.value)}
             />
           </div>
-          <PopUp handleForceFetch={handleForceFetch} selectedId={selectedId} />
+          <PopUp
+            handleForceFetch={handleForceFetch}
+            selectedId={selectedId}
+            data={carousel.find((item) => item.id === selectedId)}
+          />
         </div>
         {isLoading ? (
           <Loading />
