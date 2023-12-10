@@ -1,4 +1,5 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 import { BiEdit } from "react-icons/bi";
 import { LuCircleDollarSign, LuLayoutGrid, LuList } from "react-icons/lu";
@@ -18,6 +19,15 @@ import Dropdown from "../dropdown";
 
 export default function SideBar(props) {
   const { isSidebarOpen } = props;
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("accessToken");
+
+    console.log("Berhasil logout!");
+    navigate("/login");
+  };
 
   return (
     <>
@@ -131,6 +141,7 @@ export default function SideBar(props) {
                 label="Keluar"
                 icon={<RxExit />}
                 isSidebarOpen={isSidebarOpen}
+                onClick={handleLogout}
               />
             </div>
           </div>

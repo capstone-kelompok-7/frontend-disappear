@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { TokenProvider, useToken } from "@/utils/context/TokenContext";
 import { toast } from "@/components/ui/use-toast";
 import login from "@/utils/api/auth/login";
 import { Input } from "@/components/ui/input";
@@ -22,12 +23,21 @@ const schema = z.object({
     .min(6, { message: "Kata sandi harus terdiri dari 6 karakter" }),
 });
 
+const LoginPageWrapper = () => {
+  return (
+    <TokenProvider>
+      <LoginPage />
+    </TokenProvider>
+  );
+};
+
 const LoginPage = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [rememberChecked, setRememberChecked] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
+  const { saveTokenAndUser, saveTokenToSessionAndUser } = useToken();
   const navigate = useNavigate();
   const {
     register,
@@ -38,12 +48,13 @@ const LoginPage = () => {
   });
 
   useEffect(() => {
-    const rememberedEmail = localStorage.getItem("rememberedEmail");
-    const rememberedPassword = localStorage.getItem("rememberedPassword");
     const rememberedCheckbox = localStorage.getItem("rememberedCheckbox");
 
     if (rememberedCheckbox === "checked") {
       setRememberChecked(true);
+      const rememberedEmail = sessionStorage.getItem("rememberedEmail");
+      const rememberedPassword = sessionStorage.getItem("rememberedPassword");
+
       setEmail(rememberedEmail);
       setPassword(rememberedPassword);
     }
@@ -53,13 +64,10 @@ const LoginPage = () => {
     setRememberChecked(!rememberChecked);
 
     if (!rememberChecked) {
-      localStorage.setItem("rememberedEmail", email);
-      localStorage.setItem("rememberedPassword", password);
-      localStorage.setItem("rememberedCheckbox", "checked");
+      sessionStorage.setItem("rememberedEmail", email);
+      sessionStorage.setItem("rememberedPassword", password);
     } else {
-      localStorage.removeItem("rememberedEmail");
-      localStorage.removeItem("rememberedPassword");
-      localStorage.removeItem("rememberedCheckbox");
+      localStorage.setItem("rememberedCheckbox", "checked");
     }
   };
 
@@ -73,14 +81,13 @@ const LoginPage = () => {
       const result = await login(data.email, data.password);
 
       if (rememberChecked) {
-        localStorage.setItem("rememberedEmail", data.email);
-        localStorage.setItem("rememberedPassword", data.password);
+        saveTokenAndUser(result.data.access_token);
         localStorage.setItem("rememberedCheckbox", "checked");
+      } else {
+        saveTokenToSessionAndUser(result.data.access_token);
+        sessionStorage.setItem("accessToken", result.data.access_token);
       }
 
-      localStorage.setItem("accessToken", result.data.access_token);
-
-      console.log(result.message);
       navigate("/dashboard");
       toast({
         title: "Login Berhasil!",
@@ -135,7 +142,7 @@ const LoginPage = () => {
                   error={errors.password?.message}
                 />
                 {showIcon ? (
-                  <IoEyeOffOutline
+                  <IoEyeOutline
                     onClick={handleShowPassword}
                     className="w-5 h-5 absolute right-2 cursor-pointer"
                     style={{
@@ -146,7 +153,7 @@ const LoginPage = () => {
                     }}
                   />
                 ) : (
-                  <IoEyeOutline
+                  <IoEyeOffOutline
                     onClick={handleShowPassword}
                     className="w-5 h-5 absolute right-2 cursor-pointer"
                     style={{

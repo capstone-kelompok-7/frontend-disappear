@@ -1,6 +1,7 @@
 import axios from "axios";
 
-let bearerToken = localStorage.getItem("accessToken");
+let bearerToken =
+  sessionStorage.getItem("accessToken") || localStorage.getItem("accessToken");
 let baseUrl = "https://test.disappear-organization.my.id/";
 const axiosWithConfig = axios.create();
 
