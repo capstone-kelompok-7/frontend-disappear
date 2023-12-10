@@ -406,6 +406,7 @@ export default function CreateEditProducts() {
                   </div>
 
                   <Input
+                    id="inputImageProducts"
                     register={register}
                     type="file"
                     className="hidden"
@@ -463,13 +464,14 @@ export default function CreateEditProducts() {
 
             <div className=" gap-4 flex items-center justify-end mt-5">
               <Link
+                id="cancelCreateEditProducts"
                 to="/produk"
                 className=" bg-white px-10 py-3 rounded text-primary-green border border-primary-green"
               >
                 Batal
               </Link>
               <Button
-                id="submitCreatedProducts"
+                id="submitCreatedEditProducts"
                 type="submit"
                 label={selectedId === 0 ? "Tambah Produk " : "Simpan Perubahan"}
                 className=" bg-secondary-green px-3 py-3 rounded border text-white"
