@@ -66,12 +66,12 @@ export const getDetailCarousel = async (id) => {
 };
 
 export const updateCarousel = async (data) => {
-  const { id } = data;
+  const { id, ...restData } = data;
   try {
     const formData = new FormData();
-    for (const key in data) {
-      if (Object.prototype.hasOwnProperty.call(data, key) && data[key]) {
-        formData.append(key, data[key]);
+    for (const key in restData) {
+      if (Object.prototype.hasOwnProperty.call(restData, key) && restData[key]) {
+        formData.append(key, restData[key]);
       }
     }
 
