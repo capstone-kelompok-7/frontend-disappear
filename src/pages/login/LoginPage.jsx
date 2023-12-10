@@ -37,7 +37,7 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [rememberChecked, setRememberChecked] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
-  const { saveTokenAndUser } = useToken();
+  const { saveTokenAndUser, saveTokenToSessionAndUser } = useToken();
   const navigate = useNavigate();
   const {
     register,
@@ -64,10 +64,10 @@ const LoginPage = () => {
     setRememberChecked(!rememberChecked);
 
     if (!rememberChecked) {
-      localStorage.setItem("rememberedCheckbox", "checked");
-    } else {
       sessionStorage.setItem("rememberedEmail", email);
       sessionStorage.setItem("rememberedPassword", password);
+    } else {
+      localStorage.setItem("rememberedCheckbox", "checked");
     }
   };
 
@@ -84,10 +84,10 @@ const LoginPage = () => {
         saveTokenAndUser(result.data.access_token);
         localStorage.setItem("rememberedCheckbox", "checked");
       } else {
+        saveTokenToSessionAndUser(result.data.access_token);
         sessionStorage.setItem("accessToken", result.data.access_token);
       }
 
-      console.log(result.message);
       navigate("/dashboard");
       toast({
         title: "Login Berhasil!",
