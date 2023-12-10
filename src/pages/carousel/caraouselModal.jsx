@@ -34,6 +34,9 @@ function PopUp({ handleForceFetch, selectedId, data }) {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(CarouselSchema),
+    defaultValues: {
+      image: "",
+    },
   });
 
   useEffect(() => {
