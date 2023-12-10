@@ -192,12 +192,12 @@ function PopUp({ handleForceFetch, selectedId }) {
                 </p>
               )}
               <div className="modal-action flex justify-center gap-5 pt-5">
-                <form method="dialog">
+                <div method="dialog">
                   <Button
                     className="bg-white rounded-full border-secondary-green border px-10 py-3 text-base font-semibold text-primary-green"
                     label="Batal"
                   />
-                </form>
+                </div>
                 <Button
                   type="submit"
                   className="rounded-full border px-10 bg-secondary-green text-white py-3"
