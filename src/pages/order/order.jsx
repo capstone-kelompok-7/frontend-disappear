@@ -90,13 +90,13 @@ function Order() {
         <div className="flex">
           <div className="flex justify-start">
             <div className="mt-10">
-              <div className="flex items-center">
+              <div className="flex items-center relative w-full">
                 <Input
                   type="text"
                   placeholder="Cari Pelanggan"
-                  className="search-order border-black"
+                  className="search-order border-black py-6"
                 />
-                <FiSearch className="search-icon" />
+                <FiSearch className="search-icon absolute right-3 top-4" />
               </div>
             </div>
 
