@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
 import Layout from "@/components/layout";
 import Button from "@/components/button";
 import { Link } from "react-router-dom";
@@ -10,62 +10,145 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import Tabel from "@/components/table/table";
-import { VscKebabVertical } from "react-icons/vsc";
+import { PiDotsThreeVerticalBold } from "react-icons/pi";
+import { BiEdit, BiTrash } from "react-icons/bi";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Delete from "@/components/delete/delete";
+import Pagination from "@/components/pagenation";
+import { useSearchParams, useNavigate } from "react-router-dom";
+import { Loading } from "@/components/loading";
+import { getVoucher, deleteVouchers } from "@/utils/api/voucher/api";
+import { format } from "date-fns";
 
 function VoucherApp() {
+  const [vouchers, setVouchers] = useState([]);
+  const [isLoading, setIsLoading] = useState(false);
+  const [searchParams, setSearchParams] = useSearchParams();
+  const [meta, setMeta] = useState();
+  const navigate = useNavigate();
 
-  const handleDeleteClick = () => {
-    Delete({
-      title: "Yakin mau hapus data?",
-      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-    })
+  useEffect(() => {
+    fetchData();
+  }, [searchParams]);
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
+    try {
+      setIsLoading(true);
+      const result = await getVoucher({ ...query });
+      const { ...rest } = result.meta;
+      setVouchers(result.data);
+      setMeta(rest);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const formatNumber = (pageIndex, itemIndex) => {
+    const itemsPerPage = meta?.per_page || 8;
+    return pageIndex * itemsPerPage + itemIndex + 1;
   };
 
-  const data = [
+  function handlePrevNextPage(page) {
+    searchParams.set("page", String(page));
+    setSearchParams(searchParams);
+  }
+
+  function onClickEdit(id) {
+    navigate(`/kupon/${id}/edit-kupon`);
+  }
+
+  async function handleDeleteClick(id) {
+    try {
+      const result = await Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        await deleteVouchers(id);
+        toast({
+          title: (
+            <div className="flex items-center">
+              <FaRegCheckCircle />
+              <span className="ml-2">Produk berhasil dihapus!</span>
+            </div>
+          ),
+          description:
+            "Data produk telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+        });
+        fetchData();
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menghapus Produk!</span>
+          </div>
+        ),
+        description: "Terjadi kesalahan saat menghapus produk.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
+  const columns = [
+    { Header: "NO", accessor: "id" },
+    { Header: "NAMA KUPON", accessor: "name" },
+    { Header: "KODE", accessor: "code" },
+    { Header: "KATEGORI", accessor: "category" },
+    { Header: "DISKON", accessor: "discount" },
     {
-      No: 1,
-      NamaKupon: "Hadiah dari Level Gold",
-      Kode: "L00G1",
-      Kategori: "GOLD",
-      Diskon: 5000,
-      TanggalMulai: "10-10-2023",
-      TanggalBerakhir: "15-10-2023",
-      Status: {
-        text: "Kadaluwarsa",
-        icon: (
+      Header: "TANGGAL MULAI",
+      accessor: "start_date",
+      Cell: ({ value }) => <p>{format(new Date(value), "dd-MM-yyyy")}</p>,
+    },
+    {
+      Header: "TANGGAL BERAKHIR",
+      accessor: "end-date",
+      Cell: ({ value }) => <p>{format(new Date(value), "dd-MM-yyyy")}</p>,
+    },
+    {
+      Header: "STATUS",
+      accessor: "status",
+      Cell: ({ row }) => (
+        <div>
+          {row.original.status}
           <DropdownMenu>
             <DropdownMenuTrigger>
-              <VscKebabVertical />
+              <div className="three-dots">
+                <PiDotsThreeVerticalBold />
+              </div>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <Link to="/kupon/edit-kupon">
-                <DropdownMenuItem>Edit</DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem onClick={handleDeleteClick}>Hapus</DropdownMenuItem>
+              <DropdownMenuItem
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center"
+                onClick={() => onClickEdit(row.original.id)}
+              >
+                <BiEdit />
+                <p>Edit Kupon</p>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                onClick={() => handleDeleteClick(row.original.id)}
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center"
+                id="deleteVoucher"
+              >
+                <BiTrash />
+                <p>Hapus Kupon</p>
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
-        ),
-      },
-    },
-  ];
-
-  const columns = [
-    { Header: "NO", accessor: "No" },
-    { Header: "NAMA KUPON", accessor: "NamaKupon" },
-    { Header: "KODE", accessor: "Kode" },
-    { Header: "KATEGORI", accessor: "Kategori" },
-    { Header: "DISKON", accessor: "Diskon" },
-    { Header: "TANGGAL MULAI", accessor: "TanggalMulai" },
-    { Header: "TANGGAL BERAKHIR", accessor: "TanggalBerakhir" },
-    {
-      Header: "STATUS",
-      accessor: "Status",
-      Cell: ({ value }) => (
-        <div className="flex items-center">
-          <span className="ml-2">{value.text}</span> {value.icon}
         </div>
       ),
     },
@@ -81,13 +164,17 @@ function VoucherApp() {
             <Button
               label="Tambahkan Kupon"
               icon={<IoAddOutline />}
-              className="bg-[#25745A] text-white py-3 px-5 rounded-lg"
+              className="bg-primary-green text-white py-3 px-5 rounded-lg font-medium text-sm mr-3"
             />
           </Link>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border gap-20">
-              <p>Filter</p>
+            <DropdownMenuTrigger
+              className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-10"
+              id="filterVoucher"
+            >
+              <p className=" text-primary-green">Filter</p>
+
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 width="10"
@@ -95,24 +182,46 @@ function VoucherApp() {
                 viewBox="0 0 10 5"
                 fill="none"
               >
-                <path
-                  d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
-                  fill="#373737"
-                />
+                <path d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z" fill="#257157" />
               </svg>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem>Bronze</DropdownMenuItem>
-              <DropdownMenuItem>Silver</DropdownMenuItem>
-              <DropdownMenuItem>Gold</DropdownMenuItem>
-              <DropdownMenuItem>Kadaluwarsa</DropdownMenuItem>
-              <DropdownMenuItem>Belum Kadaluwarsa</DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Bronze
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Silver
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Gold
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Semua Pelanggan
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Kadaluwarsa
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Belum Kadaluwarsa
+              </DropdownMenuItem>
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
 
-        <Tabel columns={columns} data={data} />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <div>
+            <Tabel columns={columns} data={vouchers} />
+            <Pagination
+              meta={meta}
+              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+              onClickPage={(page) => handlePrevNextPage(page)}
+            />
+          </div>
+        )}
       </div>
     </Layout>
   );
