@@ -55,16 +55,6 @@ export const deleteCarousel = async (id) => {
   }
 };
 
-export const getDetailCarousel = async (id) => {
-  try {
-    const response = await axiosWithConfig.get(`api/v1/carousel/${id}`);
-
-    return response.data;
-  } catch (error) {
-    throw Error(error.response.data.message);
-  }
-};
-
 export const updateCarousel = async (data) => {
   const { id, ...restData } = data;
   try {
