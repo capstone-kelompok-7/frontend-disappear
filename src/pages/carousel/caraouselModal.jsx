@@ -128,7 +128,7 @@ function PopUp({ handleForceFetch, selectedId, data }) {
         description:
           "Data carousel diperbarui, nih. Silahkan nikmati fitur lainnya!",
       });
-      navigate("/carousel");
+      handleForceFetch();
       reset();
     } catch (error) {
       toast({
@@ -176,7 +176,7 @@ function PopUp({ handleForceFetch, selectedId, data }) {
                 register={register}
                 name="image"
                 error={errors.image?.message}
-                value={photo?.name || ""}
+                // value={photo?.name || ""}
               />
               {!errors.image && (
                 <p className="text-xs mt-1">
