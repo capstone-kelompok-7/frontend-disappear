@@ -3,9 +3,8 @@ import { useToken } from "@/utils/context/TokenContext";
 
 const ProtectedRoute = () => {
   const { pathname } = useLocation();
-  const { token, user } = useToken();
+  const { tokenLocal, tokenSession, user } = useToken();
 
-  const authProtected = ["/login"];
   const protectedByToken = [
     "/category",
     "/dashboard",
@@ -38,35 +37,30 @@ const ProtectedRoute = () => {
     "/carousel",
   ];
 
-  const adminProtected = ["/dashboard"];
-  const userProtected = ["/", "/login"];
+  const getUserRole = (token) => {
+    if (!token) return null;
+    try {
+      const payload = token.split(".")[1];
+      const decodedPayload = atob(payload);
+      const user = JSON.parse(decodedPayload);
 
-  // Jika pengguna belum login dan mencoba mengakses rute yang dilindungi oleh token, arahkan ke halaman login
-  if (!token && protectedByToken.includes(pathname)) {
+      return user?.role;
+    } catch (error) {
+      return null;
+    }
+  };
+
+  if (!tokenLocal && !tokenSession && protectedByToken.includes(pathname)) {
     return <Navigate to="/login" />;
   }
 
-  // Jika pengguna adalah admin, berikan akses ke semua rute termasuk yang dilindungi oleh token
-  if (user?.role === "admin") {
-    return <Outlet />;
-  }
+  const role = getUserRole(tokenLocal || tokenSession);
 
-  // Jika pengguna adalah customer dan mencoba mengakses rute yang hanya diperbolehkan untuk admin, arahkan ke halaman landing page
-  if (user?.role === "customer" && adminProtected.includes(pathname)) {
-    return <Navigate to="/" />;
-  }
-
-  // Jika pengguna belum login dan mencoba mengakses rute yang memerlukan autentikasi, arahkan ke halaman login
-  if (authProtected.includes(pathname) && !token) {
+  if (role === "customer") {
+    console.log("Tidak memiliki akses!");
     return <Navigate to="/login" />;
   }
 
-  // Jika pengguna adalah customer dan mencoba mengakses rute yang dilindungi untuk user, arahkan ke halaman landing page
-  if (user?.role === "customer" && userProtected.includes(pathname)) {
-    return <Navigate to="/" />;
-  }
-
-  // Jika tidak ada kondisi yang memerlukan redireksi, tampilkan Outlet
   return <Outlet />;
 };
 
