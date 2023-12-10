@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-const MAX_FILE_SIZE = 200000;
+const MAX_FILE_SIZE = 2000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const CarouselSchema = z.object({
