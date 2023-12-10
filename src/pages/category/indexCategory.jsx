@@ -10,6 +10,8 @@ import Tabel from "@/components/table/table";
 import Delete from "../../components/delete/delete";
 import { RiDeleteBinLine } from "react-icons/ri";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { FaRegCheckCircle } from "react-icons/fa";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -87,11 +89,11 @@ export default function IndexCategory() {
           title: (
             <div className="flex items-center">
               <FaRegCheckCircle />
-              <span className="ml-2">Berhasil Menghapus Category! </span>
+              <span className="ml-2">Berhasil Menghapus Kategori! </span>
             </div>
           ),
           description:
-            "Data category telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+            "Data kategori telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
         });
         fetchData();
       }
@@ -101,7 +103,7 @@ export default function IndexCategory() {
         title: (
           <div className="flex items-center">
             <CrossCircledIcon />
-            <span className="ml-2">Gagal Menghapus Category!</span>
+            <span className="ml-2">Gagal Menghapus Kategori!</span>
           </div>
         ),
         description:

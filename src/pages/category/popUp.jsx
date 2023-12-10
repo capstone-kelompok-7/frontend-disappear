@@ -69,7 +69,7 @@ const PopUp = () => {
             id="my_modal_5"
             className="modal modal-bottom sm:modal-middle"
           >
-            <div className="modal-box">
+            <div className="modal-box flex flex-col justify-center h-[70vh] px-20">
               <h3 className="font-semibold text-4xl text-center">
                 Tambah Kategori
               </h3>
@@ -82,13 +82,18 @@ const PopUp = () => {
                 error={errors.categoryName?.message}
               />
               <Input
-                placeholder="Nama Kategori"
+                placeholder="File Kategori"
                 type="file"
                 register={register}
                 name="image"
                 error={errors.image?.message}
               />
-              <div className="modal-action justify-around">
+              {!errors.image && (
+                <p className="text-xs mt-1">
+                  *maksimal 2MB dengan format PNG, JPG, JPEG
+                </p>
+              )}
+              <div className="modal-action flex justify-center gap-5 pt-5">
                 <form method="dialog">
                   {/* if there is a button in form, it will close the modal */}
                   <Button
