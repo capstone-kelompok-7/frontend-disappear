@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useCallback } from "react";
 import { FiSearch } from "react-icons/fi";
 import { Link, useSearchParams } from "react-router-dom";
 import { debounce } from "lodash";
@@ -31,12 +31,26 @@ export default function Ulasan() {
     return () => delayedFetchData.cancel();
   }, [searchValue, searchParams]);
 
+  const getProductName = useCallback(
+    async function (query) {
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+
+      if (!query) {
+        newSearchParams.delete("search");
+      } else {
+        newSearchParams.set("search", query);
+        newSearchParams.delete("page");
+      }
+
+      setSearchParams(newSearchParams);
+    },
+    [searchParams, setSearchParams]
+  );
+
   async function fetchData() {
     let query = { search: searchValue };
     for (const entry of searchParams.entries()) {
-      if (entry[0] !== "search") {
-        query[entry[0]] = entry[1];
-      }
+      query[entry[0]] = entry[1];
     }
     try {
       setIsLoading(true);
@@ -59,9 +73,7 @@ export default function Ulasan() {
 
   function handleSearchInputParams(search) {
     setSearchValue(search);
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-    newSearchParams.set("search", String(search));
-    setSearchParams(newSearchParams);
+    getProductName(search);
   }
 
   const numberPage = (pageIndex, itemIndex) => {

@@ -28,7 +28,7 @@ export const getUlasan = async (params) => {
 
 export const getDetailUlasan = async (id) => {
   try {
-    const response = await axiosWithConfig.get(`api/v1/products/reviews/${id}`);
+    const response = await axiosWithConfig.get(`api/v1/reviews/detail/${id}`);
 
     return response.data;
   } catch (error) {
