@@ -1,6 +1,6 @@
 import axiosWithConfig from "../axiosWithConfig";
 
-export const getAllCategory = async (params) => {
+export const getCategory = async (params) => {
   try {
     let query = "";
 

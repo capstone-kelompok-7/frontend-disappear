@@ -19,7 +19,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import {
-  getAllCategory,
+  getCategory,
   deleteCategory,
   getDetailCategory,
 } from "@/utils/api/category/api";
@@ -73,7 +73,7 @@ export default function IndexCategory() {
     }
     try {
       setIsLoading(true);
-      const result = await getAllCategory({ ...query });
+      const result = await getCategory({ ...query });
       const { ...rest } = result.meta;
       setCategories(result.data);
       setMeta(rest);
