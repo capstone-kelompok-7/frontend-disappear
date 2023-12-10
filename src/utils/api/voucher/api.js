@@ -24,6 +24,16 @@ export const getVoucher = async (params) => {
     }
   };
 
+  export const getDetailVoucher = async (id) => {
+    try {
+      const response = await axiosWithConfig.get(`api/v1/vouchers/${id}`);
+  
+      return response.data;
+    } catch (error) {
+      throw Error(error.response.data.message);
+    }
+  };
+
   export const createVouchers = async (data) => {
     try {
       const newData = {

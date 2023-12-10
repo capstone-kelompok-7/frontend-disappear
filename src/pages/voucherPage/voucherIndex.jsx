@@ -15,7 +15,7 @@ import { BiEdit, BiTrash } from "react-icons/bi";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Delete from "@/components/delete/delete";
 import Pagination from "@/components/pagenation";
-import { useSearchParams } from "react-router-dom";
+import { useSearchParams, useNavigate } from "react-router-dom";
 import { Loading } from "@/components/loading";
 import { getVoucher, deleteVouchers } from "@/utils/api/voucher/api";
 import { format } from "date-fns";
@@ -25,6 +25,7 @@ function VoucherApp() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
+  const navigate = useNavigate();
 
   useEffect(() => {
     fetchData();
@@ -51,6 +52,10 @@ function VoucherApp() {
   function handlePrevNextPage(page) {
     searchParams.set("page", String(page));
     setSearchParams(searchParams);
+  }
+
+  function onClickEdit(id) {
+    navigate(`/tantangan/${id}/edit-tantangan`);
   }
 
   async function handleDeleteClick(id) {
@@ -89,7 +94,7 @@ function VoucherApp() {
     } finally {
       setIsLoading(false);
     }
-  };
+  }
 
   const columns = [
     { Header: "NO", accessor: "id" },
@@ -121,13 +126,19 @@ function VoucherApp() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <Link to="/kupon/edit-kupon">
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center">
-                  <BiEdit />
-                  <p>Edit Kupon</p>
-                </DropdownMenuItem>
-              </Link>
-              <DropdownMenuItem onClick={() => handleDeleteClick(row.original.id)} className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center" id="deleteVoucher">
+              <DropdownMenuItem
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center"
+                onClick={() => onClickEdit(row.original.id)}
+              >
+                <BiEdit />
+                <p>Edit Kupon</p>
+              </DropdownMenuItem>
+
+              <DropdownMenuItem
+                onClick={() => handleDeleteClick(row.original.id)}
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center"
+                id="deleteVoucher"
+              >
                 <BiTrash />
                 <p>Hapus Kupon</p>
               </DropdownMenuItem>
@@ -153,38 +164,44 @@ function VoucherApp() {
           </Link>
 
           <DropdownMenu>
-              <DropdownMenuTrigger
-                className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-10"
-                id="filterVoucher"
+            <DropdownMenuTrigger
+              className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-10"
+              id="filterVoucher"
+            >
+              <p className=" text-primary-green">Filter</p>
+
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                width="10"
+                height="5"
+                viewBox="0 0 10 5"
+                fill="none"
               >
-                <p className=" text-primary-green">Filter</p>
+                <path d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z" fill="#257157" />
+              </svg>
+            </DropdownMenuTrigger>
 
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="5"
-                  viewBox="0 0 10 5"
-                  fill="none"
-                >
-                  <path
-                    d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z"
-                    fill="#257157"
-                  />
-                </svg>
-              </DropdownMenuTrigger>
-
-              <DropdownMenuContent>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Bronze</DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Silver</DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Gold</DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Semua Pelanggan</DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Kadaluwarsa</DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">Belum Kadaluwarsa</DropdownMenuItem>
+            <DropdownMenuContent>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Bronze
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Silver
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Gold
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Semua Pelanggan
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Kadaluwarsa
+              </DropdownMenuItem>
+              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+                Belum Kadaluwarsa
+              </DropdownMenuItem>
             </DropdownMenuContent>
-          
-
-              
-            </DropdownMenu>
+          </DropdownMenu>
         </div>
 
         {isLoading ? (
