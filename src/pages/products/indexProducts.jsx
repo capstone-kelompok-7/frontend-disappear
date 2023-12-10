@@ -23,9 +23,11 @@ import { useToast } from "@/components/ui/use-toast";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { Loading } from "@/components/loading";
+import { debounce } from "lodash";
 
 export default function IndexProducts() {
   const [products, setProducts] = useState([]);
+  const [searchValue, setSearchValue] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
@@ -37,24 +39,36 @@ export default function IndexProducts() {
     navigate(`/produk/${productId}`);
   };
 
-  const toEditProduct = () => {
-    navigate("/produk/edit-produk");
+  const toEditProduct = (id) => {
+    navigate(`/produk/${id}/edit-produk`);
   };
 
   useEffect(() => {
-    fetchData();
-  }, [searchParams]);
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
+  }, [searchValue, searchParams]);
 
   async function fetchData() {
-    let query = {};
+    let query = { search: searchValue };
     for (const entry of searchParams.entries()) {
-      query[entry[0]] = entry[1];
+      if (entry[0] !== "search") {
+        query[entry[0]] = entry[1];
+      }
+    }
+
+    if (searchValue.trim() === "") {
+      delete query["search"];
+    } else {
+      query.search = searchValue;
     }
     try {
       setIsLoading(true);
       const result = await getAllProducts({ ...query });
       const { ...rest } = result.meta;
       setProducts(result.data);
+      console.log(result.data);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
@@ -66,6 +80,20 @@ export default function IndexProducts() {
   function handlePrevNextPage(page) {
     searchParams.set("page", String(page));
     setSearchParams(searchParams);
+  }
+
+  function handleSearchInputParams(search) {
+    setSearchValue(search);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+
+    // Hapus parameter 'search' jika nilai search kosong
+    if (search.trim() === "") {
+      newSearchParams.delete("search");
+    } else {
+      newSearchParams.set("search", String(search));
+    }
+
+    setSearchParams(newSearchParams);
   }
 
   async function handleDeleteClick(id) {
@@ -164,12 +192,15 @@ export default function IndexProducts() {
                   <p>Detail Produk</p>
                 </DropdownMenuItem>
               </Link>
-              <Link onClick={toEditProduct} id="toEditProduct">
-                <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white">
-                  <BiEdit />
-                  <p>Edit Produk</p>
-                </DropdownMenuItem>
-              </Link>
+
+              <DropdownMenuItem
+                className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
+                onClick={() => toEditProduct(row.original.id)}
+                id="toEditProduct"
+              >
+                <BiEdit />
+                <p>Edit Produk</p>
+              </DropdownMenuItem>
 
               <DropdownMenuItem
                 className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
@@ -194,7 +225,7 @@ export default function IndexProducts() {
           <Link
             id="toCreateProducts"
             to="/produk/buat-produk"
-            className=" font-medium text-sm rounded-md text-white bg-primary-green px-3 py-3 flex items-center justify-between gap-3"
+            className=" font-medium text-sm rounded-md text-white bg-secondary-green px-3 py-3 flex items-center justify-between gap-3"
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
@@ -221,6 +252,8 @@ export default function IndexProducts() {
                 type="text"
                 placeholder="Cari Produk"
                 className=" border-primary-green py-6"
+                onChange={(e) => handleSearchInputParams(e.target.value)}
+                value={searchValue}
               />
               <svg
                 className="absolute right-3 top-4 text-primary-green"

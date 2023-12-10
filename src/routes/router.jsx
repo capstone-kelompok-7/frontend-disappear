@@ -101,7 +101,7 @@ export default function Router() {
           element: <CreateEditProducts />,
         },
         {
-          path: "/produk/edit-produk",
+          path: "/produk/:id/edit-produk",
           element: <CreateEditProducts />,
         },
         {

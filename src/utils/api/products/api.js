@@ -48,6 +48,37 @@ export const createProducts = async (data) => {
   }
 };
 
+export const createImageProducts = async (formData) => {
+  try {
+    const response = await axiosWithConfig.post(
+      `api/v1/products/images`,
+      formData
+    );
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
+
+export const updateProducts = async (data) => {
+  const { id } = data;
+  try {
+    const newData = {
+      ...data,
+    };
+
+    const response = await axiosWithConfig.put(
+      `api/v1/products/${id}`,
+      newData
+    );
+
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};
+
 export const deleteProducts = async (id) => {
   try {
     const response = await axiosWithConfig.delete(`api/v1/products/${id}`);
