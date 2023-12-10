@@ -11,14 +11,13 @@ import {
 } from "@/components/ui/dropdown-menu";
 import Tabel from "@/components/table/table";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
-import { IoEye } from "react-icons/io5";
 import { BiEdit, BiTrash } from "react-icons/bi";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Delete from "@/components/delete/delete";
 import Pagination from "@/components/pagenation";
 import { useSearchParams } from "react-router-dom";
 import { Loading } from "@/components/loading";
-import { getVoucher } from "@/utils/api/voucher/api";
+import { getVoucher, deleteVouchers } from "@/utils/api/voucher/api";
 import { format } from "date-fns";
 
 function VoucherApp() {
@@ -54,11 +53,42 @@ function VoucherApp() {
     setSearchParams(searchParams);
   }
 
-  const handleDeleteClick = () => {
-    Delete({
-      title: "Yakin mau hapus data?",
-      text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
-    });
+  async function handleDeleteClick(id) {
+    try {
+      const result = await Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        await deleteVouchers(id);
+        toast({
+          title: (
+            <div className="flex items-center">
+              <FaRegCheckCircle />
+              <span className="ml-2">Produk berhasil dihapus!</span>
+            </div>
+          ),
+          description:
+            "Data produk telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+        });
+        fetchData();
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menghapus Produk!</span>
+          </div>
+        ),
+        description: "Terjadi kesalahan saat menghapus produk.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const columns = [
@@ -91,19 +121,13 @@ function VoucherApp() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <Link to="">
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center">
-                  <IoEye />
-                  <p>Lihat Deskripsi</p>
-                </DropdownMenuItem>
-              </Link>
               <Link to="/kupon/edit-kupon">
                 <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center">
                   <BiEdit />
                   <p>Edit Kupon</p>
                 </DropdownMenuItem>
               </Link>
-              <DropdownMenuItem onClick={handleDeleteClick} className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center">
+              <DropdownMenuItem onClick={() => handleDeleteClick(row.original.id)} className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center" id="deleteVoucher">
                 <BiTrash />
                 <p>Hapus Kupon</p>
               </DropdownMenuItem>

@@ -23,3 +23,45 @@ export const getVoucher = async (params) => {
       throw Error(error.response.data.message);
     }
   };
+
+  export const createVouchers = async (data) => {
+    try {
+      const newData = {
+        ...data,
+      };
+  
+      const response = await axiosWithConfig.post(`api/v1/vouchers`, newData);
+  
+      return response.data;
+    } catch (error) {
+      throw Error(error.response.data.message);
+    }
+  };
+
+  export const updateVouchers = async (data) => {
+    const { id } = data;
+    try {
+      const newData = {
+        ...data,
+      };
+  
+      const response = await axiosWithConfig.put(
+        `api/v1/vouchers/${id}`,
+        newData
+      );
+  
+      return response.data;
+    } catch (error) {
+      throw Error(error.response.data.message);
+    }
+  };
+  
+  export const deleteVouchers = async (id) => {
+    try {
+      const response = await axiosWithConfig.delete(`api/v1/vouchers/${id}`);
+  
+      return response.data;
+    } catch (error) {
+      throw Error(error.response.data.message);
+    }
+  };

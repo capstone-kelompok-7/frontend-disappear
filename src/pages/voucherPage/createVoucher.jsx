@@ -15,7 +15,8 @@ import {
   SelectValue,
 } from "@/components/ui/select";
 import { Link } from "react-router-dom";
-import { getVoucher } from "@/utils/api/voucher/api";
+import { createVouchers, updateVouchers } from "@/utils/api/voucher/api";
+import { useNavigate } from "react-router-dom";
 import { Loading } from "@/components/loading";
 
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -39,19 +40,22 @@ const schema = z.object({
       message: "Harus berupa angka",
     }),
   minPurchase: z
-  .string()
-  .min(1, { message: "Field tidak boleh kosong" })
-  .refine((value) => !Number.isNaN(parseInt(value)), {
-    message: "Harus berupa angka",
-  }),
+    .string()
+    .min(1, { message: "Field tidak boleh kosong" })
+    .refine((value) => !Number.isNaN(parseInt(value)), {
+      message: "Harus berupa angka",
+    }),
 });
 
 function CreateVoucher() {
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
+  const navigate = useNavigate();
 
   const {
     handleSubmit,
     register,
+    setValue,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
@@ -62,15 +66,15 @@ function CreateVoucher() {
       const newVoucher = {
         name: data.voucherName,
         description: data.voucherDescription,
-        total: data.voucherTotal,
-        start: data.startDate,
-        end: data.endDate,
         code: data.voucherCode,
         category: data.voucherFor,
         discount: parseInt(data.discount),
-        minimal: parseInt(data.minPurchase),
+        start_date: data.startDate,
+        end_date: data.endDate,
+        min_purchase: parseInt(data.minPurchase),
+        stock: parseInt(data.voucherTotal),
       };
-      await createVoucher(newVoucher);
+      await createVouchers(newVoucher);
       navigate("/kupon");
       toast({
         title: (
@@ -86,17 +90,13 @@ function CreateVoucher() {
       });
       reset();
     } catch (error) {
-      console.log(error);
       toast({
-        variant: "destructive",
-        title: (
-          <div className="flex items-center">
-            <CrossCircledIcon />
-            <span className="ml-2">Gagal Menambahkan Produk!</span>
-          </div>
-        ),
-        description: { error },
+        title: "Error",
+        description: error.message || "Terjadi kesalahan saat menyimpan data.",
+        color: "#FF0000",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -105,149 +105,152 @@ function CreateVoucher() {
       <Breadcrumbs pages="Buat Kupon" />
 
       <div className="my-5 py-5 px-11 rounded-md shadow-lg border-2">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          {/* baris 1 */}
-          <div className="flex gap-28 pt-5">
-            <div className="w-full">
-              <label htmlFor="voucherName">Nama Kupon</label>
-              <Input
-                type="text"
-                placeholder="Nama Produk"
-                name="voucherName"
-                register={register}
-                error={errors.voucherName?.message}
-              />
+        {isLoading ? (
+          <Loading />
+        ) : (
+          <form onSubmit={handleSubmit(onSubmit)}>
+            {/* baris 1 */}
+            <div className="flex gap-28 pt-5">
+              <div className="w-full">
+                <label htmlFor="voucherName">Nama Kupon</label>
+                <Input
+                  type="text"
+                  placeholder="Nama Produk"
+                  name="voucherName"
+                  register={register}
+                  error={errors.voucherName?.message}
+                />
+              </div>
+              <div className="w-full">
+                <label htmlFor="startDate">Mulai</label>
+                <Input
+                  type="date"
+                  placeholder="Mulai"
+                  name="startDate"
+                  register={register}
+                  error={errors.startDate?.message}
+                />
+              </div>
             </div>
-            <div className="w-full">
-              <label htmlFor="startDate">Mulai</label>
-              <Input
-                type="date"
-                placeholder="Mulai"
-                name="startDate"
-                register={register}
-                error={errors.startDate?.message}
-              />
+            {/* baris 2 */}
+            <div className="flex gap-28 pt-5">
+              <div className="w-full">
+                <label htmlFor="voucherCode">Kode Kupon</label>
+                <Input
+                  type="text"
+                  placeholder="Kode Kupon"
+                  name="voucherCode"
+                  register={register}
+                  error={errors.voucherCode?.message}
+                />
+              </div>
+              <div className="w-full">
+                <label htmlFor="endDate">Berhenti</label>
+                <Input
+                  type="date"
+                  placeholder="Berhenti"
+                  name="endDate"
+                  register={register}
+                  error={errors.endDate?.message}
+                />
+              </div>
             </div>
-          </div>
-          {/* baris 2 */}
-          <div className="flex gap-28 pt-5">
-            <div className="w-full">
-              <label htmlFor="voucherCode">Kode Kupon</label>
-              <Input
-                type="text"
-                placeholder="Kode Kupon"
-                name="voucherCode"
-                register={register}
-                error={errors.voucherCode?.message}
-              />
+            {/* baris 3 */}
+            <div className="flex gap-28 pt-5">
+              <div className="w-full">
+                <label htmlFor="voucherFor">Kategori</label>
+                <Select register={register} error={errors.voucherFor?.message}>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Kategori Kupon" />
+                  </SelectTrigger>
+                  <SelectContent>
+                    <SelectItem className="cursor-pointer" value="Bronze">
+                      Bronze
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="Silver">
+                      Silver
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="Gold">
+                      Gold
+                    </SelectItem>
+                    <SelectItem
+                      className="cursor-pointer"
+                      value="Semua Pelanggan"
+                    >
+                      Semua Pelanggan
+                    </SelectItem>
+                    <SelectItem className="cursor-pointer" value="Kadaluwarsa">
+                      Kadaluwarsa
+                    </SelectItem>
+                    <SelectItem
+                      className="cursor-pointer"
+                      value="Belum Kadaluwarsa"
+                    >
+                      Belum Kadaluwarsa
+                    </SelectItem>
+                  </SelectContent>
+                </Select>
+              </div>
+              <div className="w-full">
+                <label htmlFor="voucherTotal">Total Yang Tersedia</label>
+                <Input
+                  type="text"
+                  placeholder="Total Yang Tersedia"
+                  name="voucherTotal"
+                  register={register}
+                  error={errors.voucherTotal?.message}
+                />
+              </div>
             </div>
-            <div className="w-full">
-              <label htmlFor="endDate">Berhenti</label>
-              <Input
-                type="date"
-                placeholder="Berhenti"
-                name="endDate"
-                register={register}
-                error={errors.endDate?.message}
-              />
+            {/* baris 4 */}
+            <div className="flex gap-28 py-5">
+              <div className="w-full">
+                <label htmlFor="discount">Diskon</label>
+                <Input
+                  type="text"
+                  placeholder="Diskon"
+                  name="discount"
+                  register={register}
+                  error={errors.discount?.message}
+                />
+              </div>
+              <div className="w-full">
+                <label htmlFor="minPurchase">Minimal Pembelian</label>
+                <Input
+                  type="text"
+                  placeholder="Minimal Pembelian"
+                  name="minPurchase"
+                  register={register}
+                  error={errors.minPurchase?.message}
+                />
+              </div>
             </div>
-          </div>
-          {/* baris 3 */}
-          <div className="flex gap-28 pt-5">
-            <div className="w-full">
-              <label htmlFor="voucherFor">Kategori</label>
-              <Select register={register} error={errors.voucherFor?.message}>
-                <SelectTrigger>
-                  <SelectValue placeholder="Kategori Kupon" />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectItem className="cursor-pointer" value="Bronze">
-                    Bronze
-                  </SelectItem>
-                  <SelectItem className="cursor-pointer" value="Silver">
-                    Silver
-                  </SelectItem>
-                  <SelectItem className="cursor-pointer" value="Gold">
-                    Gold
-                  </SelectItem>
-                  <SelectItem
-                    className="cursor-pointer"
-                    value="Semua Pelanggan"
-                  >
-                    Semua Pelanggan
-                  </SelectItem>
-                  <SelectItem className="cursor-pointer" value="Kadaluwarsa">
-                    Kadaluwarsa
-                  </SelectItem>
-                  <SelectItem
-                    className="cursor-pointer"
-                    value="Belum Kadaluwarsa"
-                  >
-                    Belum Kadaluwarsa
-                  </SelectItem>
-                </SelectContent>
-              </Select>
-            </div>
-            <div className="w-full">
-              <label htmlFor="voucherTotal">Total Yang Tersedia</label>
-              <Input
-                type="text"
-                placeholder="Total Yang Tersedia"
-                name="voucherTotal"
-                register={register}
-                error={errors.voucherTotal?.message}
-              />
-            </div>
-          </div>
-          {/* baris 4 */}
-          <div className="flex gap-28 py-5">
-            <div className="w-full">
-              <label htmlFor="discount">Diskon</label>
-              <Input
-                type="text"
-                placeholder="Diskon"
-                name="discount"
-                register={register}
-                error={errors.discount?.message}
-              />
-            </div>
-            <div className="w-full">
-              <label htmlFor="minPurchase">Minimal Pembelian</label>
-              <Input
-                type="text"
-                placeholder="Minimal Pembelian"
-                name="minPurchase"
-                register={register}
-                error={errors.minPurchase?.message}
-              />
-            </div>
-          </div>
-          {/* baris 5 */}
-          <label htmlFor="voucherDescription">Deskripsi Kupon</label>
-          <Textarea
-            className="h-36"
-            placeholder="Deskripsi Kupon"
-            name="voucherDescription"
-            register={register}
-            error={errors.voucherDescription?.message}
-          />
+            {/* baris 5 */}
+            <label htmlFor="voucherDescription">Deskripsi Kupon</label>
+            <Textarea
+              className="h-36"
+              placeholder="Deskripsi Kupon"
+              name="voucherDescription"
+              register={register}
+              error={errors.voucherDescription?.message}
+            />
 
-          <div className="flex gap-2 justify-end py-5">
-            <Link to="/kupon">
-            
-            <Button
-              type="button"
-              label="Batal"
-              className="border-[#25745A] text-[#25745A] border-2 py-2 px-3 rounded-lg"
-            />
-            </Link>
-            <Button
-              type="submit"
-              label="Buat Voucher"
-              className="bg-[#25745A] text-white py-2 px-3 rounded-lg"
-            />
-          </div>
-        </form>
+            <div className="flex gap-2 justify-end py-5">
+              <Link to="/kupon">
+                <Button
+                  type="button"
+                  label="Batal"
+                  className="border-[#25745A] text-[#25745A] border-2 py-2 px-3 rounded-lg"
+                />
+              </Link>
+              <Button
+                type="submit"
+                label="Buat Voucher"
+                className="bg-[#25745A] text-white py-2 px-3 rounded-lg"
+              />
+            </div>
+          </form>
+        )}
       </div>
     </Layout>
   );
