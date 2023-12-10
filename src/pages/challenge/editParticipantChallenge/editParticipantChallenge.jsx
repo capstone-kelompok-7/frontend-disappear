@@ -27,8 +27,6 @@ export default function editPesertaChallange() {
   const [participant, setParticipant] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
 
-  const [gambar, setGambar] = useState([]);
-
   const {
     reset,
     register,
@@ -48,7 +46,6 @@ export default function editPesertaChallange() {
       setIsLoading(true);
       const result = await getDetailParticipant(id);
       setParticipant(result.data);
-      console.log(result.data);
 
       if (result.data) {
         setSelectedId(result.data.id);
@@ -59,6 +56,7 @@ export default function editPesertaChallange() {
           format(new Date(result.data.tanggal_berpartisipasi), "yyyy-MM-dd")
         );
         setValue("image", result.data.photo);
+        setValue("status", result.data.status);
       }
     } catch (error) {
       console.log(error.message);
@@ -111,7 +109,6 @@ export default function editPesertaChallange() {
   const onGambarChange = (e) => {
     const file = e.target.files[0];
     if (file) {
-      setGambar(file);
       setValue("image", [file]);
     }
   };
