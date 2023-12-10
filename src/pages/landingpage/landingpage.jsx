@@ -1,4 +1,4 @@
-import React, { useRef, useState } from "react";
+import React, { useEffect, useState } from "react";
 import Nav from "@/components/landingpage/nav";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Mousewheel, Keyboard } from "swiper/modules";
@@ -28,8 +28,24 @@ import { FaCircleArrowRight } from "react-icons/fa6";
 import { FaStar } from "react-icons/fa";
 import "@/styles/landingpage/landingpage.css";
 import Footer from "@/components/landingpage/footer";
+import { getReviews, getLandingPage } from "@/utils/api/landingpage/api";
 
 export default function Landingpage() {
+  const [reviews, setReviews] = useState([]);
+
+  useEffect(() => {
+    const fetchReviews = async () => {
+      try {
+        const response = await getReviews();
+        setReviews(response.data);
+      } catch (error) {
+        console.error("Error fetching reviews:", error);
+      }
+    };
+
+    fetchReviews();
+  }, []);
+
   return (
     <>
       <Nav />
@@ -198,36 +214,24 @@ export default function Landingpage() {
             modules={[Navigation, Pagination, Mousewheel, Keyboard]}
             className="testimonial mySwiper"
           >
-            <div className="testi-content">
-              <SwiperSlide className="slide ">
-                <img src={avatar} alt="Avatar Image" className="image sm:hidden" />
-                <p>
-                  Produk ini terbuat dari stainless steel yang tahan lama dan
-                  bisa digunakan berulang kali. Dengan menggunakan botol ini,
-                  kita dapat mengurangi penggunaan botol plastik sekali pakai
-                  yang merusak lingkungan. Desainnya yang stylish juga
-                  membuatnya menjadi pilihan ramah lingkungan yang praktis.
-                </p>
-                <div className="star-icon">
-                  <FaStar style={{ color: "#DC9B09" }} />
-                </div>
-                <div className="details">
-                  <span className="font-semibold text-2xl">Charlie Green</span>
-                </div>
-              </SwiperSlide>
-              <SwiperSlide className="slide ">
-                <img src={avatar} alt="Avatar Image" className="image" />
-                <p>
-                  Lorem ipsum dolor sit amet consectetur adipisicing elit. Eum cumque dolorum esse hic! Quia nobis perferendis, cumque aperiam asperiores perspiciatis quaerat blanditiis obcaecati eveniet aut fuga, possimus repellat quis, officia exercitationem eaque animi incidunt quidem libero voluptas expedita. Tempore corrupti eveniet voluptatem molestiae quam explicabo commodi doloribus, suscipit ratione aliquam!
-                </p>
-                <div className="star-icon">
-                  <FaStar style={{ color: "#DC9B09" }} />
-                </div>
-                <div className="details">
-                  <span className="font-semibold text-2xl">Charlie Black</span>
-                </div>
-              </SwiperSlide>
-            </div>
+            {reviews.map((category) => (
+              <div key={category.id} className="testi-content">
+                {category.review.map((review) => (
+                  <SwiperSlide key={review.id} className="slide">
+                    <img src={review.user.photo_profile} alt="Avatar Image" className="image rounded-full" />
+                    <p id="description">{review.description}</p>
+                    <div className="star-icon flex" id="rating">
+                      {Array.from({ length: review.rating }, (_, index) => (
+                        <FaStar key={index} style={{ color: "#DC9B09" }} />
+                      ))}
+                    </div>
+                    <div className="details">
+                      <span className="font-semibold text-2xl">{review.user.name}</span>
+                    </div>
+                  </SwiperSlide>
+                ))}
+              </div>
+            ))}
           </Swiper>
         </section>
 
