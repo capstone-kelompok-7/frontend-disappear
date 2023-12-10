@@ -162,7 +162,7 @@ function PopUp({ handleForceFetch, selectedId }) {
         <Loading />
       ) : (
         <form
-          onSubmit={handleSubmit(selectedId === 0 ? onSubmit : onSubmitEdit)}
+          onSubmit={handleSubmit(selectedId === null ? onSubmit : onSubmitEdit)}
         >
           <dialog
             id="my_modal_5"
@@ -170,7 +170,7 @@ function PopUp({ handleForceFetch, selectedId }) {
           >
             <div className="modal-box flex flex-col justify-center h-[50vh] px-20">
               <h3 className="font-semibold text-4xl text-center">
-                {selectedId === 0 ? "Tambah Carousel" : "Edit Carousel"}
+                {selectedId === null ? "Tambah Carousel" : "Edit Carousel"}
               </h3>
               <Input
                 placeholder="Nama Carousel"
@@ -201,7 +201,7 @@ function PopUp({ handleForceFetch, selectedId }) {
                 <Button
                   type="submit"
                   className="rounded-full border px-10 bg-secondary-green text-white py-3"
-                  label={selectedId === 0 ? "Tambah" : "Edit"}
+                  label={selectedId === null ? "Tambah" : "Edit"}
                 />
               </div>
             </div>
