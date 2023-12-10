@@ -72,7 +72,6 @@ export default function LihatUlasan() {
           <div className="flex mt-4 items-center">
             <div className="flex-col w-1/2">
               <p className="font-semibold pb-4">{ulasan.name}</p>
-              <p>P00B4532</p>
             </div>
 
             <div className="flex-col w-1/4 mr-10">
