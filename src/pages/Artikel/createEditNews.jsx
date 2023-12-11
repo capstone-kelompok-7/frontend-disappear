@@ -85,7 +85,9 @@ function CreateEditNews() {
   }
 
   useEffect(() => {
-    fetchArtikel();
+    if (id !== undefined) {
+      fetchArtikel();
+    }
   }, []);
 
   async function fetchArtikel() {
