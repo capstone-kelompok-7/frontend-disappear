@@ -6,6 +6,7 @@ import Button from "@/components/button";
 import Layout from "@/components/layout";
 import { useToast } from "@/components/ui/use-toast";
 import { FaRegCheckCircle } from "react-icons/fa";
+import { FaRegTimesCircle } from "react-icons/fa";
 import { getDetailOrder } from "@/utils/api/order/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
 import { format } from "date-fns";
@@ -74,16 +75,17 @@ export default function ConfirmPayment() {
 
       navigate("/pembayaran");
       toast({
+        variant: "destructive",
         title: (
           <div className="flex items-center gap-3">
-            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <FaRegTimesCircle className="text-[#E50000] text-3xl" />
             <span className=" text-base font-semibold">
-              Konfirmasi Pembayaran Berhasil!
+              Konfirmasi Pembayaran Gagal!
             </span>
           </div>
         ),
         description:
-          "Pembayaran telah berhasil dikonfimasi. Silahkan nikmati fitur lainnya!!",
+          "Oh, noo! Sepertinya ada kesalahan saat proses konfirmasi pembayaran. Periksa koneksi mu dan coba lagi, yuk!!",
       });
     } catch (error) {
       console.log(error);
