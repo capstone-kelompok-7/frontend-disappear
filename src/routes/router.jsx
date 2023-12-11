@@ -14,7 +14,7 @@ import IndexProducts from "@/pages/products/indexProducts";
 import PelangganDetail from "@/pages/pelanggan/pelangganDetail";
 import Pelanggan from "@/pages/pelanggan/pelanggan";
 
-import CreateVoucher from "@/pages/voucherpage/createEditVoucher";
+import CreateVoucher from "@/pages/voucherPage/createEditVoucher";
 import VoucherApp from "@/pages/voucherPage/voucherIndex";
 
 import ConfirmPayment from "@/pages/payment/confirmPayment";
