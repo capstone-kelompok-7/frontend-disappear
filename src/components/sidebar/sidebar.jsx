@@ -22,6 +22,9 @@ export default function SideBar(props) {
   const navigate = useNavigate();
 
   const handleLogout = () => {
+    localStorage.removeItem("rememberedCheckbox");
+    sessionStorage.removeItem("rememberedEmail");
+    sessionStorage.removeItem("rememberedPassword");
     localStorage.removeItem("accessToken");
     sessionStorage.removeItem("accessToken");
 
