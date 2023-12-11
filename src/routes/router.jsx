@@ -14,8 +14,8 @@ import IndexProducts from "@/pages/products/indexProducts";
 import PelangganDetail from "@/pages/pelanggan/pelangganDetail";
 import Pelanggan from "@/pages/pelanggan/pelanggan";
 
-import CreateVoucher from "@/pages/voucherpage/createEditVoucher";
-import VoucherApp from "@/pages/voucherpage/voucherIndex";
+import CreateVoucher from "@/pages/voucherPage/createEditVoucher";
+import VoucherApp from "@/pages/voucherPage/voucherIndex";
 
 import ConfirmPayment from "@/pages/payment/confirmPayment";
 import IndexPayment from "@/pages/payment/indexPayment";
@@ -24,9 +24,8 @@ import DetailOrder from "@/pages/order/detailOrder";
 import Pesanan from "@/pages/order/order";
 
 import DetailNews from "@/pages/Artikel/detailNews";
-import CreateNews from "@/pages/Artikel/createNews";
+import CreateEditNews from "@/pages/Artikel/createEditNews";
 import IndexNews from "@/pages/Artikel/indexNews";
-import EditNews from "@/pages/Artikel/editNews";
 
 import DetailUlasan from "@/pages/ulasan/detailUlasan/detailUlasan";
 import IndexUlasan from "@/pages/ulasan/indexUlasan";
@@ -120,15 +119,15 @@ export default function Router() {
           element: <CreateVoucher />,
         },
         {
-          path: "/create-news",
-          element: <CreateNews />,
+          path: "/artikel/create-news",
+          element: <CreateEditNews />,
         },
         {
-          path: "/edit-news",
-          element: <EditNews />,
+          path: "/artikel/edit-news/:id",
+          element: <CreateEditNews />,
         },
         {
-          path: "/detail-news",
+          path: "/artikel/detail-news/:id",
           element: <DetailNews />,
         },
         {
