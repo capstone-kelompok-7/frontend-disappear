@@ -260,7 +260,7 @@ function CreateVoucher() {
                 <label htmlFor="voucherFor">Kategori</label>
                 <Select
                     name="voucherFor"
-                    options={["Bronze", "Silver", "Gold", "All Customer"]}
+                    options={["bronze", "silver", "gold", "all Customer"]}
                     placeholder="Status"
                     register={register}
                     error={errors.voucherFor?.message}
