@@ -31,6 +31,7 @@ export default function IndexProducts() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const { toast } = useToast();
 
   const navigate = useNavigate();
@@ -136,6 +137,41 @@ export default function IndexProducts() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  const allCategories = products
+    ? products.flatMap((product) => product.categories)
+    : [];
+
+  const uniqueCategories = allCategories.filter(
+    (category, index, self) =>
+      index === self.findIndex((c) => c.id === category.id)
+  );
+
+  const filteredProducts = selectedCategory
+    ? products.filter((product) =>
+        product.categories.some(
+          (category) => category.id === selectedCategory.id
+        )
+      )
+    : products;
+
+  const handleCategoryClick = (category) => {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("category", category.name);
+    setSearchParams(newSearchParams);
+
+    fetchData({ category: category.name });
+    setSelectedCategory(category);
+  };
+
+  function handleShowAllData() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("category");
+    setSearchParams(newSearchParams);
+
+    setSelectedCategory(null);
+    fetchData();
   }
 
   const columns = [
@@ -281,7 +317,9 @@ export default function IndexProducts() {
                 className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20"
                 id="dropdownFilter"
               >
-                <p className=" text-primary-green">Filter</p>
+                <p className=" text-primary-green">
+                  {selectedCategory ? selectedCategory.name : "filter"}
+                </p>
 
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -298,15 +336,21 @@ export default function IndexProducts() {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
-                  Tas Baru
+                <DropdownMenuItem
+                  className="cursor-pointer bg-black text-white hover:bg-secondary-green hover:text-white"
+                  onClick={() => handleShowAllData()}
+                >
+                  Tampilkan Semua Produk
                 </DropdownMenuItem>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
-                  Alat Makan
-                </DropdownMenuItem>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
-                  Sendok
-                </DropdownMenuItem>
+                {uniqueCategories.map((category) => (
+                  <DropdownMenuItem
+                    key={category.id}
+                    className="cursor-pointer hover:bg-secondary-green hover:text-white"
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    {category.name}
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -317,7 +361,7 @@ export default function IndexProducts() {
           <div className="mt-5">
             {products && products.length > 0 ? (
               <>
-                <Tabel columns={columns} data={products} />
+                <Tabel columns={columns} data={filteredProducts} />
                 <Pagination
                   meta={meta}
                   onClickPrevious={() =>
