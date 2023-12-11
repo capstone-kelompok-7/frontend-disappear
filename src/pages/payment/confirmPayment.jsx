@@ -7,7 +7,7 @@ import Layout from "@/components/layout";
 import { useToast } from "@/components/ui/use-toast";
 import { FaRegCheckCircle } from "react-icons/fa";
 import { FaRegTimesCircle } from "react-icons/fa";
-import { getDetailOrder } from "@/utils/api/order/api";
+import { getDetailOrder } from "@/utils/api/paymentAndOrder/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
 import { format } from "date-fns";
 import { Loading } from "@/components/loading";

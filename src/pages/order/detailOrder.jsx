@@ -12,7 +12,7 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Textarea } from "@/components/ui/textarea";
-import { getAllOrder, getDetailOrder } from "@/utils/api/paymentAndOrder/api";
+import { getDetailOrder } from "@/utils/api/paymentAndOrder/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
 import { format } from "date-fns";
 import { Loading } from "@/components/loading";
