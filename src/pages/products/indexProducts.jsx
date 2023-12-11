@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
@@ -50,19 +50,28 @@ export default function IndexProducts() {
     return () => delayedFetchData.cancel();
   }, [searchValue, searchParams]);
 
-  async function fetchData() {
-    let query = { search: searchValue };
-    for (const entry of searchParams.entries()) {
-      if (entry[0] !== "search") {
-        query[entry[0]] = entry[1];
+  const getSuggestions = useCallback(
+    async function (query) {
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+
+      if (!query) {
+        newSearchParams.delete("search");
+      } else {
+        newSearchParams.set("search", query);
+        newSearchParams.delete("page");
       }
+
+      setSearchParams(newSearchParams);
+    },
+    [searchParams, setSearchParams]
+  );
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
     }
 
-    if (searchValue.trim() === "") {
-      delete query["search"];
-    } else {
-      query.search = searchValue;
-    }
     try {
       setIsLoading(true);
       const result = await getAllProducts({ ...query });
@@ -83,16 +92,7 @@ export default function IndexProducts() {
 
   function handleSearchInputParams(search) {
     setSearchValue(search);
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-
-    // Hapus parameter 'search' jika nilai search kosong
-    if (search.trim() === "") {
-      newSearchParams.delete("search");
-    } else {
-      newSearchParams.set("search", String(search));
-    }
-
-    setSearchParams(newSearchParams);
+    getSuggestions(search);
   }
 
   async function handleDeleteClick(id) {
