@@ -161,7 +161,7 @@ export default function Carousel() {
         <img
           src={row.original.photo}
           alt="Product"
-          className="h-20 w-28 rounded m-auto object-cover"
+          className="h-20 w-36 rounded m-auto object-cover"
         />
       ),
     },
