@@ -68,7 +68,6 @@ export default function IndexProducts() {
       const result = await getAllProducts({ ...query });
       const { ...rest } = result.meta;
       setProducts(result.data);
-      console.log(result.data);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);

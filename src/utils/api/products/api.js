@@ -48,8 +48,14 @@ export const createProducts = async (data) => {
   }
 };
 
-export const createImageProducts = async (formData) => {
+export const createImageProducts = async (data) => {
   try {
+    const formData = new FormData();
+    for (const key in data) {
+      if (Object.prototype.hasOwnProperty.call(data, key) && data[key]) {
+        formData.append(key, data[key]);
+      }
+    }
     const response = await axiosWithConfig.post(
       `api/v1/products/images`,
       formData
