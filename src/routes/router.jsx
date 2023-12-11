@@ -15,7 +15,7 @@ import PelangganDetail from "@/pages/pelanggan/pelangganDetail";
 import Pelanggan from "@/pages/pelanggan/pelanggan";
 
 import CreateVoucher from "@/pages/voucherpage/createEditVoucher";
-import VoucherApp from "@/pages/voucherpage/voucherIndex";
+import VoucherApp from "@/pages/voucherPage/voucherIndex";
 
 import ConfirmPayment from "@/pages/payment/confirmPayment";
 import IndexPayment from "@/pages/payment/indexPayment";
@@ -119,15 +119,15 @@ export default function Router() {
           element: <CreateVoucher />,
         },
         {
-          path: "/create-news",
-          element: <CreateNews />,
+          path: "/artikel/create-news",
+          element: <CreateEditNews />,
         },
         {
-          path: "/edit-news",
-          element: <EditNews />,
+          path: "/artikel/edit-news/:id",
+          element: <CreateEditNews />,
         },
         {
-          path: "/detail-news",
+          path: "/artikel/detail-news/:id",
           element: <DetailNews />,
         },
         {
