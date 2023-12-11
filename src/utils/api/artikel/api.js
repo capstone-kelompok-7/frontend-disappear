@@ -1,12 +1,25 @@
 import axiosWithConfig from "../axiosWithConfig";
 
-export const getArtikel = async () => {
+export const getArtikel = async (params) => {
   try {
-    const response = await axiosWithConfig.get("/api/v1/articles");
+    let query = "";
+
+    if (params) {
+      const queryParams = [];
+
+      let key;
+      for (key in params) {
+        queryParams.push(`${key}=${params[key]}`);
+      }
+
+      query = queryParams.join("&");
+    }
+    const url = query ? `/api/v1/articles?${query}` : "/api/v1/articles";
+    const response = await axiosWithConfig.get(url);
 
     return response.data;
   } catch (error) {
-    throw Error("Failed to get All Products");
+    throw Error(error.response.data.message);
   }
 };
 

@@ -65,13 +65,16 @@ function DetailNews() {
             </div>
             <div className="mx-auto mb-8">
               <img
-                className="w-full h-[50rem] rounded-md object-cover"
+                className="w-full h-[50rem] rounded-md object-contain"
                 src={photo}
                 alt={title}
               />
             </div>
-            <p dangerouslySetInnerHTML={{ __html: sanitizedContent }} />
-            <div className="justify-between my-7 flex">
+            <div
+              className="space-y-3"
+              dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+            ></div>
+            <div className="justify-end space-x-3 my-7 flex">
               <button
                 type="submit"
                 className="border border-black text-black px-4 rounded"
