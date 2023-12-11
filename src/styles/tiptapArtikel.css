@@ -1,0 +1,26 @@
+.text-editor-container {
+  width: 100%;
+  margin-top: 1rem;
+  height: 27rem;
+}
+
+.text-editor-container .ProseMirror {
+  border: 1px solid #000;
+  height: 24rem;
+  padding: 4px;
+  border-radius: 0.25rem;
+  overflow: auto;
+}
+
+.text-editor-container .ProseMirror h1,
+.text-editor-container .ProseMirror h2,
+.text-editor-container .ProseMirror ul,
+.text-editor-container .ProseMirror ol {
+  margin-left: 6px;
+  margin-bottom: 4rem;
+  list-style-type: disc;
+}
+
+.text-editor-container .ProseMirror li {
+  margin-bottom: 2rem;
+}

@@ -18,6 +18,7 @@ import {
   updateArtikel,
 } from "@/utils/api/artikel/api";
 import { Loading } from "@/components/loading";
+import Button from "@/components/button";
 
 function CreateEditNews() {
   const { id } = useParams();
@@ -176,7 +177,11 @@ function CreateEditNews() {
               </div>
               <div className="flex flex-col mb-4 w-full">
                 <label className="text-black font-bold mb-3">Unggah File</label>
-                <div className="border p-2 rounded-sm border-black flex">
+                <div
+                  className={`border p-2 rounded-sm border-black flex ${
+                    errors.image ? "border-red-500" : "border"
+                  }`}
+                >
                   <label
                     htmlFor="gambar-artikel"
                     className="cursor-pointer flex items-center px-5 bg-[#404040] w-[6.5rem] text-white rounded-md"
@@ -191,19 +196,30 @@ function CreateEditNews() {
                     className="hidden"
                     onChange={handleFileNameChange}
                     accept="image/jpeg, image/jpg, image/png"
-                    error={errors.photo?.message}
                   />
                   {fileName && (
                     <p className="ml-2 text-sm text-gray-500">{`${fileName}`}</p>
                   )}
                 </div>
-                <p className="text-xs font-light mt-1">
-                  *maksimal 2MB dengan format PNG, JPG, JPEG
-                </p>
+                <div className={`text-xs mt-1 ${"text-gray-500"}`}>
+                  {errors.photo ? (
+                    <div className="text-red-500 text-xs mt-1">
+                      {errors.photo.message}
+                    </div>
+                  ) : (
+                    "*maksimal 2MB dengan format PNG, JPG, JPEG"
+                  )}
+                </div>
               </div>
             </div>
             <div className="mt-6 ml-4">
-              <label className="text-black font-bold">Konten</label>
+              <div className="flex justify-between items-center">
+                <label className="text-black font-bold">Konten</label>
+                <Button
+                  label="Generate content article"
+                  className="bg-secondary-green px-2 py-2 rounded border text-white"
+                />
+              </div>
               <div className="overflow-auto">
                 <TextEditor
                   register={register}
@@ -215,17 +231,17 @@ function CreateEditNews() {
             </div>
             <div className="justify-end mb-7 flex space-x-3">
               <button
-                type="submit"
-                className="bg-secondary-green text-white px-4 py-2 rounded"
-              >
-                {selectedId === 0 ? "Tambah Artikel" : "Edit Artikel"}
-              </button>
-              <button
                 type="button"
                 className="border border-black text-black px-4 rounded"
                 onClick={() => navigate(`/artikel`)}
               >
                 Batal
+              </button>
+              <button
+                type="submit"
+                className="bg-secondary-green text-white px-4 py-2 rounded"
+              >
+                {selectedId === 0 ? "Tambah Artikel" : "Edit Artikel"}
               </button>
             </div>
           </div>
