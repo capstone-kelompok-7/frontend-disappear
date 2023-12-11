@@ -171,12 +171,14 @@ function PopUp({ handleForceFetch, selectedId, data }) {
                 register={register}
                 name="carouselName"
                 error={errors.carouselName?.message}
+                id="carouselName"
               />
               <Input
                 type="file"
                 register={register}
                 name="image"
                 error={errors.image?.message}
+                id="image"
               />
               {!errors.image && (
                 <p className="text-xs mt-1">
@@ -187,7 +189,7 @@ function PopUp({ handleForceFetch, selectedId, data }) {
                 <form method="dialog">
                   <Button
                     className="bg-white rounded-full border-secondary-green border px-10 py-3 text-base font-semibold text-primary-green"
-                    label="Batal"
+                    label="Batal" id="btn-cancel"
                   />
                 </form>
                 <Button
@@ -198,6 +200,7 @@ function PopUp({ handleForceFetch, selectedId, data }) {
                       : "rounded-full border bg-secondary-green text-white px-14 py-3"
                   }
                   label={selectedId === null ? "Tambah" : "Edit"}
+                  id="btn-submit"
                 />
               </div>
             </div>

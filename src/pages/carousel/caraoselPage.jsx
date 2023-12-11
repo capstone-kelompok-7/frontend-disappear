@@ -182,6 +182,7 @@ export default function Carousel() {
               <DropdownMenuItem
                 className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
                 onClick={() => onClickEdit(row.original.id)}
+                id="btn-edit"
               >
                 <BiEdit />
                 Edit Carousel
@@ -189,6 +190,7 @@ export default function Carousel() {
               <DropdownMenuItem
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
                 onClick={() => onClickDelete(row.original.id)}
+                id="btn-delete"
               >
                 <BiTrash />
                 Delete Carousel
@@ -207,6 +209,7 @@ export default function Carousel() {
         <div className=" items-center flex  mt-6  py-5 gap-6">
           <Button
             label="Tambah Carousel"
+            id="btn-modal"
             icon={
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -236,6 +239,7 @@ export default function Carousel() {
               icon={<FiSearch />}
               value={searchValue}
               onChange={(e) => handleSearchInputParams(e.target.value)}
+              id="searchCarousel"
             />
           </div>
           <PopUp
