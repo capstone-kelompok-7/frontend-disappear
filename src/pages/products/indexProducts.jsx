@@ -75,8 +75,13 @@ export default function IndexProducts() {
     try {
       setIsLoading(true);
       const result = await getAllProducts({ ...query });
+      const searchData = result.data
+        ? result.data.filter((item) =>
+            item.name.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        : [];
       const { ...rest } = result.meta;
-      setProducts(result.data);
+      setProducts(searchData);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
@@ -310,13 +315,23 @@ export default function IndexProducts() {
           <Loading />
         ) : (
           <div className="mt-5">
-            <Tabel columns={columns} data={products} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
+            {products && products.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={products} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
+                <p>Data tidak ditemukan</p>
+              </div>
+            )}
           </div>
         )}
       </Layout>
