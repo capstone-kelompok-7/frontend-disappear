@@ -11,27 +11,48 @@ import {
 import { Input } from "@/components/ui/input";
 import { getAllPayment } from "@/utils/api/payment/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { SlCalender } from "react-icons/sl";
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { format } from "date-fns";
 import getStatusColor from "@/utils/formatter/formatStatusColor";
 import { Loading } from "@/components/loading";
+import { debounce } from "lodash";
 
 export default function IndexPayment() {
   const [payment, setPayment] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
+  const [searchValue, setSearchValue] = useState("");
 
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData();
-  }, [searchParams]);
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
+  }, [searchValue, searchParams]);
+
+  const getSuggestions = useCallback(
+    async function (query) {
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+
+      if (!query) {
+        newSearchParams.delete("search");
+      } else {
+        newSearchParams.set("search", query);
+        newSearchParams.delete("page");
+      }
+
+      setSearchParams(newSearchParams);
+    },
+    [searchParams, setSearchParams]
+  );
 
   async function fetchData() {
-    let query = {};
+    let query = { search: searchValue };
     for (const entry of searchParams.entries()) {
       query[entry[0]] = entry[1];
     }
@@ -52,6 +73,11 @@ export default function IndexPayment() {
   function handlePrevNextPage(page) {
     searchParams.set("page", String(page));
     setSearchParams(searchParams);
+  }
+
+  function handleSearchInputParams(search) {
+    setSearchValue(search);
+    getSuggestions(search);
   }
 
   const columns = [
@@ -103,6 +129,8 @@ export default function IndexPayment() {
                 placeholder="Cari Pelanggan"
                 type="text"
                 className=" border-primary-green py-6"
+                value={searchValue}
+                onChange={(e) => handleSearchInputParams(e.target.value)}
               />
               <svg
                 className="absolute right-3 top-4 text-primary-green"
@@ -137,11 +165,15 @@ export default function IndexPayment() {
                 </svg>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem>apa</DropdownMenuItem>
-                <DropdownMenuItem>apa</DropdownMenuItem>
-                <DropdownMenuItem>apa</DropdownMenuItem>
-                <DropdownMenuItem>apa</DropdownMenuItem>
-                <DropdownMenuItem>apa</DropdownMenuItem>
+                <DropdownMenuItem style={{ cursor: "pointer" }}>
+                  Konfirmasi
+                </DropdownMenuItem>
+                <DropdownMenuItem style={{ cursor: "pointer" }}>
+                  Menunggu Konfirmasi
+                </DropdownMenuItem>
+                <DropdownMenuItem style={{ cursor: "pointer" }}>
+                  Gagal
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -168,12 +200,15 @@ export default function IndexPayment() {
                   </svg>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem>apa</DropdownMenuItem>
-                  <DropdownMenuItem>apa</DropdownMenuItem>
-                  <DropdownMenuItem>apa</DropdownMenuItem>
-                  <DropdownMenuItem>apa</DropdownMenuItem>
-                  <DropdownMenuItem>apa</DropdownMenuItem>
-                  <DropdownMenuItem>apa</DropdownMenuItem>
+                  <DropdownMenuItem style={{ cursor: "pointer" }}>
+                    Minggu Ini
+                  </DropdownMenuItem>
+                  <DropdownMenuItem style={{ cursor: "pointer" }}>
+                    Bulan Ini
+                  </DropdownMenuItem>
+                  <DropdownMenuItem style={{ cursor: "pointer" }}>
+                    Tahun Ini
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
