@@ -15,6 +15,7 @@ import {
 import { deleteArtikel } from "@/utils/api/artikel/api";
 import Delete from "@/components/delete/delete";
 import { useToast } from "@/components/ui/use-toast";
+import { Loading } from "@/components/loading";
 
 function CardArtikel({ title, content, photo, date, artikelId }) {
   // Intragrated content
@@ -82,6 +83,7 @@ function CardArtikel({ title, content, photo, date, artikelId }) {
 
   // Delete Artikel
   const { toast } = useToast();
+  const [isLoading, setIsLoading] = useState(false);
 
   async function handleDeleteClick(id) {
     try {
@@ -91,6 +93,7 @@ function CardArtikel({ title, content, photo, date, artikelId }) {
       });
 
       if (result.isConfirmed) {
+        setIsLoading(true);
         await deleteArtikel(id);
         toast({
           title: (
@@ -115,85 +118,94 @@ function CardArtikel({ title, content, photo, date, artikelId }) {
         ),
         description: "Terjadi kesalahan saat menghapus produk.",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
   return (
-    <div className="flex border-y-4 p-4 mt-4 mb-4 space-x-3 shadow-md items-center justify-between">
-      <div className="p-4">
-        <p className="mb-2">{formattedDatee}</p>
-        <h2 className="text-xl font-bold mb-2">{title}</h2>
-        <div className="mr-12">
-          <p dangerouslySetInnerHTML={{ __html: cleanContent }} />
-          <div className="flex justify-between pt-3">
-            <p className="items-center">{`${countdown}`}</p>
-            <DropdownMenu>
-              <DropdownMenuTrigger>
-                <svg
-                  width="16"
-                  height="4"
-                  viewBox="0 0 16 4"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
-                  <path
-                    d="M13 2C13 2.55228 13.4477 3 14 3C14.5523 3 15 2.55228 15 2C15 1.44772 14.5523 1 14 1C13.4477 1 13 1.44772 13 2Z"
-                    stroke="black"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M7 2C7 2.55228 7.44772 3 8 3C8.55228 3 9 2.55228 9 2C9 1.44772 8.55228 1 8 1C7.44772 1 7 1.44772 7 2Z"
-                    stroke="black"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                  <path
-                    d="M1 2C1 2.55228 1.44772 3 2 3C2.55228 3 3 2.55228 3 2C3 1.44772 2.55228 1 2 1C1.44772 1 1 1.44772 1 2Z"
-                    stroke="black"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                  />
-                </svg>
-              </DropdownMenuTrigger>
-              <DropdownMenuContent>
-                <Link onClick={toDetailArtikel} id="toDetailArtikel">
-                  <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white">
-                    <IoEye />
-                    <p>Detail Artikel</p>
-                  </DropdownMenuItem>
-                </Link>
-                <Link>
-                  <DropdownMenuItem
-                    className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
-                    onClick={toEditArtikel}
-                  >
-                    <BiEdit />
-                    <p>Edit Artikel</p>
-                  </DropdownMenuItem>
-                </Link>
-                <DropdownMenuItem
-                  className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
-                  id="deleteArtikel"
-                  onClick={() => handleDeleteClick(artikelId)}
-                >
-                  <BiTrash />
-                  <p>Hapus Artikel</p>
-                </DropdownMenuItem>
-              </DropdownMenuContent>
-            </DropdownMenu>
+    <>
+      {isLoading ? (
+        <Loading />
+      ) : (
+        <div className="flex border-y-4 p-4 mt-4 mb-4 space-x-3 shadow-md items-center justify-between">
+          <div className="p-4">
+            <p className="mb-2">{formattedDatee}</p>
+            <h2 className="text-xl font-bold mb-2">{title}</h2>
+            <div className="mr-12">
+              <p dangerouslySetInnerHTML={{ __html: cleanContent }} />
+              <div className="flex justify-between pt-3">
+                <p className="items-center">{`${countdown}`}</p>
+                <DropdownMenu>
+                  <DropdownMenuTrigger>
+                    <svg
+                      width="16"
+                      height="4"
+                      viewBox="0 0 16 4"
+                      fill="none"
+                      xmlns="http://www.w3.org/2000/svg"
+                    >
+                      <path
+                        d="M13 2C13 2.55228 13.4477 3 14 3C14.5523 3 15 2.55228 15 2C15 1.44772 14.5523 1 14 1C13.4477 1 13 1.44772 13 2Z"
+                        stroke="black"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M7 2C7 2.55228 7.44772 3 8 3C8.55228 3 9 2.55228 9 2C9 1.44772 8.55228 1 8 1C7.44772 1 7 1.44772 7 2Z"
+                        stroke="black"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                      <path
+                        d="M1 2C1 2.55228 1.44772 3 2 3C2.55228 3 3 2.55228 3 2C3 1.44772 2.55228 1 2 1C1.44772 1 1 1.44772 1 2Z"
+                        stroke="black"
+                        strokeWidth="2"
+                        strokeLinecap="round"
+                        strokeLinejoin="round"
+                      />
+                    </svg>
+                  </DropdownMenuTrigger>
+                  <DropdownMenuContent>
+                    <Link onClick={toDetailArtikel} id="toDetailArtikel">
+                      <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white">
+                        <IoEye />
+                        <p>Detail Artikel</p>
+                      </DropdownMenuItem>
+                    </Link>
+                    <Link>
+                      <DropdownMenuItem
+                        className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
+                        onClick={toEditArtikel}
+                      >
+                        <BiEdit />
+                        <p>Edit Artikel</p>
+                      </DropdownMenuItem>
+                    </Link>
+
+                    <DropdownMenuItem
+                      className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
+                      id="deleteArtikel"
+                      onClick={() => handleDeleteClick(artikelId)}
+                    >
+                      <BiTrash />
+                      <p>Hapus Artikel</p>
+                    </DropdownMenuItem>
+                  </DropdownMenuContent>
+                </DropdownMenu>
+              </div>
+            </div>
           </div>
+          <img
+            className="items-center w-[16.875rem] h-[10.938rem] rounded-md object-cover"
+            src={photo}
+            alt=""
+          />
         </div>
-      </div>
-      <img
-        className="items-center w-[16.875rem] h-[10.938rem] rounded-md object-cover"
-        src={photo}
-        alt=""
-      />
-    </div>
+      )}
+    </>
   );
 }
 

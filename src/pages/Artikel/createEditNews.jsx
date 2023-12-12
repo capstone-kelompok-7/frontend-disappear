@@ -54,6 +54,7 @@ function CreateEditNews() {
         content: data.content,
       };
 
+      setIsLoading(true);
       await createArtikel(newArtikel);
       navigate("/artikel");
       toast({
@@ -81,6 +82,8 @@ function CreateEditNews() {
         ),
         description: "Gagal menambahkan Artikel",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 

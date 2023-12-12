@@ -1,15 +1,19 @@
 import React, { useEffect, useState } from "react";
 import DOMPurify from "dompurify";
-import Layout from "../../components/layout";
 import { IoArrowBack } from "react-icons/io5";
-import { Link, useParams } from "react-router-dom";
-import { getDetailArtikel } from "@/utils/api/artikel/api";
+import { Link, useParams, useNavigate } from "react-router-dom";
+
+import Layout from "../../components/layout";
+import { getDetailArtikel, deleteArtikel } from "@/utils/api/artikel/api";
 import { Loading } from "@/components/loading";
+import Delete from "@/components/delete/delete";
+import { useToast } from "@/components/ui/use-toast";
 
 function DetailNews() {
   const { id } = useParams();
   const [artikel, setArtikel] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const { toast } = useToast();
 
   useEffect(() => {
     fetchArtikel();
@@ -28,8 +32,11 @@ function DetailNews() {
   }
 
   const { title, content, photo, author, date } = artikel;
+
+  // content html
   const sanitizedContent = DOMPurify.sanitize(content);
 
+  // date
   const formattedDate = new Date(date)
     .toLocaleDateString("id-ID", {
       day: "numeric",
@@ -38,6 +45,52 @@ function DetailNews() {
     })
     .split("/")
     .join("-");
+
+  // Edit Artikel
+  const navigate = useNavigate();
+
+  const toEditArtikel = (id) => {
+    navigate(`/artikel/edit-news/${id}`);
+  };
+
+  async function handleDeleteClick(id) {
+    try {
+      const result = await Delete({
+        title: "Yakin mau hapus data?",
+        text: "Data yang sudah dihapus tidak dapat dipulihkan, lho. Coba dipikirkan dulu, yuk!",
+      });
+
+      if (result.isConfirmed) {
+        setIsLoading(true);
+        await deleteArtikel(id);
+        navigate("/artikel");
+        toast({
+          title: (
+            <div className="flex items-center">
+              <FaRegCheckCircle />
+              <span className="ml-2">Artikel berhasil dihapus!</span>
+            </div>
+          ),
+          description:
+            "Data produk telah berhasil dihapus, nih. Silahkan nikmati fitur lainnya!",
+        });
+        window.location.reload();
+      }
+    } catch (error) {
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menghapus Artikel!</span>
+          </div>
+        ),
+        description: "Terjadi kesalahan saat menghapus produk.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  }
 
   return (
     <Layout>
@@ -67,7 +120,7 @@ function DetailNews() {
               <img
                 className="w-full h-[50rem] rounded-md object-contain"
                 src={photo}
-                alt={title}
+                alt=""
               />
             </div>
             <div
@@ -78,12 +131,14 @@ function DetailNews() {
               <button
                 type="submit"
                 className="border border-black text-black px-4 rounded"
+                onClick={() => handleDeleteClick(id)}
               >
                 Hapus Artikel
               </button>
               <button
                 type="button"
                 className="bg-secondary-green text-white px-4 py-2 rounded"
+                onClick={() => toEditArtikel(id)}
               >
                 Edit Artikel
               </button>

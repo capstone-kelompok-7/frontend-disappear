@@ -22,6 +22,7 @@ function IndexNews() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [searchValue, setSearchValue] = useState("");
+  const [selectedArtikel, setSelectedArtikel] = useState("");
 
   useEffect(() => {
     const delayedFetchArtikel = debounce(fetchArtikel, 1000);
@@ -50,7 +51,6 @@ function IndexNews() {
     for (const entry of searchParams.entries()) {
       query[entry[0]] = entry[1];
     }
-
     try {
       setIsLoading(true);
       const result = await getArtikel({ ...query });
@@ -65,6 +65,27 @@ function IndexNews() {
   function handleSearchInputParams(search) {
     setSearchValue(search);
     getSuggestions(search);
+  }
+
+  function handleFilterArtikel(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("date_filter_type", value);
+    setSearchParams(newSearchParams);
+    setSelectedArtikel(
+      value === "minggu ini"
+        ? "Minggu ini"
+        : value === "bulan ini"
+        ? "Bulan ini"
+        : "Tahun ini"
+    );
+  }
+  function handleShowAllData() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("date_filter_type");
+    setSearchParams(newSearchParams);
+
+    setSelectedArtikel(null);
+    fetchArtikel();
   }
 
   return (
@@ -99,7 +120,7 @@ function IndexNews() {
                 <SlCalender />
               </div>
               <DropdownMenuTrigger className="flex justify-between items-center py-3 px-3 gap-20 font-bold">
-                <p>Filter</p>
+                <p>{selectedArtikel || "Filter"}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="10"
@@ -114,9 +135,30 @@ function IndexNews() {
                 </svg>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="font-bold">
-                <DropdownMenuItem>Bulan ini</DropdownMenuItem>
-                <DropdownMenuItem>Seminggu ini</DropdownMenuItem>
-                <DropdownMenuItem>Hari ini</DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer bg-black text-white hover:bg-secondary-green hover:text-white"
+                  onClick={() => handleShowAllData()}
+                >
+                  Tampilkan Semua Artikel
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleFilterArtikel("minggu ini")}
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                >
+                  Minggu ini
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleFilterArtikel("bulan ini")}
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                >
+                  Bulan ini
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  onClick={() => handleFilterArtikel("tahun ini")}
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                >
+                  Tahun ini
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -137,7 +179,7 @@ function IndexNews() {
                 />
               ))
             ) : (
-              <div className="mt-6 mx-[40rem]">
+              <div className="mt-6 text-center">
                 <p>Data tidak ditemukan</p>
               </div>
             )}
