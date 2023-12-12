@@ -23,6 +23,7 @@ export default function Ulasan() {
   const [meta, setMeta] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [selectedRating, setSelectedRating] = useState("");
 
   useEffect(() => {
     const delayedFetchData = debounce(fetchData, 1000);
@@ -55,8 +56,15 @@ export default function Ulasan() {
     try {
       setIsLoading(true);
       const result = await getUlasan({ ...query });
+
+      const searchData = result.data
+        ? result.data.filter((item) =>
+            item.name.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        : [];
+
       const { ...rest } = result.meta;
-      setUlasan(result.data);
+      setUlasan(searchData);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
@@ -80,6 +88,40 @@ export default function Ulasan() {
     const itemsPerPage = meta?.per_page || 8;
     return pageIndex * itemsPerPage + itemIndex + 1;
   };
+
+  function handleFilterRating(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("rating", value);
+    setSearchParams(newSearchParams);
+    setSelectedRating(
+      value === "sangat buruk"
+        ? "Sangat Buruk"
+        : value === "buruk"
+        ? "Buruk"
+        : value === "sedang"
+        ? "Sedang"
+        : value === "baik"
+        ? "Baik"
+        : "Sangat Baik"
+    );
+  }
+
+  const filterStatusOptions = [
+    { value: "sangat baik", label: "Sangat Baik" },
+    { value: "baik", label: "Baik" },
+    { value: "sedang", label: "Sedang" },
+    { value: "buruk", label: "Buruk" },
+    { value: "sangat buruk", label: "Sangat Buruk" },
+  ];
+
+  function handleShowAllData() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("rating");
+    setSearchParams(newSearchParams);
+
+    setSelectedRating(null);
+    fetchData();
+  }
 
   const columns = [
     {
@@ -105,56 +147,79 @@ export default function Ulasan() {
         </div>
 
         <div className="flex justify-start items-center mb-5 mt-8 gap-5">
-          <div className="flex items-center">
+          <div className="relative flex items-center">
             <Input
               type="text"
               placeholder="Cari Produk"
-              className="pr-32 py-6 border border-primary-green"
+              className="pr-11 w-96 py-6 border border-primary-green"
               value={searchValue}
               onChange={(e) => handleSearchInputParams(e.target.value)}
             />
-            <FiSearch className="absolute ml-72 text-primary-green" />
+            <FiSearch className="absolute right-4 text-primary-green" />
           </div>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green gap-20">
-              <p className="text-secondary-green">Filter</p>
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="10"
-                height="5"
-                viewBox="0 0 10 5"
-                fill="none"
-              >
-                <path d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z" fill="#257157" />
-              </svg>
+            <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green">
+              <div className="flex items-center justify-between w-32">
+                <p className="text-secondary-green">
+                  {selectedRating || "Filter"}
+                </p>
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  width="10"
+                  height="5"
+                  viewBox="0 0 10 5"
+                  fill="none"
+                >
+                  <path
+                    d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z"
+                    fill="#257157"
+                  />
+                </svg>
+              </div>
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
-                Terbaik
+              <DropdownMenuItem
+                className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                onClick={() => handleShowAllData()}
+              >
+                Tampilkan Semua
               </DropdownMenuItem>
-              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
-                Terburuk
-              </DropdownMenuItem>
-              <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
-                Sedang
-              </DropdownMenuItem>
+              {filterStatusOptions.map((option) => (
+                <DropdownMenuItem
+                  key={option.value}
+                  className="hover:bg-secondary-green hover:text-white cursor-pointer"
+                  onClick={() => handleFilterRating(option.value)}
+                >
+                  {option.label}
+                </DropdownMenuItem>
+              ))}
             </DropdownMenuContent>
           </DropdownMenu>
         </div>
         {isLoading ? (
           <Loading />
         ) : (
-          <>
-            <Tabel columns={columns} data={ulasan} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
-          </>
+          <div className="mt-5">
+            {ulasan && ulasan.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={ulasan} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
+                <p>Data tidak ditemukan</p>
+              </div>
+            )}
+          </div>
         )}
       </Layout>
     </div>
