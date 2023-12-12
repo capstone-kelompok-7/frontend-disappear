@@ -2,19 +2,24 @@ import { useState, useEffect, useRef } from "react";
 import Layout from "../../components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
 import "../../styles/pelanggan/pelangganDetail.css";
-import { FaUserCircle } from "react-icons/fa";
+import { FaRegCheckCircle, FaUserCircle } from "react-icons/fa";
 import { Progress } from "flowbite-react";
 import Button from "@/components/button";
 import Delete from "@/components/delete/delete";
 import {
   deleteUsers,
   getActivity,
-  getAllUsers,
   getPelangganDetail,
 } from "@/utils/api/pelanggan/api";
-import { Link, useSearchParams, useParams } from "react-router-dom";
+import {
+  Link,
+  useSearchParams,
+  useParams,
+  useNavigate,
+} from "react-router-dom";
 import { Loading } from "@/components/loading";
 import { useToast } from "@/components/ui/use-toast";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 function PelangganDetail() {
   const [users, setUsers] = useState([]);
@@ -23,6 +28,7 @@ function PelangganDetail() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { id } = useParams();
   const { toast } = useToast();
+  const navigate = useNavigate();
 
   async function handleDelete() {
     try {
