@@ -33,6 +33,7 @@ function VoucherApp() {
   const { toast } = useToast();
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  
 
   useEffect(() => {
     const delayedFetchData = debounce(fetchData, 1000);
@@ -115,9 +116,7 @@ function VoucherApp() {
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set("status", value);
     setSearchParams(newSearchParams);
-    setSelectedStatus(
-      value === "kadaluwarsa" ? "Kadaluwarsa" : "Belum Kadaluwarsa"
-    );
+    setSelectedStatus(value);
   }
 
   function handleFilterCategory(value) {
@@ -129,10 +128,15 @@ function VoucherApp() {
 
   function handleShowAllData() {
     const newSearchParams = new URLSearchParams(searchParams.toString());
+  
     newSearchParams.delete("status");
+    newSearchParams.delete("category");
+  
     setSearchParams(newSearchParams);
-
+  
     setSelectedStatus(null);
+    setSelectedCategory(null);
+  
     fetchData();
   }
 
@@ -233,10 +237,16 @@ function VoucherApp() {
               >
                 Bronze
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black" onClick={() => handleFilterCategory("Silver")}>
+              <DropdownMenuItem
+                className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
+                onClick={() => handleFilterCategory("Silver")}
+              >
                 Silver
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black" onClick={() => handleFilterCategory("Gold")}>
+              <DropdownMenuItem
+                className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
+                onClick={() => handleFilterCategory("Gold")}
+              >
                 Gold
               </DropdownMenuItem>
               <DropdownMenuItem
@@ -253,7 +263,7 @@ function VoucherApp() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
-                nClick={() => handleFilterStatus("Belum Kadaluwarsa")}
+                onClick={() => handleFilterStatus("Belum Kadaluwarsa")}
               >
                 Belum Kadaluwarsa
               </DropdownMenuItem>
@@ -265,27 +275,23 @@ function VoucherApp() {
           <Loading />
         ) : (
           <div>
-            {vouchers &&
-              vouchers.length >
-                0 ? (
-                  <>
-                    <Tabel columns={columns} data={vouchers} />
-                    <Pagination
-                      meta={meta}
-                      onClickPrevious={() =>
-                        handlePrevNextPage(meta?.current_page - 1)
-                      }
-                      onClickNext={() =>
-                        handlePrevNextPage(meta?.current_page + 1)
-                      }
-                      onClickPage={(page) => handlePrevNextPage(page)}
-                    />
-                  </>
-                ) : (
-                  <div className="text-center">
+            {vouchers && vouchers.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={vouchers} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
                 <p>Data tidak ditemukan</p>
               </div>
-                )}
+            )}
           </div>
         )}
       </div>
