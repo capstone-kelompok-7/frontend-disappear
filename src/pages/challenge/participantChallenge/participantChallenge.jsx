@@ -69,6 +69,12 @@ export default function IndexPesertaTantangan() {
     );
   }
 
+  const filterStatusOptions = [
+    { value: "valid", label: "Valid" },
+    { value: "tidak valid", label: "Tidak Valid" },
+    { value: "menunggu validasi", label: "Menunggu Validasi" },
+  ];
+
   function handleFilterDate(value) {
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.set("date", value);
@@ -81,6 +87,12 @@ export default function IndexPesertaTantangan() {
         : "Hari ini"
     );
   }
+
+  const filterDateOptions = [
+    { value: "hari ini", label: "Hari ini" },
+    { value: "minggu ini", label: "Minggu ini" },
+    { value: "bulan ini", label: "Bulan ini" },
+  ];
 
   function handleShowAllStatus() {
     const newSearchParams = new URLSearchParams(searchParams.toString());
@@ -163,24 +175,15 @@ export default function IndexPesertaTantangan() {
                     >
                       Tampilkan Semua
                     </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className=" hover:bg-secondary-green hover:text-white cursor-pointer"
-                      onClick={() => handleFilterDate("bulan ini")}
-                    >
-                      Bulan ini
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className=" hover:bg-secondary-green hover:text-white cursor-pointer"
-                      onClick={() => handleFilterDate("minggu ini")}
-                    >
-                      Minggu ini
-                    </DropdownMenuItem>
-                    <DropdownMenuItem
-                      className=" hover:bg-secondary-green hover:text-white cursor-pointer"
-                      onClick={() => handleFilterDate("hari ini")}
-                    >
-                      Hari ini
-                    </DropdownMenuItem>
+                    {filterDateOptions.map((option) => (
+                      <DropdownMenuItem
+                        key={option.value}
+                        className="hover:bg-secondary-green hover:text-white cursor-pointer"
+                        onClick={() => handleFilterDate(option.value)}
+                      >
+                        {option.label}
+                      </DropdownMenuItem>
+                    ))}
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
@@ -214,24 +217,15 @@ export default function IndexPesertaTantangan() {
                 >
                   Tampilkan Semua
                 </DropdownMenuItem>
-                <DropdownMenuItem
-                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
-                  onClick={() => handleFilterStatus("valid")}
-                >
-                  Valid
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
-                  onClick={() => handleFilterStatus("tidak valid")}
-                >
-                  Tidak Valid
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
-                  onClick={() => handleFilterStatus("menunggu validasi")}
-                >
-                  Menunggu Validasi
-                </DropdownMenuItem>
+                {filterStatusOptions.map((option) => (
+                  <DropdownMenuItem
+                    key={option.value}
+                    className="hover:bg-secondary-green hover:text-white cursor-pointer"
+                    onClick={() => handleFilterStatus(option.value)}
+                  >
+                    {option.label}
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
