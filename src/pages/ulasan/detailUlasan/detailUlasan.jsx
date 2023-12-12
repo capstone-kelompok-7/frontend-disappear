@@ -11,6 +11,7 @@ import Star from "@/components/review/star";
 import { useParams } from "react-router-dom";
 import { getDetailUlasan } from "@/utils/api/ulasan/api";
 import { Loading } from "@/components/loading";
+import Stars from "@/components/userReview/Stars";
 
 export default function LihatUlasan() {
   const { id } = useParams();
@@ -48,7 +49,6 @@ export default function LihatUlasan() {
   };
 
   let totalReview = ulasan.rating;
-  let userReview = ulasan.reviews;
 
   return (
     <Layout>
@@ -176,7 +176,7 @@ export default function LihatUlasan() {
                         </p>
                       </div>
                       <div className="flex items-center">
-                        <Star starValue={userReview} />
+                        <Stars userReview={review.rating} />
                       </div>
                     </div>
                   </div>
