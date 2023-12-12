@@ -18,18 +18,24 @@ import formatCurrency from "@/utils/formatter/currencyIdr";
 import { format } from "date-fns";
 import { Loading } from "@/components/loading";
 import Pagination from "@/components/pagenation";
+import { debounce } from "lodash";
 
 function Order() {
   const [order, setOrder] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
-
+  const [searchValue, setSearchValue] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
   const navigate = useNavigate();
 
   useEffect(() => {
-    fetchData();
-  }, [searchParams]);
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
+  }, [searchValue, searchParams]);
 
   async function fetchData() {
     let query = {};
@@ -55,8 +61,69 @@ function Order() {
     setSearchParams(searchParams);
   }
 
+  function handleSearchInputParams(search) {
+    setSearchValue(search);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+
+    // Hapus parameter 'search' jika nilai search kosong
+    if (search.trim() === "") {
+      newSearchParams.delete("search");
+    } else {
+      newSearchParams.set("search", String(search));
+    }
+
+    setSearchParams(newSearchParams);
+  }
+
+  function handleFilterStatus(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("status_filter", value);
+    setSearchParams(newSearchParams);
+    setSelectedStatus(
+      value === "Menunggu Konfirmasi"
+        ? "Menunggu Konfirmasi"
+        : value == "Proses"
+        ? "Proses"
+        : value == "Pengiriman"
+        ? "Pengiriman"
+        : value == "Selesai"
+        ? "Selesai"
+        : "Gagal"
+    );
+  }
+  function handleFilterDate(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("date_filter", value);
+    setSearchParams(newSearchParams);
+    setSelectedDate(
+      value === "Bulan Ini"
+        ? "Bulan Ini"
+        : value === "Minggu Ini"
+        ? "Minggu Ini"
+        : "Tahun Ini"
+    );
+  }
+
+  function handleShowAllDate() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("date_filter");
+    setSearchParams(newSearchParams);
+
+    setSelectedDate(null);
+    fetchData();
+  }
+
+  function handleShowAllData() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("status_filter");
+    setSearchParams(newSearchParams);
+
+    setSelectedStatus(null);
+    fetchData();
+  }
+
   const columns = [
-    { Header: "NO", accessor: "id" },
+    { Header: "NO", accessor: "id_order" },
     {
       Header: "Pelanggan",
       accessor: "user.name",
@@ -94,7 +161,9 @@ function Order() {
                 <Input
                   type="text"
                   placeholder="Cari Pelanggan"
-                  className="search-order border-black py-6"
+                  className="search-order border-primary-green"
+                  onChange={(e) => handleSearchInputParams(e.target.value)}
+                  value={searchValue}
                 />
                 <FiSearch className="search-icon absolute right-3 top-4" />
               </div>
@@ -102,8 +171,8 @@ function Order() {
 
             <div className="ml-6 mt-10">
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-black gap-20">
-                  <p className="text-[#8C8C8C]">Filter</p>
+                <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20">
+                  <p className="text-[#8C8C8C]">{selectedStatus || "Filter"}</p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="10"
@@ -119,9 +188,42 @@ function Order() {
                 </DropdownMenuTrigger>
 
                 <DropdownMenuContent>
-                  <DropdownMenuItem>??</DropdownMenuItem>
-                  <DropdownMenuItem>??</DropdownMenuItem>
-                  <DropdownMenuItem>??</DropdownMenuItem>
+                  <DropdownMenuItem
+                    className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
+                    onClick={() => handleShowAllData()}
+                  >
+                    Tampilkan Semua
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                    onClick={() => handleFilterStatus("Menunggu Konfirmasi")}
+                  >
+                    Menunggu Konfirmasi
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                    onClick={() => handleFilterStatus("Proses")}
+                  >
+                    Proses
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                    onClick={() => handleFilterStatus("Pengiriman")}
+                  >
+                    Pengiriman
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                    onClick={() => handleFilterStatus("Selesai")}
+                  >
+                    Selesai
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                    onClick={() => handleFilterStatus("Gagal")}
+                  >
+                    Gagal
+                  </DropdownMenuItem>
                 </DropdownMenuContent>
               </DropdownMenu>
             </div>
@@ -131,7 +233,7 @@ function Order() {
             <FaRegCalendarAlt />
             <DropdownMenu>
               <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 gap-5">
-                <p className="text-black font-semibold">Bulan Ini</p>
+                <p className="text-black font-semibold">{selectedDate || ""}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="10"
@@ -147,9 +249,30 @@ function Order() {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem>??</DropdownMenuItem>
-                <DropdownMenuItem>??</DropdownMenuItem>
-                <DropdownMenuItem>??</DropdownMenuItem>
+                <DropdownMenuItem
+                  className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
+                  onClick={() => handleShowAllDate()}
+                >
+                  Tampilkan Semua
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  onClick={() => handleFilterDate("Tahun Ini")}
+                >
+                  Tahun ini
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  onClick={() => handleFilterDate("Bulan Ini")}
+                >
+                  Bulan ini
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  onClick={() => handleFilterDate("Minggu Ini")}
+                >
+                  Minggu ini
+                </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
           </div>

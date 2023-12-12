@@ -24,6 +24,22 @@ export const getAllOrder = async (params) => {
   }
 };
 
+export const updateOrder = async (data) => {
+  // console.log(data);
+  const { order_id } = data;
+
+  try {
+
+    const newData = {
+      ...data,
+    };
+    const response = await axiosWithConfig.put(`/api/v1/order/update-order`, newData);
+    console.log(response.message);
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+}
+
 export const getDetailOrder = async (id) => {
   try {
     const response = await axiosWithConfig.get(`/api/v1/order/${id}`);
