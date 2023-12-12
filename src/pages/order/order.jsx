@@ -100,7 +100,7 @@ function Order() {
         ? "Bulan Ini"
         : value === "Minggu Ini"
         ? "Minggu Ini"
-        : "Hari Ini"
+        : "Tahun Ini"
     );
   }
 
@@ -257,6 +257,12 @@ function Order() {
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  onClick={() => handleFilterDate("Tahun Ini")}
+                >
+                  Tahun ini
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                   onClick={() => handleFilterDate("Bulan Ini")}
                 >
                   Bulan ini
@@ -266,12 +272,6 @@ function Order() {
                   onClick={() => handleFilterDate("Minggu Ini")}
                 >
                   Minggu ini
-                </DropdownMenuItem>
-                <DropdownMenuItem
-                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
-                  onClick={() => handleFilterDate("Hari Ini")}
-                >
-                  Hari ini
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
