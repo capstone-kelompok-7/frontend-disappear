@@ -26,6 +26,7 @@ export default function DetailOrder() {
   const [searchParams, setSearchParams] = useSearchParams();
   const { id } = useParams();
   const { toast } = useToast();
+  const navigate = useNavigate();
   const isValidDate = (dateString) => {
     const regex = /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}:\d{2}Z$/;
     return regex.test(dateString);
@@ -92,6 +93,7 @@ export default function DetailOrder() {
       });
       reset();
       setReff(true);
+      navigate("/pesanan");
     } catch (error) {
       console.error(error);
     }
