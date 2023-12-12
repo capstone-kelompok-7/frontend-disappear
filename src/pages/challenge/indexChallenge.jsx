@@ -37,6 +37,7 @@ function IndexChallenge() {
   const [meta, setMeta] = useState();
   const [isLoading, setIsLoading] = useState(false);
   const [searchValue, setSearchValue] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
 
   const navigate = useNavigate();
 
@@ -72,8 +73,15 @@ function IndexChallenge() {
     try {
       setIsLoading(true);
       const result = await getChallenge({ ...query });
+
+      const searchData = result.data
+        ? result.data.filter((item) =>
+            item.title.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        : [];
+
       const { ...rest } = result.meta;
-      setChallenge(result.data);
+      setChallenge(searchData);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
@@ -140,6 +148,24 @@ function IndexChallenge() {
     const itemsPerPage = meta?.per_page || 8;
     return pageIndex * itemsPerPage + itemIndex + 1;
   };
+
+  function handleFilterStatus(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("status", value);
+    setSearchParams(newSearchParams);
+    setSelectedStatus(
+      value === "kadaluwarsa" ? "Kadaluwarsa" : "Belum Kadaluwarsa"
+    );
+  }
+
+  function handleShowAllData() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("status");
+    setSearchParams(newSearchParams);
+
+    setSelectedStatus(null);
+    fetchData();
+  }
 
   const columns = [
     {
@@ -208,65 +234,85 @@ function IndexChallenge() {
           <Breadcrumbs pages="Tantangan" />
         </div>
 
-        <div className="flex items-center mt-8 pb-6 gap-6">
-          <Button
-            className="flex items-center space-x-2 border bg-secondary-green text-white p-3 rounded-lg"
-            label="Buat Tantangan"
-            icon={
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-              >
-                <path
-                  d="M18 12.75H6C5.59 12.75 5.25 12.41 5.25 12C5.25 11.59 5.59 11.25 6 11.25H18C18.41 11.25 18.75 11.59 18.75 12C18.75 12.41 18.41 12.75 18 12.75Z"
-                  fill="white"
-                />
-                <path
-                  d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V6C11.25 5.59 11.59 5.25 12 5.25C12.41 5.25 12.75 5.59 12.75 6V18C12.75 18.41 12.41 18.75 12 18.75Z"
-                  fill="white"
-                />
-              </svg>
-            }
-            onClick={() => navigate("/tantangan/buat-tantangan")}
-          />
-
-          <div className="flex ml-auto gap-4">
-            <div className="relative flex items-center w-full ">
-              <Input
-                type="text"
-                placeholder="Cari Tantangan"
-                className="pr-32 py-6 border border-primary-green"
-                value={searchValue}
-                onChange={(e) => handleSearchInputParams(e.target.value)}
-              />
-              <FiSearch className="absolute right-3 text-primary-green" />
-            </div>
-
-            <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green gap-20">
-                <p className="text-primary-green">Filter</p>
+        <div className="flex items-center mt-8 pb-6 gap-6 w-full">
+          <div className="w-1/4">
+            <Button
+              className="flex items-center space-x-2 border bg-secondary-green text-white p-3 rounded-lg"
+              label="Buat Tantangan"
+              icon={
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="5"
-                  viewBox="0 0 10 5"
+                  width="24"
+                  height="24"
+                  viewBox="0 0 24 24"
                   fill="none"
                 >
                   <path
-                    d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z"
-                    fill="#257157"
+                    d="M18 12.75H6C5.59 12.75 5.25 12.41 5.25 12C5.25 11.59 5.59 11.25 6 11.25H18C18.41 11.25 18.75 11.59 18.75 12C18.75 12.41 18.41 12.75 18 12.75Z"
+                    fill="white"
+                  />
+                  <path
+                    d="M12 18.75C11.59 18.75 11.25 18.41 11.25 18V6C11.25 5.59 11.59 5.25 12 5.25C12.41 5.25 12.75 5.59 12.75 6V18C12.75 18.41 12.41 18.75 12 18.75Z"
+                    fill="white"
                   />
                 </svg>
+              }
+              onClick={() => navigate("/tantangan/buat-tantangan")}
+            />
+          </div>
+
+          <div className="flex justify-end gap-4 w-3/4">
+            <div className="relative flex items-center">
+              <Input
+                type="text"
+                placeholder="Cari Tantangan"
+                className="pr-11 w-96 py-6 border border-primary-green"
+                value={searchValue}
+                onChange={(e) => handleSearchInputParams(e.target.value)}
+              />
+              <FiSearch className="absolute right-4 text-primary-green" />
+            </div>
+
+            <DropdownMenu>
+              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green">
+                <div className="flex items-center justify-between w-48">
+                  <p className="text-primary-green">
+                    {selectedStatus || "Filter"}
+                  </p>
+                  <div>
+                    <svg
+                      xmlns="http://www.w3.org/2000/svg"
+                      width="10"
+                      height="5"
+                      viewBox="0 0 10 5"
+                      fill="none"
+                    >
+                      <path
+                        d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z"
+                        fill="#257157"
+                      />
+                    </svg>
+                  </div>
+                </div>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                <DropdownMenuItem
+                  className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
+                  onClick={() => handleShowAllData()}
+                >
+                  Tampilkan Semua
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  onClick={() => handleFilterStatus("kadaluwarsa")}
+                >
                   Kadaluwarsa
                 </DropdownMenuItem>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                <DropdownMenuItem
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  onClick={() => handleFilterStatus("belum kadaluwarsa")}
+                >
                   Belum Kadaluwarsa
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -276,15 +322,25 @@ function IndexChallenge() {
         {isLoading ? (
           <Loading />
         ) : (
-          <>
-            <Tabel columns={columns} data={challenge} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
-          </>
+          <div className="mt-5">
+            {challenge && challenge.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={challenge} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
+                <p>Data tidak ditemukan</p>
+              </div>
+            )}
+          </div>
         )}
       </Layout>
     </div>

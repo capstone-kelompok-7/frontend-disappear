@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
+import DOMPurify from "dompurify";
 
 import Layout from "@/components/layout";
 import { getDetailChallenge } from "@/utils/api/challenge/challenge/api";
@@ -14,6 +15,9 @@ export default function DetailChallange() {
   useEffect(() => {
     fetchData();
   }, []);
+
+  const { description } = challenge;
+  const sanitizedContent = DOMPurify.sanitize(description);
 
   async function fetchData() {
     setIsLoading(true);
@@ -84,7 +88,10 @@ export default function DetailChallange() {
               className="w-full h-80 my-10 rounded-md object-contain"
             />
           </div>
-          <p className="text-base">{challenge.description}</p>
+          <p
+            className="text-base space-y-3"
+            dangerouslySetInnerHTML={{ __html: sanitizedContent }}
+          ></p>
         </div>
       )}
     </Layout>

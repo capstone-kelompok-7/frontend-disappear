@@ -27,6 +27,8 @@ export const ChallengeSchema = z.object({
     .refine(
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
       "*format PNG, JPG, JPEG"
-    ),
+    )
+    .optional()
+    .or(z.literal("")),
   description: z.string().min(1, { message: "Field tidak boleh kosong" }),
 });
