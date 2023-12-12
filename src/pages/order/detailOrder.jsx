@@ -5,24 +5,24 @@ import { BsX } from "react-icons/bs";
 import Button from "@/components/button";
 import { FaUserCircle } from "react-icons/fa";
 import { Input } from "@/components/ui/input";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
+import { Select } from "@/components/input";
+import { useForm } from "react-hook-form";
+
 import { Textarea } from "@/components/ui/textarea";
-import { getDetailOrder } from "@/utils/api/paymentAndOrder/api";
+import { getDetailOrder, updateOrder } from "@/utils/api/paymentAndOrder/api";
 import formatCurrency from "@/utils/formatter/currencyIdr";
 import { format } from "date-fns";
 import { Loading } from "@/components/loading";
 import { useSearchParams, useNavigate, useParams } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
-import { format as formatDate } from "date-fns";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { Loader2 } from "lucide-react";
 
 export default function DetailOrder() {
   const [order, setOrder] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
+  const [updateLoading, setUpdateLoading] = useState(false);
+  const [reff, setReff] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const { id } = useParams();
   const { toast } = useToast();
@@ -31,22 +31,72 @@ export default function DetailOrder() {
     return regex.test(dateString);
   };
 
+  const {
+    reset,
+    register,
+    setValue,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
+
   useEffect(() => {
     fetchData();
-  }, [searchParams]);
+  }, [searchParams, reff]);
 
   async function fetchData() {
     try {
       setIsLoading(true);
       const detail_order = await getDetailOrder(id);
       setOrder(detail_order.data);
-      console.log(detail_order.data);
+      reset({
+        orderDate: format(
+          new Date(detail_order.data.status_order_date),
+          "yyyy-MM-dd"
+        ),
+        statusOrder: detail_order.data.order_status,
+        extraInfo: detail_order.data.extra_info,
+      });
     } catch (error) {
       console.log(error);
     } finally {
       setIsLoading(false);
     }
   }
+
+  async function onSubmit(data) {
+    setUpdateLoading(true);
+    try {
+      const newOrder = {
+        order_id: id,
+        status_order_date: format(
+          new Date(data.orderDate + "T00:00:00Z"),
+          "yyyy-MM-dd'T'HH:mm:ss'Z'"
+        ),
+        order_status: data.statusOrder,
+        extra_info: data.extraInfo,
+      };
+
+      await updateOrder(newOrder);
+      setUpdateLoading(false);
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Berhasil Mengubah Detail Pesanan!
+            </span>
+          </div>
+        ),
+        description:
+          "Detail pesanan berhasil diubah, nih. Silahkan nikmati fitur lainya!",
+      });
+      reset();
+      setReff(true);
+    } catch (error) {
+      console.error(error);
+    }
+  }
+
   return (
     <>
       <Layout>
@@ -254,63 +304,71 @@ export default function DetailOrder() {
                       Status Pesanan
                     </p>
                   </div>
-                  <div className="flex flex-col mt-2 gap-4 ml-6">
-                    <div className="flex justify-between items-center">
-                      <p className="text-sm">Tanggal</p>
-                      <Input
-                        type="date"
-                        name="deadline-tantangan"
-                        className="block w-[290px] rounded-md border border-[#5D5D5D] py-1 px-4 mr-6 text-muted-foreground"
-                      />
+                  <form onSubmit={handleSubmit(onSubmit)}>
+                    <div className="flex flex-col mt-2 gap-2 ml-6">
+                      <div className="flex justify-between items-center">
+                        <label htmlFor="orderDate" className="text-sm">
+                          Tanggal
+                        </label>
+                        <Input
+                          type="date"
+                          name="orderDate"
+                          register={register}
+                          error={errors.status?.message}
+                          className="block w-[290px] rounded-md border border-[#5D5D5D] py-1 px-4 mr-6 text-muted-foreground"
+                        />
+                      </div>
+                      <div className="flex justify-between mr-5 items-center">
+                        <label className="text-sm" htmlFor="statusOrder">
+                          Status Pesanan
+                        </label>
+                        <Select
+                          className="py-1 px-4 mr-6"
+                          name="statusOrder"
+                          options={[
+                            "Pengiriman",
+                            "Proses",
+                            "Menunggu Konfirmasi",
+                            "Gagal",
+                          ]}
+                          placeholder="Status"
+                          register={register}
+                          error={errors.status?.message}
+                        />
+                      </div>
+                      <div className="flex justify-between items-center">
+                        <label htmlFor="extraInfo" className="text-sm">
+                          Ekstra Info
+                        </label>
+                        <Textarea
+                          id="status-pesanan"
+                          name="extraInfo"
+                          register={register}
+                          error={errors.status?.message}
+                          placeholder="Pesanan anda dalam perjalanan menuju kota Bandung."
+                          className="p-3 mt-3 block w-[290px] h-[57px] text-xs border border-black rounded-md resize-none mr-6"
+                        />
+                      </div>
+                      <div className="flex flex-row justify-end gap-5 mr-6">
+                        <Button
+                          label="Batal"
+                          type="button"
+                          className="rounded bg-white border border-primary-green text-primary-green py-3 px-5 items-center font-semibold"
+                        />
+                        {updateLoading ? (
+                          <div className="rounded bg-primary-green text-white py-3 px-8 items-center font-semibold">
+                            <Loader2 className="animate-spin" size={30} />
+                          </div>
+                        ) : (
+                          <Button
+                            label="Kirim"
+                            type="submit"
+                            className="rounded bg-primary-green text-white py-3 px-5 items-center font-semibold"
+                          />
+                        )}
+                      </div>
                     </div>
-                    <div className="flex justify-between items-center">
-                      <p className="text-sm">Status Pesanan</p>
-                      <DropdownMenu>
-                        <DropdownMenuTrigger className="flex w-[290px] justify-between h-[40px] items-center rounded-md bg-white py-2 px-4 border border-[#5D5D5D] gap-35 mr-6">
-                          <p className="text-xs text-muted-foreground">
-                            Status
-                          </p>
-                          <svg
-                            xmlns="http://www.w3.org/2000/svg"
-                            width="10"
-                            height="5"
-                            viewBox="0 0 10 5"
-                            fill="none"
-                          >
-                            <path
-                              d="M5 4.5L0.669872 0.75L9.33013 0.75L5 4.5Z"
-                              fill="#373737"
-                            />
-                          </svg>
-                        </DropdownMenuTrigger>
-
-                        <DropdownMenuContent>
-                          <DropdownMenuItem>??</DropdownMenuItem>
-                          <DropdownMenuItem>??</DropdownMenuItem>
-                          <DropdownMenuItem>??</DropdownMenuItem>
-                        </DropdownMenuContent>
-                      </DropdownMenu>
-                    </div>
-                    <div className="flex justify-between items-center">
-                      <p className="text-sm">Ekstra Info</p>
-                      <Textarea
-                        id="status-pesanan"
-                        name="status-pesanan"
-                        placeholder="Pesanan anda dalam perjalanan menuju kota Bandung."
-                        className="p-3 mt-3 block w-[290px] h-[57px] text-xs border border-black rounded-md resize-none mr-6"
-                      />
-                    </div>
-                    <div className="flex flex-row justify-end gap-7 mr-6">
-                      <Button
-                        label="Batal"
-                        className="rounded bg-white border border-primary-green text-primary-green py-3 px-5 items-center font-semibold"
-                      />
-                      <Button
-                        label="Kirim"
-                        className="rounded bg-primary-green text-white py-3 px-5 items-center font-semibold"
-                      />
-                    </div>
-                  </div>
+                  </form>
                 </div>
               </div>
             </div>
