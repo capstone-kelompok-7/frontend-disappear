@@ -50,6 +50,16 @@ const ProtectedRoute = () => {
     }
   };
 
+  const isAdminLoggedIn = () => {
+    return tokenLocal || tokenSession;
+  };
+
+  const isTokenAvailable = isAdminLoggedIn();
+
+  if (isTokenAvailable && pathname === "/login") {
+    return <Navigate to="/dashboard" />;
+  }
+
   if (!tokenLocal && !tokenSession && protectedByToken.includes(pathname)) {
     return <Navigate to="/login" />;
   }
@@ -58,6 +68,8 @@ const ProtectedRoute = () => {
 
   if (role === "customer") {
     console.log("Tidak memiliki akses!");
+    localStorage.removeItem("accessToken");
+    sessionStorage.removeItem("accessToken");
     return <Navigate to="/login" />;
   }
 
