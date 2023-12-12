@@ -40,6 +40,10 @@ export default function DetailOrder() {
     formState: { errors },
   } = useForm();
 
+  const handleCancel = () => {
+    reset();
+  };
+
   useEffect(() => {
     fetchData();
   }, [searchParams, reff]);
@@ -356,6 +360,7 @@ export default function DetailOrder() {
                         <Button
                           label="Batal"
                           type="button"
+                          onClick={handleCancel}
                           className="rounded bg-white border border-primary-green text-primary-green py-3 px-3 items-center font-semibold"
                         />
                         {updateLoading ? (
