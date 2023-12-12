@@ -1,5 +1,6 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useToken } from "@/utils/context/TokenContext";
 
 import { BiEdit } from "react-icons/bi";
 import { LuCircleDollarSign, LuLayoutGrid, LuList } from "react-icons/lu";
@@ -20,16 +21,22 @@ import Dropdown from "../dropdown";
 export default function SideBar(props) {
   const { isSidebarOpen } = props;
   const navigate = useNavigate();
+  const { saveTokenAndUser, saveTokenToSessionAndUser } = useToken();
 
   const handleLogout = () => {
-    localStorage.removeItem("rememberedCheckbox");
-    sessionStorage.removeItem("rememberedEmail");
-    sessionStorage.removeItem("rememberedPassword");
-    localStorage.removeItem("accessToken");
-    sessionStorage.removeItem("accessToken");
+    try {
+      localStorage.clear();
+      sessionStorage.clear();
 
-    console.log("Berhasil logout!");
-    navigate("/login");
+      saveTokenAndUser("");
+      saveTokenToSessionAndUser("");
+
+      console.log("Berhasil logout!");
+
+      navigate("/login");
+    } catch (error) {
+      console.error("Gagal logout!", error);
+    }
   };
 
   return (
