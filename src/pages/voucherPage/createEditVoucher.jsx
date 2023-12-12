@@ -33,9 +33,9 @@ const schema = z.object({
   voucherDescription: z
     .string()
     .min(1, { message: "Field tidak boleh kosong" }),
-  voucherTotal:  z.number().min(1, { message: "Field tidak boleh kosong" }),
-  discount:  z.number().min(1, { message: "Field tidak boleh kosong" }),
-  minPurchase:  z.number().min(1, { message: "Field tidak boleh kosong" }),
+  voucherTotal: z.number().min(1, { message: "Field tidak boleh kosong" }),
+  discount: z.number().min(1, { message: "Field tidak boleh kosong" }),
+  minPurchase: z.number().min(1, { message: "Field tidak boleh kosong" }),
 });
 
 function CreateVoucher() {
@@ -54,7 +54,7 @@ function CreateVoucher() {
     formState: { errors },
   } = useForm({
     resolver: zodResolver(schema),
-    defaultValues: {discount:0, minPurchase:0, voucherTotal:0,}, 
+    defaultValues: { discount: 0, minPurchase: 0, voucherTotal: 0 },
   });
 
   useEffect(() => {
@@ -67,14 +67,20 @@ function CreateVoucher() {
     try {
       setIsLoading(true);
       const result = await getDetailVoucher(id);
-      console.log('Result.data:', result.data);
+      console.log("Result.data:", result.data);
       setVouchers(result.data);
 
       if (result.data) {
         setSelectedId(result.data.id);
         setValue("voucherName", result.data.name);
-        setValue("startDate", format(new Date(result.data.start_date), "yyyy-MM-dd"));
-        setValue("endDate", format(new Date(result.data['end-date']), "yyyy-MM-dd"));
+        setValue(
+          "startDate",
+          format(new Date(result.data.start_date), "yyyy-MM-dd")
+        );
+        setValue(
+          "endDate",
+          format(new Date(result.data["end-date"]), "yyyy-MM-dd")
+        );
         setValue("voucherDescription", result.data.description);
         setValue("voucherCode", result.data.code);
         setValue("voucherFor", result.data.category);
@@ -110,7 +116,7 @@ function CreateVoucher() {
       };
       setIsLoading(true);
       await createVouchers(newVoucher);
-       navigate("/kupon");
+      navigate("/kupon");
       toast({
         title: (
           <div className="flex items-center gap-3">
@@ -123,7 +129,6 @@ function CreateVoucher() {
         description:
           "Data Voucher berhasil ditambahkan, nih. Silahkan nikmati fitur lainnya!!",
       });
-     
     } catch (error) {
       console.log(error);
       toast({
@@ -187,32 +192,34 @@ function CreateVoucher() {
         title: (
           <div className="flex items-center">
             <CrossCircledIcon />
-            <span className="ml-2">Gagal Menambahkan Tantangan!</span>
+            <span className="ml-2">Gagal Menambahkan Voucher!</span>
           </div>
         ),
         description:
-          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+          error.message,
       });
-    }
-    finally {
+    } finally {
       setIsLoading(false);
     }
   }
 
   return (
     <Layout>
-      <Breadcrumbs pages={selectedId === 0 ? "Tambah Kupon" : "Edit Kupon"}/>
+      <Breadcrumbs pages={selectedId === 0 ? "Tambah Kupon" : "Edit Kupon"} />
 
       <div className="my-5 py-5 px-11 rounded-md shadow-lg border-2">
         {isLoading ? (
           <Loading />
         ) : (
-          <form onSubmit={handleSubmit(selectedId === 0 ? onSubmit : onSubmitEdit)}>
+          <form
+            onSubmit={handleSubmit(selectedId === 0 ? onSubmit : onSubmitEdit)}
+          >
             {/* baris 1 */}
             <div className="flex gap-28 pt-5">
               <div className="w-full">
                 <label htmlFor="voucherName">Nama Kupon</label>
                 <Input
+                  id="voucherName"
                   type="text"
                   placeholder="Nama Produk"
                   name="voucherName"
@@ -223,6 +230,7 @@ function CreateVoucher() {
               <div className="w-full">
                 <label htmlFor="startDate">Mulai</label>
                 <Input
+                  id="startDate"
                   type="date"
                   placeholder="Mulai"
                   name="startDate"
@@ -236,6 +244,7 @@ function CreateVoucher() {
               <div className="w-full">
                 <label htmlFor="voucherCode">Kode Kupon</label>
                 <Input
+                  id="voucherCode"
                   type="text"
                   placeholder="Kode Kupon"
                   name="voucherCode"
@@ -246,6 +255,7 @@ function CreateVoucher() {
               <div className="w-full">
                 <label htmlFor="endDate">Berhenti</label>
                 <Input
+                  id="endDate"
                   type="date"
                   placeholder="Berhenti"
                   name="endDate"
@@ -259,16 +269,18 @@ function CreateVoucher() {
               <div className="w-full">
                 <label htmlFor="voucherFor">Kategori</label>
                 <Select
-                    name="voucherFor"
-                    options={["bronze", "silver", "gold", "all Customer"]}
-                    placeholder="Status"
-                    register={register}
-                    error={errors.voucherFor?.message}
-                  />
+                  id="voucherFor"
+                  name="voucherFor"
+                  options={["bronze", "silver", "gold", "all Customer"]}
+                  placeholder="Status"
+                  register={register}
+                  error={errors.voucherFor?.message}
+                />
               </div>
               <div className="w-full">
                 <label htmlFor="voucherTotal">Total Yang Tersedia</label>
                 <Input
+                  id="voucherTotal"
                   type="number"
                   placeholder="Total Yang Tersedia"
                   name="voucherTotal"
@@ -282,6 +294,7 @@ function CreateVoucher() {
               <div className="w-full">
                 <label htmlFor="discount">Diskon</label>
                 <Input
+                  id="discount"
                   type="number"
                   placeholder="Diskon"
                   name="discount"
@@ -292,6 +305,7 @@ function CreateVoucher() {
               <div className="w-full">
                 <label htmlFor="minPurchase">Minimal Pembelian</label>
                 <Input
+                  id="minPurchase"
                   type="number"
                   placeholder="Minimal Pembelian"
                   name="minPurchase"
@@ -303,6 +317,7 @@ function CreateVoucher() {
             {/* baris 5 */}
             <label htmlFor="voucherDescription">Deskripsi Kupon</label>
             <Textarea
+              id="voucherDescription"
               className="h-36"
               placeholder="Deskripsi Kupon"
               name="voucherDescription"
@@ -313,12 +328,14 @@ function CreateVoucher() {
             <div className="flex gap-2 justify-end py-5">
               <Link to="/kupon">
                 <Button
+                  id="cancelButton"
                   type="button"
                   label="Batal"
                   className="border-[#25745A] text-[#25745A] border-2 py-2 px-3 rounded-lg"
                 />
               </Link>
               <Button
+                id="submitButton"
                 type="submit"
                 label={selectedId === 0 ? "Buat Voucher" : "Simpan Perubahan"}
                 className="bg-[#25745A] text-white py-2 px-3 rounded-lg"

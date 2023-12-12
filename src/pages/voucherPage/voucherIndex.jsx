@@ -173,7 +173,7 @@ function VoucherApp() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem
+              <DropdownMenuItem id="editVoucher"
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center"
                 onClick={() => onClickEdit(row.original.id)}
               >
@@ -204,6 +204,7 @@ function VoucherApp() {
         <div className="flex justify-between items-center pb-5">
           <Link to="/kupon/buat-kupon">
             <Button
+            id="AddVoucher"
               label="Tambahkan Kupon"
               icon={<IoAddOutline />}
               className="bg-primary-green text-white py-3 px-5 rounded-lg font-medium text-sm mr-3"
