@@ -224,7 +224,7 @@ export default function DetailOrder() {
                       <p>Status</p>
                       <p>{order.payment_status}</p>
                     </div>
-                    <div className="flex text-xs justify-between mb-1 gap-[780px]">
+                    <div className="flex text-xs justify-between mb-1 gap-[760px]">
                       <p>Transfer Dari</p>
                       <p>{order.payment_method}</p>
                     </div>
@@ -346,24 +346,24 @@ export default function DetailOrder() {
                           register={register}
                           error={errors.status?.message}
                           placeholder="Pesanan anda dalam perjalanan menuju kota Bandung."
-                          className="p-3 mt-3 block w-[290px] h-[57px] text-xs border border-black rounded-md resize-none mr-6"
+                          className="p-3 mt-3 block w-72 h-14 text-xs border border-black rounded-md resize-none mr-6"
                         />
                       </div>
                       <div className="flex flex-row justify-end gap-5 mr-6">
                         <Button
                           label="Batal"
                           type="button"
-                          className="rounded bg-white border border-primary-green text-primary-green py-3 px-5 items-center font-semibold"
+                          className="rounded bg-white border border-primary-green text-primary-green py-3 px-3 items-center font-semibold"
                         />
                         {updateLoading ? (
                           <div className="rounded bg-primary-green text-white py-3 px-8 items-center font-semibold">
-                            <Loader2 className="animate-spin" size={30} />
+                            <Loader2 className="animate-spin" size={20} />
                           </div>
                         ) : (
                           <Button
                             label="Kirim"
                             type="submit"
-                            className="rounded bg-primary-green text-white py-3 px-5 items-center font-semibold"
+                            className="rounded bg-primary-green text-white py-3 px-3 items-center font-semibold"
                           />
                         )}
                       </div>
