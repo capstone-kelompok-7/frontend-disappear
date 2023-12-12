@@ -341,10 +341,10 @@ export default function Landingpage() {
             lingkungan yang lestari dan terjaga
           </p>
           <div className="flex">
-            <a href="">
+            <a href="" id="playstoreButton">
               <img src={playstore} alt="" />
             </a>
-            <a href="">
+            <a href="applestoreButton">
               <img src={applestore} alt="" />
             </a>
           </div>
