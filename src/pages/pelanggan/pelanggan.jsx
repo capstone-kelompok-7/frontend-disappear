@@ -4,7 +4,6 @@ import "../../styles/pelanggan/pelanggan.css";
 import { useState, useEffect, useRef } from "react";
 import Tabel from "../../components/table/table";
 import { Input } from "@/components/ui/input";
-import { FiSearch } from "react-icons/fi";
 import Breadcrumbs from "@/components/breadcrumbs";
 import {
   DropdownMenu,
@@ -19,6 +18,9 @@ import { deleteUsers, getAllUsers } from "@/utils/api/pelanggan/api";
 import { Loading } from "@/components/loading";
 import Pagination from "@/components/pagenation";
 import { useToast } from "@/components/ui/use-toast";
+import { debounce } from "lodash";
+import { FaRegCheckCircle } from "react-icons/fa";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 function Pelanggan() {
   const { toast } = useToast();
@@ -26,6 +28,34 @@ function Pelanggan() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
+  const [searchValue, setSearchValue] = useState("");
+  const [selectedLevel, setSelectedLevel] = useState("");
+
+  useEffect(() => {
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
+  }, [searchValue, searchParams]);
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
+    }
+    try {
+      setIsLoading(true);
+      const result = await getAllUsers({ ...query });
+      const { ...rest } = result.meta;
+      setUsers(result.data);
+      setMeta(rest);
+    } catch (error) {
+      console.log(error.message);
+    } finally {
+      setIsLoading(false);
+    }
+  }
+
   async function handleDelete(id) {
     try {
       const result = await Delete({
@@ -64,26 +94,36 @@ function Pelanggan() {
     }
   }
 
-  useEffect(() => {
-    fetchData();
-  }, [searchParams]);
+  function handleSearchInputParams(search) {
+    setSearchValue(search);
+    const newSearchParams = new URLSearchParams(searchParams.toString());
 
-  async function fetchData() {
-    let query = {};
-    for (const entry of searchParams.entries()) {
-      query[entry[0]] = entry[1];
+    // Hapus parameter 'search' jika nilai search kosong
+    if (search.trim() === "") {
+      newSearchParams.delete("search");
+    } else {
+      newSearchParams.set("search", String(search));
     }
-    try {
-      setIsLoading(true);
-      const result = await getAllUsers({ ...query });
-      const { ...rest } = result.meta;
-      setUsers(result.data);
-      setMeta(rest);
-    } catch (error) {
-      console.log(error.message);
-    } finally {
-      setIsLoading(false);
-    }
+
+    setSearchParams(newSearchParams);
+  }
+
+  function handleFilterLevel(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("filter", value);
+    setSearchParams(newSearchParams);
+    setSelectedLevel(
+      value === "bronze" ? "Bronze" : value == "silver" ? "Silver" : "Gold"
+    );
+  }
+
+  function handleShowAllData() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("filter");
+    setSearchParams(newSearchParams);
+
+    setSelectedLevel(null);
+    fetchData();
   }
 
   function handlePrevNextPage(page) {
@@ -112,7 +152,7 @@ function Pelanggan() {
       accessor: "level",
       Cell: ({ row }) => (
         <div className="level-cell">
-          {row.original.Level}
+          {row.original.level}
           <DropdownMenu>
             <DropdownMenuTrigger>
               <div className="three-dots">
@@ -151,20 +191,38 @@ function Pelanggan() {
           <div className="pb-7">
             <div className="flex justify-start">
               <div className="">
-                <div className="flex items-center">
+                <div className="relative items-center">
                   <Input
                     type="text"
                     placeholder="Cari Pelanggan"
-                    className="search-order border-black"
+                    className="search-user border-primary-green "
+                    onChange={(e) => handleSearchInputParams(e.target.value)}
+                    value={searchValue}
                   />
-                  <FiSearch className="search-icon" />
+                  <svg
+                    className="absolute right-3 top-4 text-primary-green"
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="14"
+                    height="14"
+                    viewBox="0 0 14 14"
+                    fill="none"
+                  >
+                    <path
+                      fillRule="evenodd"
+                      clipRule="evenodd"
+                      d="M11.2892 8.97102C11.7427 8.12671 12 7.16127 12 6.13574C12 2.82203 9.31371 0.135742 6 0.135742C2.68629 0.135742 0 2.82203 0 6.13574C0 9.44945 2.68629 12.1357 6 12.1357C7.56425 12.1357 8.98868 11.5371 10.0567 10.5565L12.2421 12.596C12.6458 12.9728 13.2786 12.9509 13.6554 12.5472C14.0322 12.1434 14.0104 11.5106 13.6066 11.1338L11.2892 8.97102ZM6 10.0357C3.84609 10.0357 2.1 8.28965 2.1 6.13574C2.1 3.98183 3.84609 2.23574 6 2.23574C8.15391 2.23574 9.9 3.98183 9.9 6.13574C9.9 8.28965 8.15391 10.0357 6 10.0357Z"
+                      fill="#25745A"
+                    />
+                  </svg>
                 </div>
               </div>
 
               <div className="ml-6">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-black gap-20">
-                    <p className="text-[#8C8C8C]">Filter</p>
+                  <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20">
+                    <p className="text-[#8C8C8C]">
+                      {selectedLevel || "Filter"}
+                    </p>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="10"
@@ -180,9 +238,30 @@ function Pelanggan() {
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent>
-                    <DropdownMenuItem>??</DropdownMenuItem>
-                    <DropdownMenuItem>??</DropdownMenuItem>
-                    <DropdownMenuItem>??</DropdownMenuItem>
+                    <DropdownMenuItem
+                      className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
+                      onClick={() => handleShowAllData()}
+                    >
+                      Tampilkan Semua
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                      onClick={() => handleFilterLevel("bronze")}
+                    >
+                      Bronze
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                      onClick={() => handleFilterLevel("silver")}
+                    >
+                      Silver
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                      onClick={() => handleFilterLevel("gold")}
+                    >
+                      Gold
+                    </DropdownMenuItem>
                   </DropdownMenuContent>
                 </DropdownMenu>
               </div>
