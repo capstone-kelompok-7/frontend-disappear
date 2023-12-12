@@ -4,7 +4,7 @@ import Button from "@/components/button";
 import { Link } from "react-router-dom";
 import { useToast } from "@/components/ui/use-toast";
 import { IoAddOutline } from "react-icons/io5";
-import { CrossCircledIcon,  } from "@radix-ui/react-icons";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { FaRegCheckCircle } from "react-icons/fa";
 import {
   DropdownMenu,
@@ -22,6 +22,7 @@ import { useSearchParams, useNavigate } from "react-router-dom";
 import { Loading } from "@/components/loading";
 import { getVoucher, deleteVouchers } from "@/utils/api/voucher/api";
 import { format } from "date-fns";
+import { debounce } from "lodash";
 
 function VoucherApp() {
   const [vouchers, setVouchers] = useState([]);
@@ -30,9 +31,15 @@ function VoucherApp() {
   const [meta, setMeta] = useState();
   const navigate = useNavigate();
   const { toast } = useToast();
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
+  
 
   useEffect(() => {
-    fetchData();
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
   }, [searchParams]);
 
   async function fetchData() {
@@ -105,8 +112,39 @@ function VoucherApp() {
     }
   }
 
+  function handleFilterStatus(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("status", value);
+    setSearchParams(newSearchParams);
+    setSelectedStatus(value);
+  }
+
+  function handleFilterCategory(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("category", value);
+    setSearchParams(newSearchParams);
+    setSelectedCategory(value);
+  }
+
+  function handleShowAllData() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+  
+    newSearchParams.delete("status");
+    newSearchParams.delete("category");
+  
+    setSearchParams(newSearchParams);
+  
+    setSelectedStatus(null);
+    setSelectedCategory(null);
+  
+    fetchData();
+  }
+
   const columns = [
-    { Header: "NO", accessor: (_, index) => formatNumber(meta?.current_page - 1, index), },
+    {
+      Header: "NO",
+      accessor: (_, index) => formatNumber(meta?.current_page - 1, index),
+    },
     { Header: "NAMA KUPON", accessor: "name" },
     { Header: "KODE", accessor: "code" },
     { Header: "KATEGORI", accessor: "category" },
@@ -135,7 +173,7 @@ function VoucherApp() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem
+              <DropdownMenuItem id="editVoucher"
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center"
                 onClick={() => onClickEdit(row.original.id)}
               >
@@ -166,6 +204,7 @@ function VoucherApp() {
         <div className="flex justify-between items-center pb-5">
           <Link to="/kupon/buat-kupon">
             <Button
+            id="AddVoucher"
               label="Tambahkan Kupon"
               icon={<IoAddOutline />}
               className="bg-primary-green text-white py-3 px-5 rounded-lg font-medium text-sm mr-3"
@@ -177,7 +216,9 @@ function VoucherApp() {
               className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-10"
               id="filterVoucher"
             >
-              <p className=" text-primary-green">Filter</p>
+              <p className=" text-primary-green">
+                {selectedStatus || selectedCategory || "Filter"}
+              </p>
 
               <svg
                 xmlns="http://www.w3.org/2000/svg"
@@ -191,22 +232,40 @@ function VoucherApp() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+              <DropdownMenuItem
+                className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
+                onClick={() => handleFilterCategory("Bronze")}
+              >
                 Bronze
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+              <DropdownMenuItem
+                className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
+                onClick={() => handleFilterCategory("Silver")}
+              >
                 Silver
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+              <DropdownMenuItem
+                className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
+                onClick={() => handleFilterCategory("Gold")}
+              >
                 Gold
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+              <DropdownMenuItem
+                className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
+                onClick={() => handleShowAllData()}
+              >
                 Semua Pelanggan
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+              <DropdownMenuItem
+                className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
+                onClick={() => handleFilterStatus("Kadaluwarsa")}
+              >
                 Kadaluwarsa
               </DropdownMenuItem>
-              <DropdownMenuItem className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black">
+              <DropdownMenuItem
+                className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
+                onClick={() => handleFilterStatus("Belum Kadaluwarsa")}
+              >
                 Belum Kadaluwarsa
               </DropdownMenuItem>
             </DropdownMenuContent>
@@ -217,13 +276,23 @@ function VoucherApp() {
           <Loading />
         ) : (
           <div>
-            <Tabel columns={columns} data={vouchers} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
+            {vouchers && vouchers.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={vouchers} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
+                <p>Data tidak ditemukan</p>
+              </div>
+            )}
           </div>
         )}
       </div>
