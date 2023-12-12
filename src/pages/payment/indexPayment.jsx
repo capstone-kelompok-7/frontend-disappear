@@ -25,6 +25,8 @@ export default function IndexPayment() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
   const [searchValue, setSearchValue] = useState("");
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
 
   const navigate = useNavigate();
 
@@ -53,6 +55,7 @@ export default function IndexPayment() {
 
   async function fetchData() {
     let query = { search: searchValue };
+
     for (const entry of searchParams.entries()) {
       query[entry[0]] = entry[1];
     }
@@ -78,6 +81,50 @@ export default function IndexPayment() {
   function handleSearchInputParams(search) {
     setSearchValue(search);
     getSuggestions(search);
+  }
+
+  function handleFilterStatus(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("status_filter", value);
+    setSearchParams(newSearchParams);
+    setSelectedStatus(
+      value === "konfirmasi"
+        ? "Konfirmasi"
+        : value === "menunggu konfirmasi"
+        ? "Menunggu Konfirmasi"
+        : "Gagal"
+    );
+  }
+
+  function handleFilterDate(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("date_filter", value);
+    setSearchParams(newSearchParams);
+    setSelectedDate(
+      value === "Minggu Ini"
+        ? "Minggu Ini"
+        : value === "Bulan Ini"
+        ? "Bulan Ini"
+        : "Tahun Ini"
+    );
+  }
+
+  function handleShowAllStatus() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("status_filter");
+    setSearchParams(newSearchParams);
+
+    setSelectedStatus(null);
+    fetchData();
+  }
+
+  function handleShowAllDate() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("date_filter");
+    setSearchParams(newSearchParams);
+
+    setSelectedDate(null);
+    fetchData();
   }
 
   const columns = [
@@ -150,7 +197,9 @@ export default function IndexPayment() {
             </div>
             <DropdownMenu>
               <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20">
-                <p className="text-primary-green">Filter</p>
+                <p className="text-primary-green">
+                  {selectedStatus || "Filter"}
+                </p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   width="10"
@@ -165,13 +214,28 @@ export default function IndexPayment() {
                 </svg>
               </DropdownMenuTrigger>
               <DropdownMenuContent>
-                <DropdownMenuItem style={{ cursor: "pointer" }}>
+                <DropdownMenuItem
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleShowAllStatus()}
+                >
+                  Tampilkan Semua
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleFilterStatus("konfirmasi")}
+                >
                   Konfirmasi
                 </DropdownMenuItem>
-                <DropdownMenuItem style={{ cursor: "pointer" }}>
+                <DropdownMenuItem
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleFilterStatus("menunggu konfirmasi")}
+                >
                   Menunggu Konfirmasi
                 </DropdownMenuItem>
-                <DropdownMenuItem style={{ cursor: "pointer" }}>
+                <DropdownMenuItem
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleFilterStatus("gagal")}
+                >
                   Gagal
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -185,7 +249,7 @@ export default function IndexPayment() {
               </div>
               <DropdownMenu className="flex">
                 <DropdownMenuTrigger className="flex justify-between items-center gap-3">
-                  <p>Bulan Ini</p>
+                  <p>{selectedDate || ""}</p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
                     width="10"
@@ -200,13 +264,28 @@ export default function IndexPayment() {
                   </svg>
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
-                  <DropdownMenuItem style={{ cursor: "pointer" }}>
+                  <DropdownMenuItem
+                    className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
+                    onClick={() => handleShowAllDate()}
+                  >
+                    Tampilkan Semua
+                  </DropdownMenuItem>
+                  <DropdownMenuItem
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleFilterDate("Minggu Ini")}
+                  >
                     Minggu Ini
                   </DropdownMenuItem>
-                  <DropdownMenuItem style={{ cursor: "pointer" }}>
+                  <DropdownMenuItem
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleFilterDate("Bulan Ini")}
+                  >
                     Bulan Ini
                   </DropdownMenuItem>
-                  <DropdownMenuItem style={{ cursor: "pointer" }}>
+                  <DropdownMenuItem
+                    style={{ cursor: "pointer" }}
+                    onClick={() => handleFilterDate("Tahun Ini")}
+                  >
                     Tahun Ini
                   </DropdownMenuItem>
                 </DropdownMenuContent>
@@ -217,14 +296,24 @@ export default function IndexPayment() {
         {isLoading ? (
           <Loading />
         ) : (
-          <div>
-            <Tabel columns={columns} data={payment} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
+          <div className="mt-5">
+            {payment && payment.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={payment} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
+                <p>Data tidak ditemukan</p>
+              </div>
+            )}
           </div>
         )}
       </Layout>
