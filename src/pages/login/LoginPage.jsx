@@ -1,16 +1,18 @@
 import React, { useState, useEffect } from "react";
+
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
+import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
+import { zodResolver } from "@hookform/resolvers/zod";
+import * as z from "zod";
+
 import { TokenProvider, useToken } from "@/utils/context/TokenContext";
-import { toast } from "@/components/ui/use-toast";
 import login from "@/utils/api/auth/login";
+import { toast } from "@/components/ui/use-toast";
 import { Input } from "@/components/ui/input";
 import Button from "@/components/button";
 import Label from "@/components/label";
 import rectangle from "@/assets/Rectangle292.png";
-import { IoEyeOffOutline, IoEyeOutline } from "react-icons/io5";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
 
 const schema = z.object({
   email: z
@@ -37,7 +39,12 @@ const LoginPage = () => {
   const [password, setPassword] = useState("");
   const [rememberChecked, setRememberChecked] = useState(false);
   const [showIcon, setShowIcon] = useState(false);
-  const { saveTokenAndUser, saveTokenToSessionAndUser } = useToken();
+  const {
+    saveTokenAndUser,
+    saveTokenToSessionAndUser,
+    tokenLocal,
+    tokenSession,
+  } = useToken();
   const navigate = useNavigate();
   const {
     register,
@@ -58,7 +65,11 @@ const LoginPage = () => {
       setEmail(rememberedEmail);
       setPassword(rememberedPassword);
     }
-  }, []);
+
+    if (tokenLocal || tokenSession) {
+      navigate("/dashboard");
+    }
+  }, [tokenLocal, tokenSession, navigate]);
 
   const handleRememberChange = () => {
     setRememberChecked(!rememberChecked);
