@@ -219,7 +219,7 @@ function Pelanggan() {
 
               <div className="ml-6">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-black gap-20">
+                  <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20">
                     <p className="text-[#8C8C8C]">
                       {selectedLevel || "Filter"}
                     </p>
