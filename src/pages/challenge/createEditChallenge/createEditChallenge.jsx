@@ -42,6 +42,7 @@ function CreateChallenge() {
     resolver: zodResolver(ChallengeSchema),
     defaultValues: {
       exp: 0,
+      image: "",
     },
   });
 
@@ -394,19 +395,26 @@ function CreateChallenge() {
               <div className="flex-col w-1/2 pl-8">
                 <label
                   htmlFor="deskripsi-tantangan"
-                  className="block font-semibold text-black mb-3"
+                  className="block font-semibold text-black"
                 >
                   Deskripsi
                 </label>
-                <TextEditor
-                  register={register}
-                  setContent={(description) =>
-                    setValue("description", description)
-                  }
-                  initialContent={challenge.description}
-                  name="description"
-                  error={errors.description?.message}
-                />
+                <div className="overflow-auto">
+                  <TextEditor
+                    register={register}
+                    setContent={(description) =>
+                      setValue("description", description)
+                    }
+                    initialContent={challenge.description}
+                    name="description"
+                    error={errors.description?.message}
+                  />
+                </div>
+                {errors.description && (
+                  <p className="text-red-500 text-xs mt-1">
+                    {errors.description.message}
+                  </p>
+                )}
               </div>
             </div>
 

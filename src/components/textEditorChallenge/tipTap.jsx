@@ -2,6 +2,7 @@ import { useEditor, EditorContent } from "@tiptap/react";
 import StarterKit from "@tiptap/starter-kit";
 import Highlight from "@tiptap/extension-highlight";
 import TextAlign from "@tiptap/extension-text-align";
+import HardBreak from "@tiptap/extension-hard-break";
 import "@/styles/challenge/tiptap.css";
 
 const configureEditor = (setContent, initialContent = "") => {
@@ -12,6 +13,7 @@ const configureEditor = (setContent, initialContent = "") => {
         types: ["heading", "paragraph"],
       }),
       Highlight,
+      HardBreak,
     ],
     content: initialContent,
     onBlur: ({ editor }) => {
