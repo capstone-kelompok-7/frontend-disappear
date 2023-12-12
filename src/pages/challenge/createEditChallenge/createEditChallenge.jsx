@@ -363,7 +363,7 @@ function CreateChallenge() {
                   </ul>
                 )}
 
-                {/* {previewImage.length === 0 && selectedId !== 0 && (
+                {previewImage.length === 0 && selectedId !== 0 && (
                   <ul className="mt-3">
                     <li
                       key={0}
@@ -378,10 +378,6 @@ function CreateChallenge() {
                             URL.revokeObjectURL(challenge.photo);
                           }}
                         />
-                        <div>
-                          <p>{challenge.name}</p>
-                          <p>{challenge.size / 1000} kb</p>
-                        </div>
                       </div>
                       <IoTrashOutline
                         className="text-base cursor-pointer"
@@ -389,7 +385,7 @@ function CreateChallenge() {
                       />
                     </li>
                   </ul>
-                )} */}
+                )}
               </div>
 
               <div className="flex-col w-1/2 pl-8">
