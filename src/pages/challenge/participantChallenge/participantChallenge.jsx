@@ -2,6 +2,7 @@ import { useEffect, useState } from "react";
 import { MdOutlineCalendarMonth } from "react-icons/md";
 import { useSearchParams, Link } from "react-router-dom";
 import { format } from "date-fns";
+import { debounce } from "lodash";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -21,9 +22,14 @@ export default function IndexPesertaTantangan() {
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  const [selectedStatus, setSelectedStatus] = useState("");
+  const [selectedDate, setSelectedDate] = useState("");
 
   useEffect(() => {
-    fetchData();
+    const delayedFetchData = debounce(fetchData, 1000);
+    delayedFetchData();
+
+    return () => delayedFetchData.cancel();
   }, [searchParams]);
 
   async function fetchData() {
@@ -32,6 +38,7 @@ export default function IndexPesertaTantangan() {
       query[entry[0]] = entry[1];
     }
     try {
+      setIsLoading(true);
       const result = await getParticipant({ ...query });
       const { ...rest } = result.meta;
       setParticipant(result.data);
@@ -39,12 +46,58 @@ export default function IndexPesertaTantangan() {
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
+    } finally {
+      setIsLoading(false);
     }
   }
 
   function handlePrevNextPage(page) {
     searchParams.set("page", String(page));
     setSearchParams(searchParams);
+  }
+
+  function handleFilterStatus(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("status", value);
+    setSearchParams(newSearchParams);
+    setSelectedStatus(
+      value === "valid"
+        ? "Valid"
+        : value === "tidak valid"
+        ? "Tidak Valid"
+        : "Menunggu Validasi"
+    );
+  }
+
+  function handleFilterDate(value) {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("date", value);
+    setSearchParams(newSearchParams);
+    setSelectedDate(
+      value === "bulan ini"
+        ? "Bulan ini"
+        : value === "minggu ini"
+        ? "Minggu ini"
+        : "Hari ini"
+    );
+  }
+
+  function handleShowAllStatus() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("status");
+    setSearchParams(newSearchParams);
+
+    setSelectedStatus(null);
+    fetchData();
+  }
+
+  function handleShowAllDate() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("date");
+    setSearchParams(newSearchParams);
+
+    setSelectedDate(null);
+    fetchData();
   }
 
   const columns = [
@@ -77,7 +130,7 @@ export default function IndexPesertaTantangan() {
         </div>
 
         <div className="flex justify-between items-center mb-6 mt-8">
-          <div>
+          <div className="w-1/4">
             <p className="font-semibold text-3xl">Semua Peserta</p>
           </div>
 
@@ -88,7 +141,7 @@ export default function IndexPesertaTantangan() {
                 <MdOutlineCalendarMonth size={30} />
                 <DropdownMenu>
                   <DropdownMenuTrigger className="flex justify-between items-center py-3 px-3 gap-3">
-                    <p>Bulan ini</p>
+                    <p>{selectedDate || ""}</p>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
                       width="10"
@@ -104,13 +157,28 @@ export default function IndexPesertaTantangan() {
                   </DropdownMenuTrigger>
 
                   <DropdownMenuContent>
-                    <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                    <DropdownMenuItem
+                      className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
+                      onClick={() => handleShowAllDate()}
+                    >
+                      Tampilkan Semua
+                    </DropdownMenuItem>
+                    <DropdownMenuItem
+                      className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                      onClick={() => handleFilterDate("bulan ini")}
+                    >
                       Bulan ini
                     </DropdownMenuItem>
-                    <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                    <DropdownMenuItem
+                      className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                      onClick={() => handleFilterDate("minggu ini")}
+                    >
                       Minggu ini
                     </DropdownMenuItem>
-                    <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                    <DropdownMenuItem
+                      className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                      onClick={() => handleFilterDate("hari ini")}
+                    >
                       Hari ini
                     </DropdownMenuItem>
                   </DropdownMenuContent>
@@ -119,30 +187,49 @@ export default function IndexPesertaTantangan() {
             </div>
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-between items-center rounded-md py-3 px-3 border border-primary-green gap-20">
-                <p className="text-primary-green">Filter</p>
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  width="10"
-                  height="5"
-                  viewBox="0 0 10 5"
-                  fill="none"
-                >
-                  <path
-                    d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z"
-                    fill="#257157"
-                  />
-                </svg>
+              <DropdownMenuTrigger className="flex justify-between items-center rounded-md py-3 px-3 border border-primary-green">
+                <div className="flex items-center justify-between w-44">
+                  <p className="text-primary-green">
+                    {selectedStatus || "Filter"}
+                  </p>
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    width="10"
+                    height="5"
+                    viewBox="0 0 10 5"
+                    fill="none"
+                  >
+                    <path
+                      d="M5 4L0.669872 0.25L9.33013 0.25L5 4Z"
+                      fill="#257157"
+                    />
+                  </svg>
+                </div>
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                <DropdownMenuItem
+                  className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
+                  onClick={() => handleShowAllStatus()}
+                >
+                  Tampilkan Semua
+                </DropdownMenuItem>
+                <DropdownMenuItem
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  onClick={() => handleFilterStatus("valid")}
+                >
                   Valid
                 </DropdownMenuItem>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                <DropdownMenuItem
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  onClick={() => handleFilterStatus("tidak valid")}
+                >
                   Tidak Valid
                 </DropdownMenuItem>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
+                <DropdownMenuItem
+                  className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  onClick={() => handleFilterStatus("menunggu validasi")}
+                >
                   Menunggu Validasi
                 </DropdownMenuItem>
               </DropdownMenuContent>
@@ -152,15 +239,25 @@ export default function IndexPesertaTantangan() {
         {isLoading ? (
           <Loading />
         ) : (
-          <>
-            <Tabel columns={columns} data={participant} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
-          </>
+          <div className="mt-5">
+            {participant && participant.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={participant} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
+                <p>Data tidak ditemukan</p>
+              </div>
+            )}
+          </div>
         )}
       </Layout>
     </div>
