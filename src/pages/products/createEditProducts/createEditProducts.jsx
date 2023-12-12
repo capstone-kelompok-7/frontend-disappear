@@ -104,7 +104,7 @@ export default function CreateEditProducts() {
       setIsloading(true);
       const result = await getDetailProducts(id);
       setProducts(result.data);
-      console.log(result.data);
+
       if (result.data) {
         setSelectedId(result.data.id);
         setValue("productsName", result.data.name);
@@ -129,7 +129,6 @@ export default function CreateEditProducts() {
         const result = await getCategory();
         const options = transformCategoriesToOptions(result.data);
         setDefaultOptions(options);
-        console.log(options);
       } catch (error) {
         console.log(error);
       } finally {
@@ -156,16 +155,15 @@ export default function CreateEditProducts() {
         categories: data.category.map((cat) => cat.value),
       };
       setIsloading(true);
-
       const createdProduct = await createProducts(newProduct);
-
-      const formData = new FormData();
-      formData.append("product_id", createdProduct.data.id);
-      formData.append("photo", gambar);
-
-      const imageResponse = await createImageProducts(formData);
-
-      newProduct.image_url = imageResponse.data.image_url;
+      await Promise.all(
+        gambar.map(async (image) => {
+          await createImageProducts({
+            product_id: createdProduct.data.id,
+            photo: image,
+          });
+        })
+      );
 
       navigate("/produk");
       toast({
@@ -257,18 +255,19 @@ export default function CreateEditProducts() {
   };
 
   const handleImageChange = (e) => {
-    const file = e.target.files[0];
-    if (file) {
-      setGambar(file);
-      setValue("image", [file]);
-      const previewURL = URL.createObjectURL(file);
-      setPreviewImage([previewURL]);
-      console.log(file);
+    const files = Array.from(e.target.files);
+    if (files.length > 0) {
+      setGambar(files);
+      setValue("image", files);
+      const previewURLs = files.map((file) => URL.createObjectURL(file));
+      setPreviewImage(previewURLs);
+      console.log(files);
     }
   };
 
   const removeFile = (index) => {
     setPreviewImage((prevImages) => prevImages.filter((_, i) => i !== index));
+    setGambar((prevImages) => prevImages.filter((_, i) => i !== index));
   };
 
   return (
@@ -412,6 +411,7 @@ export default function CreateEditProducts() {
                     className="hidden"
                     name="image"
                     onChange={handleImageChange}
+                    multiple
                   />
                 </label>
                 {errors.image ? (
@@ -423,29 +423,31 @@ export default function CreateEditProducts() {
                 )}
                 {previewImage.length > 0 && (
                   <ul className="mt-3">
-                    <li
-                      key={0}
-                      className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between p-4 rounded"
-                    >
-                      <div className="flex items-center gap-2">
-                        <img
-                          src={previewImage[0]}
-                          alt={`preview-0`}
-                          className="w-12 h-14 rounded object-cover"
-                          onLoad={() => {
-                            URL.revokeObjectURL(previewImage[0]);
-                          }}
-                        />
-                        <div>
-                          <p>{gambar.name}</p>
-                          <p>{gambar.size / 1000} kb</p>
+                    {previewImage.map((previewURL, index) => (
+                      <li
+                        key={index}
+                        className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between p-4 rounded"
+                      >
+                        <div className="flex items-center gap-2">
+                          <img
+                            src={previewURL}
+                            alt={`preview-${index}`}
+                            className="w-12 h-14 rounded object-cover"
+                            onLoad={() => {
+                              URL.revokeObjectURL(previewURL);
+                            }}
+                          />
+                          <div>
+                            <p>{gambar[index].name}</p>
+                            <p>{gambar[index].size / 1000} kb</p>
+                          </div>
                         </div>
-                      </div>
-                      <IoTrashOutline
-                        className="text-base cursor-pointer"
-                        onClick={() => removeFile(0)}
-                      />
-                    </li>
+                        <IoTrashOutline
+                          className="text-base cursor-pointer"
+                          onClick={() => removeFile(index)}
+                        />
+                      </li>
+                    ))}
                   </ul>
                 )}
               </div>

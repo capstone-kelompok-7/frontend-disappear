@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { useSearchParams } from "react-router-dom";
 
 import Breadcrumbs from "@/components/breadcrumbs";
@@ -31,6 +31,7 @@ export default function IndexProducts() {
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
+  const [selectedCategory, setSelectedCategory] = useState(null);
   const { toast } = useToast();
 
   const navigate = useNavigate();
@@ -50,25 +51,38 @@ export default function IndexProducts() {
     return () => delayedFetchData.cancel();
   }, [searchValue, searchParams]);
 
-  async function fetchData() {
-    let query = { search: searchValue };
-    for (const entry of searchParams.entries()) {
-      if (entry[0] !== "search") {
-        query[entry[0]] = entry[1];
+  const getSuggestions = useCallback(
+    async function (query) {
+      const newSearchParams = new URLSearchParams(searchParams.toString());
+
+      if (!query) {
+        newSearchParams.delete("search");
+      } else {
+        newSearchParams.set("search", query);
+        newSearchParams.delete("page");
       }
+
+      setSearchParams(newSearchParams);
+    },
+    [searchParams, setSearchParams]
+  );
+
+  async function fetchData() {
+    let query = {};
+    for (const entry of searchParams.entries()) {
+      query[entry[0]] = entry[1];
     }
 
-    if (searchValue.trim() === "") {
-      delete query["search"];
-    } else {
-      query.search = searchValue;
-    }
     try {
       setIsLoading(true);
       const result = await getAllProducts({ ...query });
+      const searchData = result.data
+        ? result.data.filter((item) =>
+            item.name.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        : [];
       const { ...rest } = result.meta;
-      setProducts(result.data);
-      console.log(result.data);
+      setProducts(searchData);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
@@ -84,16 +98,7 @@ export default function IndexProducts() {
 
   function handleSearchInputParams(search) {
     setSearchValue(search);
-    const newSearchParams = new URLSearchParams(searchParams.toString());
-
-    // Hapus parameter 'search' jika nilai search kosong
-    if (search.trim() === "") {
-      newSearchParams.delete("search");
-    } else {
-      newSearchParams.set("search", String(search));
-    }
-
-    setSearchParams(newSearchParams);
+    getSuggestions(search);
   }
 
   async function handleDeleteClick(id) {
@@ -132,6 +137,41 @@ export default function IndexProducts() {
     } finally {
       setIsLoading(false);
     }
+  }
+
+  const allCategories = products
+    ? products.flatMap((product) => product.categories)
+    : [];
+
+  const uniqueCategories = allCategories.filter(
+    (category, index, self) =>
+      index === self.findIndex((c) => c.id === category.id)
+  );
+
+  const filteredProducts = selectedCategory
+    ? products.filter((product) =>
+        product.categories.some(
+          (category) => category.id === selectedCategory.id
+        )
+      )
+    : products;
+
+  const handleCategoryClick = (category) => {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.set("category", category.name);
+    setSearchParams(newSearchParams);
+
+    fetchData({ category: category.name });
+    setSelectedCategory(category);
+  };
+
+  function handleShowAllData() {
+    const newSearchParams = new URLSearchParams(searchParams.toString());
+    newSearchParams.delete("category");
+    setSearchParams(newSearchParams);
+
+    setSelectedCategory(null);
+    fetchData();
   }
 
   const columns = [
@@ -277,7 +317,9 @@ export default function IndexProducts() {
                 className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20"
                 id="dropdownFilter"
               >
-                <p className=" text-primary-green">Filter</p>
+                <p className=" text-primary-green">
+                  {selectedCategory ? selectedCategory.name : "filter"}
+                </p>
 
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -294,15 +336,21 @@ export default function IndexProducts() {
               </DropdownMenuTrigger>
 
               <DropdownMenuContent>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
-                  Tas Baru
+                <DropdownMenuItem
+                  className="cursor-pointer bg-black text-white hover:bg-secondary-green hover:text-white"
+                  onClick={() => handleShowAllData()}
+                >
+                  Tampilkan Semua Produk
                 </DropdownMenuItem>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
-                  Alat Makan
-                </DropdownMenuItem>
-                <DropdownMenuItem className=" hover:bg-secondary-green hover:text-white cursor-pointer">
-                  Sendok
-                </DropdownMenuItem>
+                {uniqueCategories.map((category) => (
+                  <DropdownMenuItem
+                    key={category.id}
+                    className="cursor-pointer hover:bg-secondary-green hover:text-white"
+                    onClick={() => handleCategoryClick(category)}
+                  >
+                    {category.name}
+                  </DropdownMenuItem>
+                ))}
               </DropdownMenuContent>
             </DropdownMenu>
           </div>
@@ -311,13 +359,23 @@ export default function IndexProducts() {
           <Loading />
         ) : (
           <div className="mt-5">
-            <Tabel columns={columns} data={products} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
+            {products && products.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={filteredProducts} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
+                <p>Data tidak ditemukan</p>
+              </div>
+            )}
           </div>
         )}
       </Layout>
