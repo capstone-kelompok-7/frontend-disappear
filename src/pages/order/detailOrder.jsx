@@ -207,6 +207,7 @@ export default function DetailOrder() {
                         <Button
                           label="View"
                           className="text-xs font-medium text-white"
+                          onClick={() => navigate("/pembayaran/:id")}
                         />
                       </div>
                     </div>
