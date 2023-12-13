@@ -338,20 +338,22 @@ function CreateChallenge() {
                   <ul className="mt-3">
                     <li
                       key={0}
-                      className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between p-4 rounded"
+                      className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between py-2 pl-6 pr-6 rounded"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3">
                         <img
                           src={previewImage[0]}
                           alt={`preview-0`}
-                          className="w-12 h-14 rounded object-cover"
+                          className="w-40 h-20 rounded object-cover"
                           onLoad={() => {
                             URL.revokeObjectURL(previewImage[0]);
                           }}
                         />
                         <div>
                           <p>{gambar.name}</p>
-                          <p>{gambar.size / 1000} kb</p>
+                          <p className="text-gray-500">
+                            {gambar.size / 1000} kb
+                          </p>
                         </div>
                       </div>
                       <IoTrashOutline
@@ -367,13 +369,13 @@ function CreateChallenge() {
                   <ul className="mt-3">
                     <li
                       key={0}
-                      className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between p-4 rounded"
+                      className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between py-2 pl-6 rounded"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center">
                         <img
                           src={challenge.photo}
                           alt={`preview-0`}
-                          className="w-12 h-14 rounded object-cover"
+                          className="w-40 h-20 rounded object-cover"
                           onLoad={() => {
                             URL.revokeObjectURL(challenge.photo);
                           }}
