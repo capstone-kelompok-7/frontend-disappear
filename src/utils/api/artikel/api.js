@@ -89,3 +89,15 @@ export const deleteArtikel = async (id) => {
     throw Error(error.response.data.message);
   }
 };
+
+export const generateContent = async (data) => {
+  try {
+    const response = await axiosWithConfig.post(
+      `/api/v1/chatbot/generate`,
+      data
+    );
+    return response.data;
+  } catch (error) {
+    throw Error(error.response.data.message);
+  }
+};

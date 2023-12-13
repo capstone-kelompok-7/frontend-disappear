@@ -16,11 +16,13 @@ import {
   createArtikel,
   getDetailArtikel,
   updateArtikel,
+  generateContent,
 } from "@/utils/api/artikel/api";
 import { Loading } from "@/components/loading";
 import Button from "@/components/button";
 
 function CreateEditNews() {
+  const [generatArtikel, setGeneratArtikel] = useState(false);
   const { id } = useParams();
   const [artikel, setArtikel] = useState([]);
   const { toast } = useToast();
@@ -33,10 +35,12 @@ function CreateEditNews() {
     register,
     setValue,
     handleSubmit,
+    watch,
     formState: { errors },
   } = useForm({
     resolver: zodResolver(artikelSchema),
   });
+  const isEditMode = id !== undefined;
 
   const handleFileNameChange = (event) => {
     const selectedFile = event.target.files[0];
@@ -54,6 +58,7 @@ function CreateEditNews() {
         content: data.content,
       };
 
+      setIsLoading(true);
       await createArtikel(newArtikel);
       navigate("/artikel");
       toast({
@@ -81,6 +86,8 @@ function CreateEditNews() {
         ),
         description: "Gagal menambahkan Artikel",
       });
+    } finally {
+      setIsLoading(false);
     }
   }
 
@@ -148,6 +155,36 @@ function CreateEditNews() {
       setIsLoading(false);
     }
   }
+
+  const handleGenerateContent = async () => {
+    try {
+      setIsLoading(true);
+      const titleValue = watch("title");
+      const result = await generateContent({
+        text: titleValue,
+      });
+      setValue("content", result.data);
+
+      toast({
+        title: "Konten Artikel Digenerate!",
+        description: "Konten artikel berhasil digenerate.",
+      });
+    } catch (error) {
+      console.error("Error generating content:", error);
+      toast({
+        variant: "destructive",
+        title: "Gagal Generate Konten",
+        description: "Terjadi kesalahan saat menggenerate konten artikel.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+  const onGenerateArtikelHandler = async () => {
+    setGeneratArtikel(true);
+    const prompt = watch("content");
+    handleGenerateContent(prompt);
+  };
   return (
     <Layout>
       <div>
@@ -169,6 +206,7 @@ function CreateEditNews() {
                   Judul
                 </label>
                 <Input
+                  id="input-judul"
                   register={register}
                   className="border rounded-sm border-black p-2 bg-white mt-3"
                   type="text"
@@ -217,22 +255,32 @@ function CreateEditNews() {
             <div className="mt-6 ml-4">
               <div className="flex justify-between items-center">
                 <label className="text-black font-bold">Konten</label>
-                <Button
-                  label="Generate content article"
-                  className="bg-secondary-green px-2 py-2 rounded border text-white"
-                />
+                {isLoading ? (
+                  <Loading />
+                ) : (
+                  <Button
+                    id="generate-konten"
+                    label="Generate content article"
+                    className="bg-secondary-green px-2 py-2 rounded border text-white"
+                    onClick={() => onGenerateArtikelHandler(generatArtikel)}
+                  />
+                )}
               </div>
               <div className="overflow-auto">
                 <TextEditor
+                  id="text-editor-konten"
                   register={register}
                   error={errors.content?.message}
                   setContent={(content) => setValue("content", content)}
-                  initialContent={artikel.content}
+                  initialContent={
+                    watch("content") || (isEditMode ? artikel.content : "")
+                  }
                 />
               </div>
             </div>
             <div className="justify-end mb-7 flex space-x-3">
               <button
+                id="button-batal-artikel"
                 type="button"
                 className="border border-black text-black px-4 rounded"
                 onClick={() => navigate(`/artikel`)}
@@ -240,6 +288,7 @@ function CreateEditNews() {
                 Batal
               </button>
               <button
+                id="tambah-edit-artikel"
                 type="submit"
                 className="bg-secondary-green text-white px-4 py-2 rounded"
               >
