@@ -169,8 +169,12 @@ function CardArtikel({ title, content, photo, date, artikelId }) {
                     </svg>
                   </DropdownMenuTrigger>
                   <DropdownMenuContent>
-                    <Link onClick={toDetailArtikel} id="toDetailArtikel">
-                      <DropdownMenuItem className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white">
+                    <Link>
+                      <DropdownMenuItem
+                        className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
+                        onClick={toDetailArtikel}
+                        id="to-detail-artikel"
+                      >
                         <IoEye />
                         <p>Detail Artikel</p>
                       </DropdownMenuItem>
@@ -179,6 +183,7 @@ function CardArtikel({ title, content, photo, date, artikelId }) {
                       <DropdownMenuItem
                         className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
                         onClick={toEditArtikel}
+                        id="to-edit-artikel"
                       >
                         <BiEdit />
                         <p>Edit Artikel</p>
@@ -187,7 +192,7 @@ function CardArtikel({ title, content, photo, date, artikelId }) {
 
                     <DropdownMenuItem
                       className=" hover:bg-secondary-green cursor-pointer gap-3 items-center text-black hover:text-white"
-                      id="deleteArtikel"
+                      id="delete-artikel"
                       onClick={() => handleDeleteClick(artikelId)}
                     >
                       <BiTrash />

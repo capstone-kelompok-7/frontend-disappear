@@ -206,6 +206,7 @@ function CreateEditNews() {
                   Judul
                 </label>
                 <Input
+                  id="input-judul"
                   register={register}
                   className="border rounded-sm border-black p-2 bg-white mt-3"
                   type="text"
@@ -258,6 +259,7 @@ function CreateEditNews() {
                   <Loading />
                 ) : (
                   <Button
+                    id="generate-konten"
                     label="Generate content article"
                     className="bg-secondary-green px-2 py-2 rounded border text-white"
                     onClick={() => onGenerateArtikelHandler(generatArtikel)}
@@ -266,6 +268,7 @@ function CreateEditNews() {
               </div>
               <div className="overflow-auto">
                 <TextEditor
+                  id="text-editor-konten"
                   register={register}
                   error={errors.content?.message}
                   setContent={(content) => setValue("content", content)}
@@ -277,6 +280,7 @@ function CreateEditNews() {
             </div>
             <div className="justify-end mb-7 flex space-x-3">
               <button
+                id="button-batal-artikel"
                 type="button"
                 className="border border-black text-black px-4 rounded"
                 onClick={() => navigate(`/artikel`)}
@@ -284,6 +288,7 @@ function CreateEditNews() {
                 Batal
               </button>
               <button
+                id="tambah-edit-artikel"
                 type="submit"
                 className="bg-secondary-green text-white px-4 py-2 rounded"
               >

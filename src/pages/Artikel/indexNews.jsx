@@ -97,13 +97,17 @@ function IndexNews() {
         <div className="flex justify-between">
           <div className="flex space-x-3">
             <Link to="/artikel/create-news">
-              <button className="flex items-center space-x-2 border bg-secondary-green text-white p-4 rounded-lg">
+              <button
+                className="flex items-center space-x-2 border bg-secondary-green text-white p-4 rounded-lg"
+                id="buat-artikel"
+              >
                 <AiOutlinePlus />
-                <div>Buat Artikel</div>
+                <h1>Buat Artikel</h1>
               </button>
             </Link>
             <div className="flex items-center">
               <input
+                id="cari-artikel"
                 type="text"
                 placeholder="Cari Artikel"
                 className="border pl-4 p-4 px-14 rounded-lg bg-white"
@@ -138,24 +142,28 @@ function IndexNews() {
                 <DropdownMenuItem
                   className="cursor-pointer bg-black text-white hover:bg-secondary-green hover:text-white"
                   onClick={() => handleShowAllData()}
+                  id="all-data-artikel"
                 >
                   Tampilkan Semua Artikel
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => handleFilterArtikel("minggu ini")}
                   className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  id="filter-minggu-ini-artikel"
                 >
                   Minggu ini
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => handleFilterArtikel("bulan ini")}
                   className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  id="filter-bulan-ini-artikel"
                 >
                   Bulan ini
                 </DropdownMenuItem>
                 <DropdownMenuItem
                   onClick={() => handleFilterArtikel("tahun ini")}
                   className=" hover:bg-secondary-green hover:text-white cursor-pointer"
+                  id="filter-tahun-ini-artikel"
                 >
                   Tahun ini
                 </DropdownMenuItem>

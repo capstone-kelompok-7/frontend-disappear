@@ -132,6 +132,7 @@ function DetailNews() {
                 type="submit"
                 className="border border-black text-black px-4 rounded"
                 onClick={() => handleDeleteClick(id)}
+                id="=detail-artikel-delete"
               >
                 Hapus Artikel
               </button>
@@ -139,6 +140,7 @@ function DetailNews() {
                 type="button"
                 className="bg-secondary-green text-white px-4 py-2 rounded"
                 onClick={() => toEditArtikel(id)}
+                id="detail-artikel-edit"
               >
                 Edit Artikel
               </button>
