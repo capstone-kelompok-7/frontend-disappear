@@ -132,7 +132,9 @@ export default function Ulasan() {
       Header: "Nama Produk",
       accessor: "name",
       Cell: ({ row }) => (
-        <Link to={`/ulasan/${row.original.id}`}>{row.original.name}</Link>
+        <Link id="detail-ulasan" to={`/ulasan/${row.original.id}`}>
+          {row.original.name}
+        </Link>
       ),
     },
     { Header: "Penilaian", accessor: "rating" },
@@ -149,6 +151,7 @@ export default function Ulasan() {
         <div className="flex justify-start items-center mb-5 mt-8 gap-5">
           <div className="relative flex items-center">
             <Input
+              id="input-cari-produk"
               type="text"
               placeholder="Cari Produk"
               className="pr-11 w-96 py-6 border border-primary-green"
@@ -159,7 +162,10 @@ export default function Ulasan() {
           </div>
 
           <DropdownMenu>
-            <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green">
+            <DropdownMenuTrigger
+              id="btn-filter-rating"
+              className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green"
+            >
               <div className="flex items-center justify-between w-32">
                 <p className="text-secondary-green">
                   {selectedRating || "Filter"}
@@ -181,6 +187,7 @@ export default function Ulasan() {
 
             <DropdownMenuContent>
               <DropdownMenuItem
+                id="tampilkan-semua-rating"
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                 onClick={() => handleShowAllData()}
               >
@@ -188,6 +195,7 @@ export default function Ulasan() {
               </DropdownMenuItem>
               {filterStatusOptions.map((option) => (
                 <DropdownMenuItem
+                  id="dropdown-filter-rating"
                   key={option.value}
                   className="hover:bg-secondary-green hover:text-white cursor-pointer"
                   onClick={() => handleFilterRating(option.value)}
@@ -201,7 +209,7 @@ export default function Ulasan() {
         {isLoading ? (
           <Loading />
         ) : (
-          <div className="mt-5">
+          <div>
             {ulasan && ulasan.length > 0 ? (
               <>
                 <Tabel columns={columns} data={ulasan} />
