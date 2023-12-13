@@ -119,6 +119,7 @@ export default function IndexPesertaTantangan() {
       accessor: "username",
       Cell: ({ row }) => (
         <Link
+          id="edit-peserta-tantangan"
           to={`/peserta-tantangan/${row.original.id}/edit-peserta-tantangan`}
         >
           {row.original.username}
@@ -152,7 +153,10 @@ export default function IndexPesertaTantangan() {
               <div className="flex items-center gap-3">
                 <MdOutlineCalendarMonth size={30} />
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex justify-between items-center py-3 px-3 gap-3">
+                  <DropdownMenuTrigger
+                    id="dropdown-filter-tanggal"
+                    className="flex justify-between items-center py-3 px-3 gap-3"
+                  >
                     <p>{selectedDate || ""}</p>
                     <svg
                       xmlns="http://www.w3.org/2000/svg"
@@ -170,6 +174,7 @@ export default function IndexPesertaTantangan() {
 
                   <DropdownMenuContent>
                     <DropdownMenuItem
+                      id="tampilkan-semua-tanggal"
                       className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
                       onClick={() => handleShowAllDate()}
                     >
@@ -177,6 +182,7 @@ export default function IndexPesertaTantangan() {
                     </DropdownMenuItem>
                     {filterDateOptions.map((option) => (
                       <DropdownMenuItem
+                        id="dropdown-filter-tanggal"
                         key={option.value}
                         className="hover:bg-secondary-green hover:text-white cursor-pointer"
                         onClick={() => handleFilterDate(option.value)}
@@ -190,7 +196,10 @@ export default function IndexPesertaTantangan() {
             </div>
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-between items-center rounded-md py-3 px-3 border border-primary-green">
+              <DropdownMenuTrigger
+                id="dropdown-filter-status"
+                className="flex justify-between items-center rounded-md py-3 px-3 border border-primary-green"
+              >
                 <div className="flex items-center justify-between w-44">
                   <p className="text-primary-green">
                     {selectedStatus || "Filter"}
@@ -212,6 +221,7 @@ export default function IndexPesertaTantangan() {
 
               <DropdownMenuContent>
                 <DropdownMenuItem
+                  id="tampilkan-semua-status"
                   className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
                   onClick={() => handleShowAllStatus()}
                 >
@@ -219,6 +229,7 @@ export default function IndexPesertaTantangan() {
                 </DropdownMenuItem>
                 {filterStatusOptions.map((option) => (
                   <DropdownMenuItem
+                    id="dropdown-filter-status"
                     key={option.value}
                     className="hover:bg-secondary-green hover:text-white cursor-pointer"
                     onClick={() => handleFilterStatus(option.value)}
@@ -233,7 +244,7 @@ export default function IndexPesertaTantangan() {
         {isLoading ? (
           <Loading />
         ) : (
-          <div className="mt-5">
+          <div>
             {participant && participant.length > 0 ? (
               <>
                 <Tabel columns={columns} data={participant} />

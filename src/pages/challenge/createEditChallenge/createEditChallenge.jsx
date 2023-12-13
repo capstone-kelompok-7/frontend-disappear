@@ -71,12 +71,6 @@ function CreateChallenge() {
         );
         setValue("description", result.data.description);
         setValue("exp", result.data.exp);
-        // setValue("image", result.data.photo);
-
-        // if (result.data.photo) {
-        //   const previewURL = URL.createObjectURL(result.data.photo);
-        //   setPreviewImage([previewURL]);
-        // }
       }
     } catch (error) {
       console.log(error.message);
@@ -220,6 +214,7 @@ function CreateChallenge() {
                 <div className="flex-col w-1/2 pr-8">
                   <label className="font-semibold">Mulai</label>
                   <Input
+                    id="input-tanggal-mulai"
                     register={register}
                     label="Mulai"
                     type="date"
@@ -232,6 +227,7 @@ function CreateChallenge() {
                 <div className="flex-col w-1/2 pl-8">
                   <label className="font-semibold">Berakhir</label>
                   <Input
+                    id="input-tanggal-berakhir"
                     register={register}
                     label="Berakhir"
                     type="date"
@@ -247,6 +243,7 @@ function CreateChallenge() {
               <div className="flex-col w-1/2 pr-8">
                 <label className="font-semibold">Nama Tantangan</label>
                 <Input
+                  id="input-nama-tantangan"
                   register={register}
                   type="text"
                   name="challengeName"
@@ -260,6 +257,7 @@ function CreateChallenge() {
               <div className="flex-col w-1/2 pl-8">
                 <label className="font-semibold">EXP</label>
                 <Input
+                  id="input-exp-tantangan"
                   register={register}
                   type="number"
                   name="exp"
@@ -315,6 +313,7 @@ function CreateChallenge() {
                       </p>
 
                       <Input
+                        id="input-gambar-tantangan"
                         register={register}
                         type="file"
                         className="hidden"
@@ -356,6 +355,7 @@ function CreateChallenge() {
                         </div>
                       </div>
                       <IoTrashOutline
+                        id="hapus-preview"
                         className="text-base cursor-pointer"
                         onClick={() => removeFile(0)}
                       />
@@ -379,10 +379,6 @@ function CreateChallenge() {
                           }}
                         />
                       </div>
-                      <IoTrashOutline
-                        className="text-base cursor-pointer"
-                        onClick={() => removeFile(0)}
-                      />
                     </li>
                   </ul>
                 )}
@@ -397,6 +393,7 @@ function CreateChallenge() {
                 </label>
                 <div className="overflow-auto">
                   <TextEditor
+                    id="input-deskripsi-tantangan"
                     register={register}
                     setContent={(description) =>
                       setValue("description", description)
@@ -416,6 +413,7 @@ function CreateChallenge() {
 
             <div className="flex justify-end gap-3">
               <Button
+                id="btn-batal"
                 label="Batal"
                 type="button"
                 className="w-24 h-12 rounded-md border border-primary-green p-3.5 text-primary-green text-sm font-semibold items-center justify-center inline-flex"
@@ -423,6 +421,7 @@ function CreateChallenge() {
               />
 
               <Button
+                id="btn-submit"
                 label={
                   selectedId === 0 ? "Tambah Tantangan" : "Simpan Perubahan"
                 }

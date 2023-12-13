@@ -160,6 +160,7 @@ export default function editPesertaChallange() {
                     Status
                   </label>
                   <Select
+                    id="select-status"
                     name="status"
                     options={["valid", "tidak valid"]}
                     placeholder="Status"
@@ -185,6 +186,7 @@ export default function editPesertaChallange() {
 
               <div className="flex w-1/2 pl-8 mt-16 justify-end gap-3">
                 <Button
+                  id="btn-batal"
                   label="Batal"
                   type="button"
                   className="w-24 h-12 rounded-md border border-primary-green p-3.5 shadow text-primary-green text-sm font-semibold items-center justify-center inline-flex"
@@ -192,6 +194,7 @@ export default function editPesertaChallange() {
                 />
 
                 <Button
+                  id="btn-submit"
                   label="Simpan Perubahan"
                   type="submit"
                   className="w-44 h-12 bg-secondary-green rounded-md p-3.5 shadow text-white text-sm font-semibold"
@@ -216,7 +219,7 @@ export default function editPesertaChallange() {
                       <img
                         src={participant.photo}
                         alt="gambar tantangan"
-                        className="h-[14rem] w-full object-contain"
+                        className="h-[14rem] w-full object-contain opacity-60"
                       />
                       <Input
                         register={register}
