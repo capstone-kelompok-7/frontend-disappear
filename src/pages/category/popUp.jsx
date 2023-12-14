@@ -125,6 +125,7 @@ const PopUp = ({
               ) : (
                 <>
                   <Input
+                    id="input-nama-kategori"
                     placeholder="Nama Kategori"
                     type="text"
                     className="my-10"
@@ -133,6 +134,7 @@ const PopUp = ({
                     error={errors.categoryName?.message}
                   />
                   <Input
+                    id="input-file-kategori"
                     placeholder="File Kategori"
                     type="file"
                     register={register}
@@ -149,13 +151,14 @@ const PopUp = ({
 
               <div className="modal-action flex justify-center gap-5 pt-5">
                 <form method="dialog">
-                  {/* if there is a button in form, it will close the modal */}
                   <Button
+                    id="btn-cancel"
                     className="bg-white rounded-full border-secondary-green border px-10 py-3 text-base font-semibold text-primary-green"
                     label="Batal"
                   />
                 </form>
                 <Button
+                  id="btn-submit"
                   type="submit"
                   className="rounded-full border px-10 bg-secondary-green text-white py-3"
                   label={popUpTitle}

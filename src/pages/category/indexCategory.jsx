@@ -18,14 +18,10 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import {
-  getCategory,
-  deleteCategory,
-  getDetailCategory,
-} from "@/utils/api/category/api";
+import { getCategory, deleteCategory } from "@/utils/api/category/api";
 import Pagination from "@/components/pagenation";
 import { Loading } from "@/components/loading";
-import { useSearchParams, useNavigate } from "react-router-dom";
+import { useSearchParams } from "react-router-dom";
 import { debounce } from "lodash";
 import { useToast } from "@/components/ui/use-toast";
 
@@ -175,6 +171,7 @@ export default function IndexCategory() {
 
             <DropdownMenuContent>
               <DropdownMenuItem
+                id="dropdown-edit"
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
                 style={{ cursor: "pointer" }}
                 onClick={() => {
@@ -189,6 +186,7 @@ export default function IndexCategory() {
                 Edit Kategori
               </DropdownMenuItem>
               <DropdownMenuItem
+                id="dropdown-hapus"
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center"
                 onClick={() => onClickDelete(row.original.id)}
               >
@@ -209,6 +207,7 @@ export default function IndexCategory() {
 
         <div className=" items-center flex mt-6 py-5 gap-6">
           <Button
+            id="btn-tambah-kategori"
             label="Tambah Kategori"
             icon={
               <svg
@@ -238,6 +237,7 @@ export default function IndexCategory() {
 
           <div className="flex items-center w-64 relative">
             <Input
+              id="input-cari-kategori"
               type="text"
               placeholder="Cari Kategori"
               className="border-primary-green pr-36 placeholder:text-left"
@@ -277,15 +277,6 @@ export default function IndexCategory() {
               </div>
             )}
           </div>
-          // <>
-          //   <Tabel columns={columns} data={categories} />
-          //   <Pagination
-          //     meta={meta}
-          //     onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-          //     onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-          //     onClickPage={(page) => handlePrevNextPage(page)}
-          //   />
-          // </>
         )}
       </Layout>
     </>
