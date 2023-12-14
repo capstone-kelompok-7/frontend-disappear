@@ -210,6 +210,7 @@ export default function DetailOrder() {
                       </div>
                       <div className="flex  rounded bg-secondary-green">
                         <Button
+                          id="btn-view"
                           label="View"
                           className="text-xs font-medium text-white px-3.5 py-1.5"
                           onClick={() => navigate(`/pembayaran/${id}`)}
@@ -319,6 +320,7 @@ export default function DetailOrder() {
                           Tanggal
                         </label>
                         <Input
+                          id="input-date"
                           type="date"
                           name="orderDate"
                           register={register}
@@ -331,6 +333,7 @@ export default function DetailOrder() {
                           Status Pesanan
                         </label>
                         <Select
+                          id="select-status-order"
                           className="py-1 px-4 mr-6"
                           name="statusOrder"
                           options={[
@@ -350,7 +353,7 @@ export default function DetailOrder() {
                           Ekstra Info
                         </label>
                         <Textarea
-                          id="status-pesanan"
+                          id="extra-info"
                           name="extraInfo"
                           register={register}
                           error={errors.status?.message}
@@ -360,6 +363,7 @@ export default function DetailOrder() {
                       </div>
                       <div className="flex flex-row justify-end gap-5 mr-6">
                         <Button
+                          id="btn-cancel"
                           label="Batal"
                           type="button"
                           onClick={handleCancel}
@@ -371,6 +375,7 @@ export default function DetailOrder() {
                           </div>
                         ) : (
                           <Button
+                            id="btn-submit"
                             label="Kirim"
                             type="submit"
                             className="rounded bg-primary-green text-white py-3 px-3 items-center font-semibold"

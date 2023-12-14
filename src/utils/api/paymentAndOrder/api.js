@@ -25,7 +25,6 @@ export const getAllOrder = async (params) => {
 };
 
 export const updateOrder = async (data) => {
-  // console.log(data);
   const { order_id } = data;
 
   try {
