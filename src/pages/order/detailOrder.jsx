@@ -207,11 +207,11 @@ export default function DetailOrder() {
                       <div className="flex text-sm font-semibold mb-1 text-left text-primary-green">
                         Detail Pembayaran
                       </div>
-                      <div className="flex px-3.5 py-1.5 rounded bg-secondary-green">
+                      <div className="flex  rounded bg-secondary-green">
                         <Button
                           label="View"
-                          className="text-xs font-medium text-white"
-                          onClick={() => navigate("/pembayaran/:id")}
+                          className="text-xs font-medium text-white px-3.5 py-1.5"
+                          onClick={() => navigate(`/pembayaran/${id}`)}
                         />
                       </div>
                     </div>
