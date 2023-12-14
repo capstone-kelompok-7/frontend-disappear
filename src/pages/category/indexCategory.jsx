@@ -48,7 +48,7 @@ export default function IndexCategory() {
     delayedFetchData();
 
     return () => delayedFetchData.cancel();
-  }, [searchParams, reload]);
+  }, [searchValue, searchParams, reload]);
 
   const getSuggestions = useCallback(
     async function (query) {
@@ -74,8 +74,13 @@ export default function IndexCategory() {
     try {
       setIsLoading(true);
       const result = await getCategory({ ...query });
+      const searchData = result.data
+        ? result.data.filter((item) =>
+            item.name.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        : [];
       const { ...rest } = result.meta;
-      setCategories(result.data);
+      setCategories(searchData);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
@@ -253,15 +258,34 @@ export default function IndexCategory() {
         {isLoading ? (
           <Loading />
         ) : (
-          <>
-            <Tabel columns={columns} data={categories} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
-          </>
+          <div className="mt-5">
+            {categories && categories.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={categories} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
+                <p>Data tidak ditemukan</p>
+              </div>
+            )}
+          </div>
+          // <>
+          //   <Tabel columns={columns} data={categories} />
+          //   <Pagination
+          //     meta={meta}
+          //     onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
+          //     onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+          //     onClickPage={(page) => handlePrevNextPage(page)}
+          //   />
+          // </>
         )}
       </Layout>
     </>
