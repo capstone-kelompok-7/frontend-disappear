@@ -22,7 +22,6 @@ import { Loading } from "@/components/loading";
 import Button from "@/components/button";
 
 function CreateEditNews() {
-  const [generatArtikel, setGeneratArtikel] = useState(false);
   const { id } = useParams();
   const [artikel, setArtikel] = useState([]);
   const { toast } = useToast();
@@ -40,6 +39,7 @@ function CreateEditNews() {
   } = useForm({
     resolver: zodResolver(artikelSchema),
   });
+
   const isEditMode = id !== undefined;
 
   const handleFileNameChange = (event) => {
@@ -75,7 +75,6 @@ function CreateEditNews() {
       });
       reset();
     } catch (error) {
-      console.log(error);
       toast({
         variant: "destructive",
         title: (
@@ -160,6 +159,14 @@ function CreateEditNews() {
     try {
       setIsLoading(true);
       const titleValue = watch("title");
+      if (!titleValue) {
+        toast({
+          variant: "destructive",
+          title: "Gagal Generate Konten",
+          description: "Judul artikel harus diisi terlebih dahulu.",
+        });
+        return;
+      }
       const result = await generateContent({
         text: titleValue,
       });
@@ -170,7 +177,6 @@ function CreateEditNews() {
         description: "Konten artikel berhasil digenerate.",
       });
     } catch (error) {
-      console.error("Error generating content:", error);
       toast({
         variant: "destructive",
         title: "Gagal Generate Konten",
@@ -180,18 +186,17 @@ function CreateEditNews() {
       setIsLoading(false);
     }
   };
-  const onGenerateArtikelHandler = async () => {
-    setGeneratArtikel(true);
-    const prompt = watch("content");
-    handleGenerateContent(prompt);
-  };
+
   return (
     <Layout>
       <div>
         <Breadcrumbs pages="Artikel" />
       </div>
       {isLoading ? (
-        <Loading />
+        <div>
+          <Loading />
+          <p className="text-center">Sebentar ya data Sedang dimuat</p>
+        </div>
       ) : (
         <form
           onSubmit={handleSubmit(selectedId === 0 ? onSubmit : onSubmitEdit)}
@@ -255,16 +260,12 @@ function CreateEditNews() {
             <div className="mt-6 ml-4">
               <div className="flex justify-between items-center">
                 <label className="text-black font-bold">Konten</label>
-                {isLoading ? (
-                  <Loading />
-                ) : (
-                  <Button
-                    id="generate-konten"
-                    label="Generate content article"
-                    className="bg-secondary-green px-2 py-2 rounded border text-white"
-                    onClick={() => onGenerateArtikelHandler(generatArtikel)}
-                  />
-                )}
+                <Button
+                  id="generate-konten"
+                  label="Generate content article"
+                  className="bg-[#9FDFCA] px-2 py-2 rounded-sm border text-black"
+                  onClick={handleGenerateContent}
+                />
               </div>
               <div className="overflow-auto">
                 <TextEditor
@@ -290,7 +291,7 @@ function CreateEditNews() {
               <button
                 id="tambah-edit-artikel"
                 type="submit"
-                className="bg-secondary-green text-white px-4 py-2 rounded"
+                className="bg-[#65CDA9] text-white px-4 py-2 rounded"
               >
                 {selectedId === 0 ? "Tambah Artikel" : "Edit Artikel"}
               </button>
