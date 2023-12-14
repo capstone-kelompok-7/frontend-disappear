@@ -42,6 +42,7 @@ export default function DetailOrder() {
 
   const handleCancel = () => {
     reset();
+    navigate("/pesanan");
   };
 
   useEffect(() => {
@@ -337,6 +338,7 @@ export default function DetailOrder() {
                             "Proses",
                             "Menunggu Konfirmasi",
                             "Gagal",
+                            "Selesai",
                           ]}
                           placeholder="Status"
                           register={register}
