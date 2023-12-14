@@ -26,8 +26,10 @@ const configureEditor = (setContent, initialContent = "") => {
 const TextEditor = ({ setContent, initialContent, error, name }) => {
   const editor = configureEditor(setContent, initialContent);
 
+  const containerClassName = `text-container ${error ? "has-error" : ""}`;
+
   return (
-    <div className="text-container">
+    <div className={containerClassName}>
       <EditorContent editor={editor} name={name} />
       {error && (
         <p className="absolute text-xs text-left text-[#e50000] top-full left-0 mt-1">

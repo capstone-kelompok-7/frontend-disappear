@@ -30,5 +30,7 @@ export const ChallengeSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
-  description: z.string().min(1, { message: "Field tidak boleh kosong" }),
+  description: z
+    .string({ required_error: "Field tidak boleh kosong" })
+    .nullable(),
 });

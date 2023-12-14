@@ -1,15 +1,22 @@
 .text-container {
   width: 100%;
   margin-top: 1rem;
-  height: 12rem;
+  border: 1px solid #000;
+  border-radius: 0.5rem;
+  overflow: auto;
+}
+
+.text-container.has-error {
+  border: 1px solid #e50000;
 }
 
 .text-container .ProseMirror {
-  border: 1px solid #000;
   height: 12rem;
   padding: 16px;
-  border-radius: 0.25rem;
   overflow: auto;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .text-container .ProseMirror h1,
