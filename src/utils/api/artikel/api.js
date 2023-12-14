@@ -93,7 +93,7 @@ export const deleteArtikel = async (id) => {
 export const generateContent = async (data) => {
   try {
     const response = await axiosWithConfig.post(
-      `/api/v1/chatbot/generate`,
+      `/api/v1/assistant/generate-article`,
       data
     );
     return response.data;
