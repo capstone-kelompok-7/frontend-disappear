@@ -185,13 +185,19 @@ export default function LihatUlasan() {
                     <p>{review.description}</p>
                     <div className="flex gap-2">
                       {review.photo &&
-                        review.photo.map((photo) => (
-                          <img
-                            key={photo.id}
-                            src={photo.photo}
-                            alt=""
-                            className="bg-gray-300 w-12 h-12 rounded"
-                          />
+                        review.photo.slice(0, 3).map((photo, index) => (
+                          <div key={photo.id} className="relative">
+                            <img
+                              src={photo.photo}
+                              alt=""
+                              className="w-12 h-12 rounded"
+                            />
+                            {index === 2 && review.photo.length > 3 && (
+                              <div className="absolute top-0 right-1/2 transform translate-y-1/2 translate-x-1/2 text-white w-6 h-6 flex items-center justify-center">
+                                +{review.photo.length - 3}
+                              </div>
+                            )}
+                          </div>
                         ))}
                     </div>
                   </div>
