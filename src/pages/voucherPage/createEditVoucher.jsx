@@ -151,7 +151,6 @@ function CreateVoucher() {
       const editVoucher = {
         id: selectedId,
         name: data.voucherName,
-        code: data.voucherCode,
         category: data.voucherFor,
         description: data.voucherDescription,
         discount: data.discount,
