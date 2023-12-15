@@ -1,19 +1,20 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-import "@/styles/ulasan/detail.css";
+import { Link, useParams } from "react-router-dom";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { BsArrowLeft } from "react-icons/bs";
 import { Progress } from "flowbite-react";
-import { FaUserCircle } from "react-icons/fa";
+
 import Layout from "@/components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Star from "@/components/review/star";
-import { useParams } from "react-router-dom";
 import { getDetailUlasan } from "@/utils/api/ulasan/api";
 import { Loading } from "@/components/loading";
 import Stars from "@/components/userReview/Stars";
+import { useToast } from "@/components/ui/use-toast";
+import "@/styles/ulasan/detail.css";
 
 export default function LihatUlasan() {
+  const { toast } = useToast();
   const { id } = useParams();
   const [ulasan, setUlasan] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
@@ -28,7 +29,17 @@ export default function LihatUlasan() {
       const result = await getDetailUlasan(id);
       setUlasan(result.data);
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan Data Ulasan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -185,13 +196,19 @@ export default function LihatUlasan() {
                     <p>{review.description}</p>
                     <div className="flex gap-2">
                       {review.photo &&
-                        review.photo.map((photo) => (
-                          <img
-                            key={photo.id}
-                            src={photo.photo}
-                            alt=""
-                            className="bg-gray-300 w-12 h-12 rounded"
-                          />
+                        review.photo.slice(0, 3).map((photo, index) => (
+                          <div key={photo.id} className="relative">
+                            <img
+                              src={photo.photo}
+                              alt=""
+                              className="w-12 h-12 rounded"
+                            />
+                            {index === 2 && review.photo.length > 3 && (
+                              <div className="absolute top-0 right-1/2 transform translate-y-1/2 translate-x-1/2 text-white w-6 h-6 flex items-center justify-center">
+                                +{review.photo.length - 3}
+                              </div>
+                            )}
+                          </div>
                         ))}
                     </div>
                   </div>
