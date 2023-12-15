@@ -7,10 +7,12 @@ import { CrossCircledIcon } from "@radix-ui/react-icons";
 import Layout from "@/components/layout";
 import { getDetailChallenge } from "@/utils/api/challenge/challenge/api";
 import { Loading } from "@/components/loading";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function DetailChallange() {
   const [challenge, setChallenge] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
   const { id } = useParams();
 
   useEffect(() => {

@@ -17,6 +17,7 @@ import Tabel from "@/components/table/table";
 import { getParticipant } from "@/utils/api/challenge/participantChallenge/api";
 import Pagination from "@/components/pagenation";
 import { Loading } from "@/components/loading";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function IndexPesertaTantangan() {
   const [participant, setParticipant] = useState([]);
@@ -25,6 +26,7 @@ export default function IndexPesertaTantangan() {
   const [isLoading, setIsLoading] = useState(true);
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const { toast } = useToast();
 
   useEffect(() => {
     const delayedFetchData = debounce(fetchData, 1000);
