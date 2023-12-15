@@ -84,7 +84,17 @@ export default function Carousel() {
       setCarousel(searchData);
       setMeta(rest);
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mencari data Carousel!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }
