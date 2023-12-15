@@ -60,7 +60,17 @@ function PopUp({ handleForceFetch, selectedId, data }) {
         setValue("carouselName", carouselData.name);
       }
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan data Carousel!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses mendapatkan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -189,7 +199,8 @@ function PopUp({ handleForceFetch, selectedId, data }) {
                 <form method="dialog">
                   <Button
                     className="bg-white rounded-full border-secondary-green border px-10 py-3 text-base font-semibold text-primary-green"
-                    label="Batal" id="btn-cancel"
+                    label="Batal"
+                    id="btn-cancel"
                   />
                 </form>
                 <Button

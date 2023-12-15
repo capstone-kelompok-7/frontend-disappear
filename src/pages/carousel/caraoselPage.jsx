@@ -64,7 +64,7 @@ export default function Carousel() {
 
       setSearchParams(newSearchParams);
     },
-    [searchParams, setSearchParams]
+    [searchValue, searchParams, setSearchParams]
   );
 
   async function fetchData() {
@@ -75,11 +75,26 @@ export default function Carousel() {
     }
     try {
       const result = await getAllCarousel({ ...query });
+      const searchData = result.data
+        ? result.data.filter((item) =>
+            item.name.toLowerCase().includes(searchValue.toLowerCase())
+          )
+        : [];
       const { ...rest } = result.meta;
-      setCarousel(result.data);
+      setCarousel(searchData);
       setMeta(rest);
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mencari data Carousel!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -252,13 +267,23 @@ export default function Carousel() {
           <Loading />
         ) : (
           <>
-            <Tabel columns={columns} data={carousel} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
+            {carousel && carousel.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={carousel} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
+                <p>Data tidak ditemukan</p>
+              </div>
+            )}
           </>
         )}
       </Layout>
