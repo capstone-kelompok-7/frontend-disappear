@@ -1,17 +1,16 @@
 import { useEffect, useState } from "react";
-import { Link } from "react-router-dom";
-
-import "@/styles/ulasan/detail.css";
+import { Link, useParams } from "react-router-dom";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { BsArrowLeft } from "react-icons/bs";
 import { Progress } from "flowbite-react";
-import { FaUserCircle } from "react-icons/fa";
+
 import Layout from "@/components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
 import Star from "@/components/review/star";
-import { useParams } from "react-router-dom";
 import { getDetailUlasan } from "@/utils/api/ulasan/api";
 import { Loading } from "@/components/loading";
 import Stars from "@/components/userReview/Stars";
+import "@/styles/ulasan/detail.css";
 
 export default function LihatUlasan() {
   const { id } = useParams();
@@ -28,7 +27,17 @@ export default function LihatUlasan() {
       const result = await getDetailUlasan(id);
       setUlasan(result.data);
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan Data Ulasan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }

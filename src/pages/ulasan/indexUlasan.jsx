@@ -1,5 +1,6 @@
 import { useEffect, useState, useCallback } from "react";
 import { FiSearch } from "react-icons/fi";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 import { Link, useSearchParams } from "react-router-dom";
 import { debounce } from "lodash";
 
@@ -67,7 +68,17 @@ export default function Ulasan() {
       setUlasan(searchData);
       setMeta(rest);
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan data Ulasan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }
