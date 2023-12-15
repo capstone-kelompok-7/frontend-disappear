@@ -3,6 +3,7 @@ import { MdOutlineCalendarMonth } from "react-icons/md";
 import { useSearchParams, Link } from "react-router-dom";
 import { format } from "date-fns";
 import { debounce } from "lodash";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 import Breadcrumbs from "@/components/breadcrumbs";
 import Layout from "@/components/layout";
@@ -45,7 +46,17 @@ export default function IndexPesertaTantangan() {
       setIsLoading(false);
       setMeta(rest);
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan data Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }

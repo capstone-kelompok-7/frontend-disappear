@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { FaRegCheckCircle } from "react-icons/fa";
 
 import Layout from "@/components/layout";
 import Button from "@/components/button";
@@ -17,7 +18,6 @@ import {
   updateParticipant,
   getDetailParticipant,
 } from "@/utils/api/challenge/participantChallenge/api";
-import { FaRegCheckCircle } from "react-icons/fa";
 
 export default function editPesertaChallange() {
   const { id } = useParams();
@@ -59,7 +59,17 @@ export default function editPesertaChallange() {
         setValue("status", result.data.status);
       }
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan data Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +99,6 @@ export default function editPesertaChallange() {
       setSelectedId(0);
       reset();
     } catch (error) {
-      console.log(error.message);
       toast({
         variant: "destructive",
         title: (
