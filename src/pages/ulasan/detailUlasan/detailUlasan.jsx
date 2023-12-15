@@ -10,9 +10,11 @@ import Star from "@/components/review/star";
 import { getDetailUlasan } from "@/utils/api/ulasan/api";
 import { Loading } from "@/components/loading";
 import Stars from "@/components/userReview/Stars";
+import { useToast } from "@/components/ui/use-toast";
 import "@/styles/ulasan/detail.css";
 
 export default function LihatUlasan() {
+  const { toast } = useToast();
   const { id } = useParams();
   const [ulasan, setUlasan] = useState([]);
   const [isLoading, setIsLoading] = useState(false);

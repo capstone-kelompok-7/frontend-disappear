@@ -12,6 +12,7 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
+import { useToast } from "@/components/ui/use-toast";
 import Tabel from "@/components/table/table";
 import { Input } from "@/components/ui/input";
 import { getUlasan } from "@/utils/api/ulasan/api";
@@ -19,6 +20,7 @@ import Pagination from "@/components/pagenation";
 import { Loading } from "@/components/loading";
 
 export default function Ulasan() {
+  const { toast } = useToast();
   const [ulasan, setUlasan] = useState([]);
   const [searchParams, setSearchParams] = useSearchParams();
   const [meta, setMeta] = useState();
