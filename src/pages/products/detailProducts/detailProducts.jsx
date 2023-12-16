@@ -31,7 +31,17 @@ export default function DetailProducts() {
       const result = await getDetailProducts(id);
       setProducts(result.data);
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Memuat Produk!</span>
+          </div>
+        ),
+        description:
+          "Terjadi kesalahan saat memuat produk, silahkan cek internet terlebih dahulu atau reload halaman",
+      });
     } finally {
       setIsLoading(false);
     }
