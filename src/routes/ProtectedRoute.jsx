@@ -1,6 +1,5 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useToken } from "@/utils/context/TokenContext";
-import Swal from "sweetalert2";
 
 const ProtectedRoute = () => {
   const { pathname } = useLocation();
@@ -38,19 +37,6 @@ const ProtectedRoute = () => {
     "/carousel",
   ];
 
-  const getUserRole = (token) => {
-    if (!token) return null;
-    try {
-      const payload = token.split(".")[1];
-      const decodedPayload = atob(payload);
-      const user = JSON.parse(decodedPayload);
-
-      return user?.role;
-    } catch (error) {
-      return null;
-    }
-  };
-
   const isAdminLoggedIn = () => {
     return tokenLocal || tokenSession;
   };
@@ -62,17 +48,6 @@ const ProtectedRoute = () => {
   }
 
   if (!tokenLocal && !tokenSession && protectedByToken.includes(pathname)) {
-    return <Navigate to="/login" />;
-  }
-
-  const role = getUserRole(tokenLocal || tokenSession);
-
-  if (role === "customer") {
-    Swal.fire({
-      icon: "error",
-      title: "Login Gagal!",
-      text: error.message,
-    });
     return <Navigate to="/login" />;
   }
 
