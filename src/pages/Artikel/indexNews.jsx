@@ -57,7 +57,10 @@ function IndexNews() {
       result.data.sort((a, b) => new Date(b.date) - new Date(a.date));
       setArtikel(result.data);
     } catch (error) {
-      console.log(error.message);
+      toast({
+        title: "GAGAL MEMUAT ARTIKEL!",
+        description: "Konten artikel gagal dimuat!",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -80,7 +83,7 @@ function IndexNews() {
         : "Tahun ini"
     );
   }
-  
+
   function handleShowAllData() {
     const newSearchParams = new URLSearchParams(searchParams.toString());
     newSearchParams.delete("date_filter_type");

@@ -1,15 +1,23 @@
 .text-editor-container {
   width: 100%;
   margin-top: 1rem;
-  height: 27rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 0.5rem;
+  overflow: auto;
+}
+
+.text-editor-container.has-error {
+  border: 1px solid #e50000;
 }
 
 .text-editor-container .ProseMirror {
-  border: 1px solid #000;
   height: 24rem;
   padding: 4px;
   border-radius: 0.25rem;
   overflow: auto;
+  border: none;
+  outline: none;
+  -webkit-tap-highlight-color: transparent;
 }
 
 .text-editor-container .ProseMirror h1,

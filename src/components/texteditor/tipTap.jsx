@@ -25,17 +25,11 @@ const configureEditor = (setContent, initialContent = "") => {
 
 const TextEditor = ({ setContent, initialContent, error }) => {
   const editor = configureEditor(setContent, initialContent);
+  const containerArtikel = `text-editor-container ${error ? "has-error" : ""}`;
 
   return (
-    <div className="text-editor-container">
+    <div className={containerArtikel}>
       <EditorContent editor={editor} />
-      {error && (
-        <label className="label">
-          <span className="break-words text-sm font-light text-red-500">
-            {error}
-          </span>
-        </label>
-      )}
     </div>
   );
 };
