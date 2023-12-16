@@ -37,19 +37,6 @@ const ProtectedRoute = () => {
     "/carousel",
   ];
 
-  const getUserRole = (token) => {
-    if (!token) return null;
-    try {
-      const payload = token.split(".")[1];
-      const decodedPayload = atob(payload);
-      const user = JSON.parse(decodedPayload);
-
-      return user?.role;
-    } catch (error) {
-      return null;
-    }
-  };
-
   const isAdminLoggedIn = () => {
     return tokenLocal || tokenSession;
   };
@@ -61,15 +48,6 @@ const ProtectedRoute = () => {
   }
 
   if (!tokenLocal && !tokenSession && protectedByToken.includes(pathname)) {
-    return <Navigate to="/login" />;
-  }
-
-  const role = getUserRole(tokenLocal || tokenSession);
-
-  if (role === "customer") {
-    console.log("Tidak memiliki akses!");
-    localStorage.removeItem("accessToken");
-    sessionStorage.removeItem("accessToken");
     return <Navigate to="/login" />;
   }
 

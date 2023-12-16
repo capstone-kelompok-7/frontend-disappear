@@ -1,6 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import { useToken } from "@/utils/context/TokenContext";
+import Swal from "sweetalert2";
 
 import { BiEdit } from "react-icons/bi";
 import { LuCircleDollarSign, LuLayoutGrid, LuList } from "react-icons/lu";
@@ -31,11 +32,22 @@ export default function SideBar(props) {
       saveTokenAndUser("");
       saveTokenToSessionAndUser("");
 
-      console.log("Berhasil logout!");
+      Swal.fire({
+        icon: "success",
+        title: "Berhasil Logout!",
+        showConfirmButton: false,
+        timer: 1500,
+      });
 
       navigate("/login");
     } catch (error) {
-      console.error("Gagal logout!", error);
+      Swal.fire({
+        icon: "error",
+        title: "Logout Gagal!",
+        text: error.message,
+        showConfirmButton: false,
+        timer: 1500,
+      });
     }
   };
 
