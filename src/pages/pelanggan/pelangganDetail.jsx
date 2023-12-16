@@ -100,9 +100,12 @@ function PelangganDetail() {
 
                 <div className="flex w-[30%] ml-[8%] border rounded-sm bg-white">
                   <div className="pt-8 pl-6 text-8xl mb-4">
-                    <FaUserCircle />
+                    <img
+                      src={users.photo_profile}
+                      className="w-16 h-20 rounded-full"
+                    />
                   </div>
-                  <div className="flex flex-col pt-8 pl-8 pr-8 break-all">
+                  <div className="flex flex-col pt-8 pl-8 pr-8 break-all pb-8">
                     <p className="font-bold text-xl">{users.name}</p>
                     <p className="text-base mt-[0.2rem]">{users.email}</p>
                     <p className="text-sm mt-[0.2rem] text-[#6E6E6E] ">
@@ -124,7 +127,7 @@ function PelangganDetail() {
                         left: `calc(${Math.min(
                           progressPercentage,
                           100
-                        )}% - 20px)`,
+                        )}% - 10px)`,
                       }}
                     >
                       {exp} EXP

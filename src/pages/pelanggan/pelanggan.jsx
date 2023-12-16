@@ -199,7 +199,7 @@ function Pelanggan() {
                     id="input-cari-pelanggan"
                     type="text"
                     placeholder="Cari Pelanggan"
-                    className="search-user border-primary-green "
+                    className="search-user border-primary-green text-primary-green "
                     onChange={(e) => handleSearchInputParams(e.target.value)}
                     value={searchValue}
                   />
@@ -227,7 +227,7 @@ function Pelanggan() {
                     id="dropdown-filter-level"
                     className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20"
                   >
-                    <p className="text-[#8C8C8C]">
+                    <p className="text-primary-green">
                       {selectedLevel || "Filter"}
                     </p>
                     <svg
