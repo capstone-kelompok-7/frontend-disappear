@@ -1,7 +1,7 @@
 import Layout from "../../components/layout";
 import { PiDotsThreeVerticalBold } from "react-icons/pi";
 import "../../styles/pelanggan/pelanggan.css";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Tabel from "../../components/table/table";
 import { Input } from "@/components/ui/input";
 import Breadcrumbs from "@/components/breadcrumbs";
@@ -154,7 +154,7 @@ function Pelanggan() {
         <div className="level-cell">
           {row.original.level}
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger id="dropdown-fitur">
               <div className="three-dots">
                 <PiDotsThreeVerticalBold />
               </div>
@@ -162,7 +162,10 @@ function Pelanggan() {
 
             <DropdownMenuContent>
               <Link to={`/pelanggan/${row.original.id}`}>
-                <DropdownMenuItem className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white">
+                <DropdownMenuItem
+                  id="dropdown-item-detail"
+                  className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
+                >
                   <BiEdit />
                   <p>Detail</p>
                 </DropdownMenuItem>
@@ -170,7 +173,7 @@ function Pelanggan() {
               <DropdownMenuItem
                 className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
                 onClick={() => handleDelete(row.original.id)}
-                id="deleteUser"
+                id="dropdown-item-delete"
               >
                 <BiTrash />
                 <p>Hapus</p>
@@ -193,9 +196,10 @@ function Pelanggan() {
               <div className="">
                 <div className="relative items-center">
                   <Input
+                    id="input-cari-pelanggan"
                     type="text"
                     placeholder="Cari Pelanggan"
-                    className="search-user border-primary-green "
+                    className="search-user border-primary-green text-primary-green "
                     onChange={(e) => handleSearchInputParams(e.target.value)}
                     value={searchValue}
                   />
@@ -219,8 +223,11 @@ function Pelanggan() {
 
               <div className="ml-6">
                 <DropdownMenu>
-                  <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20">
-                    <p className="text-[#8C8C8C]">
+                  <DropdownMenuTrigger
+                    id="dropdown-filter-level"
+                    className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20"
+                  >
+                    <p className="text-primary-green">
                       {selectedLevel || "Filter"}
                     </p>
                     <svg
@@ -239,24 +246,28 @@ function Pelanggan() {
 
                   <DropdownMenuContent>
                     <DropdownMenuItem
+                      id="dropdown-item-tampilkan-semua"
                       className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
                       onClick={() => handleShowAllData()}
                     >
                       Tampilkan Semua
                     </DropdownMenuItem>
                     <DropdownMenuItem
+                      id="dropdown-item-bronze"
                       className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                       onClick={() => handleFilterLevel("bronze")}
                     >
                       Bronze
                     </DropdownMenuItem>
                     <DropdownMenuItem
+                      id="dropdown-item-silver"
                       className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                       onClick={() => handleFilterLevel("silver")}
                     >
                       Silver
                     </DropdownMenuItem>
                     <DropdownMenuItem
+                      id="dropdown-item-gold"
                       className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                       onClick={() => handleFilterLevel("gold")}
                     >
@@ -271,7 +282,7 @@ function Pelanggan() {
             <div className="overflow-x-auto">
               {isLoading ? (
                 <Loading />
-              ) : (
+              ) : users && users.length > 0 ? (
                 <>
                   <Tabel columns={columns} data={users} />
                   <Pagination
@@ -285,6 +296,10 @@ function Pelanggan() {
                     onClickPage={(page) => handlePrevNextPage(page)}
                   />
                 </>
+              ) : (
+                <div className="text-center">
+                  <p>Data tidak ditemukan</p>
+                </div>
               )}
             </div>
           </div>

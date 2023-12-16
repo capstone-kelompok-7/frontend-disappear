@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Layout from "../../components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
 import "../../styles/pelanggan/pelangganDetail.css";
@@ -11,12 +11,7 @@ import {
   getActivity,
   getPelangganDetail,
 } from "@/utils/api/pelanggan/api";
-import {
-  Link,
-  useSearchParams,
-  useParams,
-  useNavigate,
-} from "react-router-dom";
+import { useSearchParams, useParams, useNavigate } from "react-router-dom";
 import { Loading } from "@/components/loading";
 import { useToast } from "@/components/ui/use-toast";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
@@ -105,9 +100,12 @@ function PelangganDetail() {
 
                 <div className="flex w-[30%] ml-[8%] border rounded-sm bg-white">
                   <div className="pt-8 pl-6 text-8xl mb-4">
-                    <FaUserCircle />
+                    <img
+                      src={users.photo_profile}
+                      className="w-16 h-20 rounded-full"
+                    />
                   </div>
-                  <div className="flex flex-col pt-8 pl-8 pr-8 break-all">
+                  <div className="flex flex-col pt-8 pl-8 pr-8 break-all pb-8">
                     <p className="font-bold text-xl">{users.name}</p>
                     <p className="text-base mt-[0.2rem]">{users.email}</p>
                     <p className="text-sm mt-[0.2rem] text-[#6E6E6E] ">
@@ -129,7 +127,7 @@ function PelangganDetail() {
                         left: `calc(${Math.min(
                           progressPercentage,
                           100
-                        )}% - 20px)`,
+                        )}% - 10px)`,
                       }}
                     >
                       {exp} EXP
@@ -227,6 +225,7 @@ function PelangganDetail() {
 
               <div className="flex  justify-end relative mt-4 mr-[15.5%] whitespace-nowrap">
                 <Button
+                  id="button-delete"
                   onClick={() => handleDelete(users.id)}
                   label="Hapus Pelanggan"
                   className="text-white rounded-md bg-black py-3 px-3"
