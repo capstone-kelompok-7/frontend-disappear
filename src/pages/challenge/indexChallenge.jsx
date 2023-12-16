@@ -1,5 +1,4 @@
 import { useEffect, useState, useCallback } from "react";
-
 import { useNavigate, useSearchParams } from "react-router-dom";
 import { FiSearch } from "react-icons/fi";
 import { BiDotsVerticalRounded, BiEdit, BiTrash } from "react-icons/bi";
@@ -84,7 +83,17 @@ function IndexChallenge() {
       setChallenge(searchData);
       setMeta(rest);
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan data Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -191,13 +200,14 @@ function IndexChallenge() {
         <div className="flex justify-between items-center">
           <p>{row.original.status}</p>
           <DropdownMenu>
-            <DropdownMenuTrigger>
+            <DropdownMenuTrigger id="dropdown-aksi">
               <div className="three-dots">
                 <BiDotsVerticalRounded />
               </div>
             </DropdownMenuTrigger>
             <DropdownMenuContent>
               <DropdownMenuItem
+                id="dropdown-lihat"
                 className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
                 onClick={() => navigate(`/tantangan/${row.original.id}`)}
               >
@@ -206,6 +216,7 @@ function IndexChallenge() {
               </DropdownMenuItem>
 
               <DropdownMenuItem
+                id="dropdown-edit"
                 className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
                 onClick={() => onClickEdit(row.original.id)}
               >
@@ -214,6 +225,7 @@ function IndexChallenge() {
               </DropdownMenuItem>
 
               <DropdownMenuItem
+                id="dropdown-hapus"
                 className="hover:bg-secondary-green cursor-pointer items-center gap-3 hover:text-white"
                 onClick={() => onClickDelete(row.original.id)}
               >
@@ -237,6 +249,7 @@ function IndexChallenge() {
         <div className="flex items-center mt-8 pb-6 gap-6 w-full">
           <div className="w-1/4">
             <Button
+              id="btn-buat-tantangan"
               className="flex items-center space-x-2 border bg-secondary-green text-white p-3 rounded-lg"
               label="Buat Tantangan"
               icon={
@@ -264,6 +277,7 @@ function IndexChallenge() {
           <div className="flex justify-end gap-4 w-3/4">
             <div className="relative flex items-center">
               <Input
+                id="input-search-challenge"
                 type="text"
                 placeholder="Cari Tantangan"
                 className="pr-11 w-96 py-6 border border-primary-green"
@@ -274,7 +288,10 @@ function IndexChallenge() {
             </div>
 
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green">
+              <DropdownMenuTrigger
+                id="btn-filter-status"
+                className="flex justify-between items-center rounded-md bg-white p-3 border border-primary-green"
+              >
                 <div className="flex items-center justify-between w-48">
                   <p className="text-primary-green">
                     {selectedStatus || "Filter"}
@@ -298,18 +315,21 @@ function IndexChallenge() {
 
               <DropdownMenuContent>
                 <DropdownMenuItem
+                  id="dropdown-tampilkan-semua"
                   className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
                   onClick={() => handleShowAllData()}
                 >
                   Tampilkan Semua
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="dropdown-kadaluwarsa"
                   className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                   onClick={() => handleFilterStatus("kadaluwarsa")}
                 >
                   Kadaluwarsa
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="dropdown-belum-kadaluwarsa"
                   className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                   onClick={() => handleFilterStatus("belum kadaluwarsa")}
                 >
@@ -322,7 +342,7 @@ function IndexChallenge() {
         {isLoading ? (
           <Loading />
         ) : (
-          <div className="mt-5">
+          <div>
             {challenge && challenge.length > 0 ? (
               <>
                 <Tabel columns={columns} data={challenge} />

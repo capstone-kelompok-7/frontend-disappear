@@ -4,6 +4,7 @@ import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import { format } from "date-fns";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
+import { FaRegCheckCircle } from "react-icons/fa";
 
 import Layout from "@/components/layout";
 import Button from "@/components/button";
@@ -17,7 +18,6 @@ import {
   updateParticipant,
   getDetailParticipant,
 } from "@/utils/api/challenge/participantChallenge/api";
-import { FaRegCheckCircle } from "react-icons/fa";
 
 export default function editPesertaChallange() {
   const { id } = useParams();
@@ -59,7 +59,17 @@ export default function editPesertaChallange() {
         setValue("status", result.data.status);
       }
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan data Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -89,7 +99,6 @@ export default function editPesertaChallange() {
       setSelectedId(0);
       reset();
     } catch (error) {
-      console.log(error.message);
       toast({
         variant: "destructive",
         title: (
@@ -160,6 +169,7 @@ export default function editPesertaChallange() {
                     Status
                   </label>
                   <Select
+                    id="select-status"
                     name="status"
                     options={["valid", "tidak valid"]}
                     placeholder="Status"
@@ -185,6 +195,7 @@ export default function editPesertaChallange() {
 
               <div className="flex w-1/2 pl-8 mt-16 justify-end gap-3">
                 <Button
+                  id="btn-batal"
                   label="Batal"
                   type="button"
                   className="w-24 h-12 rounded-md border border-primary-green p-3.5 shadow text-primary-green text-sm font-semibold items-center justify-center inline-flex"
@@ -192,6 +203,7 @@ export default function editPesertaChallange() {
                 />
 
                 <Button
+                  id="btn-submit"
                   label="Simpan Perubahan"
                   type="submit"
                   className="w-44 h-12 bg-secondary-green rounded-md p-3.5 shadow text-white text-sm font-semibold"
@@ -216,7 +228,7 @@ export default function editPesertaChallange() {
                       <img
                         src={participant.photo}
                         alt="gambar tantangan"
-                        className="h-[14rem] w-full object-contain"
+                        className="h-[14rem] w-full object-contain opacity-60"
                       />
                       <Input
                         register={register}

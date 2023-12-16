@@ -1,6 +1,6 @@
 import * as z from "zod";
 
-const MAX_FILE_SIZE = 200000;
+const MAX_FILE_SIZE = 2000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 const currentDate = new Date();
@@ -30,5 +30,7 @@ export const ChallengeSchema = z.object({
     )
     .optional()
     .or(z.literal("")),
-  description: z.string().min(1, { message: "Field tidak boleh kosong" }),
+  description: z
+    .string({ required_error: "Field tidak boleh kosong" })
+    .nullable(),
 });

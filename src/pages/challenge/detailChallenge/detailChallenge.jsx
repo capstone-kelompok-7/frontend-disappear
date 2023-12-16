@@ -2,14 +2,17 @@ import { useEffect, useState } from "react";
 import { BsArrowLeft } from "react-icons/bs";
 import { Link, useParams } from "react-router-dom";
 import DOMPurify from "dompurify";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 import Layout from "@/components/layout";
 import { getDetailChallenge } from "@/utils/api/challenge/challenge/api";
 import { Loading } from "@/components/loading";
+import { useToast } from "@/components/ui/use-toast";
 
 export default function DetailChallange() {
   const [challenge, setChallenge] = useState([]);
   const [isLoading, setIsLoading] = useState(true);
+  const { toast } = useToast();
   const { id } = useParams();
 
   useEffect(() => {
@@ -26,7 +29,17 @@ export default function DetailChallange() {
       const result = await getDetailChallenge(id);
       setChallenge(result.data);
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan data Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }

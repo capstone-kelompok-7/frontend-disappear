@@ -71,15 +71,19 @@ function CreateChallenge() {
         );
         setValue("description", result.data.description);
         setValue("exp", result.data.exp);
-        // setValue("image", result.data.photo);
-
-        // if (result.data.photo) {
-        //   const previewURL = URL.createObjectURL(result.data.photo);
-        //   setPreviewImage([previewURL]);
-        // }
       }
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan data Tantangan!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses pencarian data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -118,7 +122,6 @@ function CreateChallenge() {
       });
       reset();
     } catch (error) {
-      console.log(error);
       toast({
         variant: "destructive",
         title: (
@@ -220,6 +223,7 @@ function CreateChallenge() {
                 <div className="flex-col w-1/2 pr-8">
                   <label className="font-semibold">Mulai</label>
                   <Input
+                    id="input-tanggal-mulai"
                     register={register}
                     label="Mulai"
                     type="date"
@@ -232,6 +236,7 @@ function CreateChallenge() {
                 <div className="flex-col w-1/2 pl-8">
                   <label className="font-semibold">Berakhir</label>
                   <Input
+                    id="input-tanggal-berakhir"
                     register={register}
                     label="Berakhir"
                     type="date"
@@ -247,6 +252,7 @@ function CreateChallenge() {
               <div className="flex-col w-1/2 pr-8">
                 <label className="font-semibold">Nama Tantangan</label>
                 <Input
+                  id="input-nama-tantangan"
                   register={register}
                   type="text"
                   name="challengeName"
@@ -260,6 +266,7 @@ function CreateChallenge() {
               <div className="flex-col w-1/2 pl-8">
                 <label className="font-semibold">EXP</label>
                 <Input
+                  id="input-exp-tantangan"
                   register={register}
                   type="number"
                   name="exp"
@@ -315,6 +322,7 @@ function CreateChallenge() {
                       </p>
 
                       <Input
+                        id="input-gambar-tantangan"
                         register={register}
                         type="file"
                         className="hidden"
@@ -339,23 +347,26 @@ function CreateChallenge() {
                   <ul className="mt-3">
                     <li
                       key={0}
-                      className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between p-4 rounded"
+                      className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between py-2 pl-6 pr-6 rounded"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center gap-3">
                         <img
                           src={previewImage[0]}
                           alt={`preview-0`}
-                          className="w-12 h-14 rounded object-cover"
+                          className="w-40 h-20 rounded object-cover"
                           onLoad={() => {
                             URL.revokeObjectURL(previewImage[0]);
                           }}
                         />
                         <div>
                           <p>{gambar.name}</p>
-                          <p>{gambar.size / 1000} kb</p>
+                          <p className="text-gray-500">
+                            {gambar.size / 1000} kb
+                          </p>
                         </div>
                       </div>
                       <IoTrashOutline
+                        id="hapus-preview"
                         className="text-base cursor-pointer"
                         onClick={() => removeFile(0)}
                       />
@@ -367,22 +378,18 @@ function CreateChallenge() {
                   <ul className="mt-3">
                     <li
                       key={0}
-                      className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between p-4 rounded"
+                      className="bg-white border border-gray-300 w-full mt-4 flex items-center justify-between py-2 pl-6 rounded"
                     >
-                      <div className="flex items-center gap-2">
+                      <div className="flex items-center">
                         <img
                           src={challenge.photo}
                           alt={`preview-0`}
-                          className="w-12 h-14 rounded object-cover"
+                          className="w-40 h-20 rounded object-cover"
                           onLoad={() => {
                             URL.revokeObjectURL(challenge.photo);
                           }}
                         />
                       </div>
-                      <IoTrashOutline
-                        className="text-base cursor-pointer"
-                        onClick={() => removeFile(0)}
-                      />
                     </li>
                   </ul>
                 )}
@@ -397,6 +404,7 @@ function CreateChallenge() {
                 </label>
                 <div className="overflow-auto">
                   <TextEditor
+                    id="input-deskripsi-tantangan"
                     register={register}
                     setContent={(description) =>
                       setValue("description", description)
@@ -416,6 +424,7 @@ function CreateChallenge() {
 
             <div className="flex justify-end gap-3">
               <Button
+                id="btn-batal"
                 label="Batal"
                 type="button"
                 className="w-24 h-12 rounded-md border border-primary-green p-3.5 text-primary-green text-sm font-semibold items-center justify-center inline-flex"
@@ -423,6 +432,7 @@ function CreateChallenge() {
               />
 
               <Button
+                id="btn-submit"
                 label={
                   selectedId === 0 ? "Tambah Tantangan" : "Simpan Perubahan"
                 }
