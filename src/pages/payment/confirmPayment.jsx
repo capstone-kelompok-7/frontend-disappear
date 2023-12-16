@@ -34,7 +34,6 @@ export default function ConfirmPayment() {
       setIsLoading(true);
       const result = await getDetailOrder(id);
       setPayment(result.data);
-      console.log(result.data);
     } catch (error) {
       console.log(error);
     } finally {
@@ -62,18 +61,6 @@ export default function ConfirmPayment() {
           "Pembayaran telah berhasil dikonfimasi. Silahkan nikmati fitur lainnya!!",
       });
     } catch (error) {
-      console.log(error);
-    } finally {
-      setIsLoading(false);
-    }
-  };
-
-  const handleCancelPayment = async () => {
-    try {
-      setIsLoading(true);
-      await createStatusPaymentToCancel(payment.id);
-
-      navigate("/pembayaran");
       toast({
         variant: "destructive",
         title: (
@@ -87,8 +74,43 @@ export default function ConfirmPayment() {
         description:
           "Oh, noo! Sepertinya ada kesalahan saat proses konfirmasi pembayaran. Periksa koneksi mu dan coba lagi, yuk!!",
       });
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleCancelPayment = async () => {
+    try {
+      setIsLoading(true);
+      await createStatusPaymentToCancel(payment.id);
+
+      navigate("/pembayaran");
+      toast({
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegCheckCircle className="text-[#05E500] text-3xl" />
+            <span className=" text-base font-semibold">
+              Konfirmasi Pembayaran Berhasil!
+            </span>
+          </div>
+        ),
+        description:
+          "Pembayaran telah berhasil dikonfimasi. Silahkan nikmati fitur lainnya!!",
+      });
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center gap-3">
+            <FaRegTimesCircle className="text-[#E50000] text-3xl" />
+            <span className=" text-base font-semibold">
+              Konfirmasi Pembayaran Gagal!
+            </span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses konfirmasi pembayaran. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -205,12 +227,14 @@ export default function ConfirmPayment() {
               </div>
             </div>
             <Button
+              id="buttonConfirmPayment"
               onClick={handleConfirmPayment}
               type="submit"
               label="Konfirmasi Pembayaran"
               className=" bg-secondary-green w-full my-3 text-white py-5 rounded-md text-xl font-medium flex justify-center items-center"
             />
             <Button
+              id="buttonCancelPayment"
               onClick={handleCancelPayment}
               type="submit"
               label="Pembayaran Tidak Valid"

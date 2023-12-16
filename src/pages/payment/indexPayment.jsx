@@ -64,7 +64,6 @@ export default function IndexPayment() {
       const result = await getAllPayment({ ...query });
       const { ...rest } = result.meta;
       setPayment(result.data);
-      console.log(result.data);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
@@ -215,24 +214,28 @@ export default function IndexPayment() {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
+                  id="showAllStatus"
                   style={{ cursor: "pointer" }}
                   onClick={() => handleShowAllStatus()}
                 >
                   Tampilkan Semua
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="statusConfirm"
                   style={{ cursor: "pointer" }}
                   onClick={() => handleFilterStatus("konfirmasi")}
                 >
                   Konfirmasi
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="statusWaitConfirm"
                   style={{ cursor: "pointer" }}
                   onClick={() => handleFilterStatus("menunggu konfirmasi")}
                 >
                   Menunggu Konfirmasi
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="statusFail"
                   style={{ cursor: "pointer" }}
                   onClick={() => handleFilterStatus("gagal")}
                 >
@@ -265,24 +268,28 @@ export default function IndexPayment() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem
+                    id="showAllDate"
                     className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
                     onClick={() => handleShowAllDate()}
                   >
                     Tampilkan Semua
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="filterThisWeek"
                     style={{ cursor: "pointer" }}
                     onClick={() => handleFilterDate("Minggu Ini")}
                   >
                     Minggu Ini
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="filterThisMonth"
                     style={{ cursor: "pointer" }}
                     onClick={() => handleFilterDate("Bulan Ini")}
                   >
                     Bulan Ini
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="filterThisYear"
                     style={{ cursor: "pointer" }}
                     onClick={() => handleFilterDate("Tahun Ini")}
                   >
