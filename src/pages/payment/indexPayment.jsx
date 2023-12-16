@@ -18,6 +18,8 @@ import { format } from "date-fns";
 import getStatusColor from "@/utils/formatter/formatStatusColor";
 import { Loading } from "@/components/loading";
 import { debounce } from "lodash";
+import { useToast } from "@/components/ui/use-toast";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 export default function IndexPayment() {
   const [payment, setPayment] = useState([]);
@@ -27,6 +29,7 @@ export default function IndexPayment() {
   const [searchValue, setSearchValue] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const { toast } = useToast();
 
   const navigate = useNavigate();
 
@@ -64,10 +67,19 @@ export default function IndexPayment() {
       const result = await getAllPayment({ ...query });
       const { ...rest } = result.meta;
       setPayment(result.data);
-      console.log(result.data);
       setMeta(rest);
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Memuat Pembayaran!</span>
+          </div>
+        ),
+        description:
+          "Terjadi kesalahan saat memuat pembayaran, silahkan cek internet terlebih dahulu atau reload halaman",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -173,6 +185,7 @@ export default function IndexPayment() {
           <div className="flex items-center gap-5 w-1/2">
             <div className=" relative w-full ">
               <Input
+                id="inputSearch"
                 placeholder="Cari Pelanggan"
                 type="text"
                 className=" border-primary-green py-6"
@@ -215,24 +228,28 @@ export default function IndexPayment() {
               </DropdownMenuTrigger>
               <DropdownMenuContent>
                 <DropdownMenuItem
+                  id="showAllStatus"
                   style={{ cursor: "pointer" }}
                   onClick={() => handleShowAllStatus()}
                 >
                   Tampilkan Semua
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="statusConfirm"
                   style={{ cursor: "pointer" }}
                   onClick={() => handleFilterStatus("konfirmasi")}
                 >
                   Konfirmasi
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="statusWaitConfirm"
                   style={{ cursor: "pointer" }}
                   onClick={() => handleFilterStatus("menunggu konfirmasi")}
                 >
                   Menunggu Konfirmasi
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="statusFail"
                   style={{ cursor: "pointer" }}
                   onClick={() => handleFilterStatus("gagal")}
                 >
@@ -265,24 +282,28 @@ export default function IndexPayment() {
                 </DropdownMenuTrigger>
                 <DropdownMenuContent>
                   <DropdownMenuItem
+                    id="showAllDate"
                     className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
                     onClick={() => handleShowAllDate()}
                   >
                     Tampilkan Semua
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="filterThisWeek"
                     style={{ cursor: "pointer" }}
                     onClick={() => handleFilterDate("Minggu Ini")}
                   >
                     Minggu Ini
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="filterThisMonth"
                     style={{ cursor: "pointer" }}
                     onClick={() => handleFilterDate("Bulan Ini")}
                   >
                     Bulan Ini
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="filterThisYear"
                     style={{ cursor: "pointer" }}
                     onClick={() => handleFilterDate("Tahun Ini")}
                   >
