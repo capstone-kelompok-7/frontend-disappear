@@ -33,7 +33,6 @@ function VoucherApp() {
   const { toast } = useToast();
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
-  
 
   useEffect(() => {
     const delayedFetchData = debounce(fetchData, 1000);
@@ -128,15 +127,15 @@ function VoucherApp() {
 
   function handleShowAllData() {
     const newSearchParams = new URLSearchParams(searchParams.toString());
-  
+
     newSearchParams.delete("status");
     newSearchParams.delete("category");
-  
+
     setSearchParams(newSearchParams);
-  
+
     setSelectedStatus(null);
     setSelectedCategory(null);
-  
+
     fetchData();
   }
 
@@ -173,7 +172,8 @@ function VoucherApp() {
             </DropdownMenuTrigger>
 
             <DropdownMenuContent>
-              <DropdownMenuItem id="editVoucher"
+              <DropdownMenuItem
+                id="editVoucher"
                 className=" hover:bg-secondary-green hover:text-white cursor-pointer gap-2 items-center"
                 onClick={() => onClickEdit(row.original.id)}
               >
@@ -204,7 +204,7 @@ function VoucherApp() {
         <div className="flex justify-between items-center pb-5">
           <Link to="/kupon/buat-kupon">
             <Button
-            id="AddVoucher"
+              id="AddVoucher"
               label="Tambahkan Kupon"
               icon={<IoAddOutline />}
               className="bg-primary-green text-white py-3 px-5 rounded-lg font-medium text-sm mr-3"
@@ -234,6 +234,12 @@ function VoucherApp() {
             <DropdownMenuContent>
               <DropdownMenuItem
                 className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
+                onClick={() => handleShowAllData()}
+              >
+                Semua Kupon
+              </DropdownMenuItem>
+              <DropdownMenuItem
+                className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
                 onClick={() => handleFilterCategory("Bronze")}
               >
                 Bronze
@@ -252,9 +258,9 @@ function VoucherApp() {
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
-                onClick={() => handleShowAllData()}
+                onClick={() => handleFilterCategory("All Customer")}
               >
-                Semua Pelanggan
+                All Customer
               </DropdownMenuItem>
               <DropdownMenuItem
                 className="hover:bg-secondary-green hover:text-white cursor-pointer gap-3 items-center text-black"
