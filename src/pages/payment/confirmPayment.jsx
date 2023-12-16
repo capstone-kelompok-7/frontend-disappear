@@ -15,6 +15,7 @@ import {
   createStatusPaymentToCancel,
   createStatusPaymentToConfirm,
 } from "@/utils/api/payment/api";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 export default function ConfirmPayment() {
   const [payment, setPayment] = useState([]);
@@ -35,7 +36,17 @@ export default function ConfirmPayment() {
       const result = await getDetailOrder(id);
       setPayment(result.data);
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Memuat Pembayaran!</span>
+          </div>
+        ),
+        description:
+          "Terjadi kesalahan saat memuat pembayaran, silahkan cek internet terlebih dahulu atau reload halaman",
+      });
     } finally {
       setIsLoading(false);
     }

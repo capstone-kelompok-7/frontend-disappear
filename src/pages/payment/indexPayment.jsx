@@ -18,6 +18,8 @@ import { format } from "date-fns";
 import getStatusColor from "@/utils/formatter/formatStatusColor";
 import { Loading } from "@/components/loading";
 import { debounce } from "lodash";
+import { useToast } from "@/components/ui/use-toast";
+import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 export default function IndexPayment() {
   const [payment, setPayment] = useState([]);
@@ -27,6 +29,7 @@ export default function IndexPayment() {
   const [searchValue, setSearchValue] = useState("");
   const [selectedStatus, setSelectedStatus] = useState("");
   const [selectedDate, setSelectedDate] = useState("");
+  const { toast } = useToast();
 
   const navigate = useNavigate();
 
@@ -66,7 +69,17 @@ export default function IndexPayment() {
       setPayment(result.data);
       setMeta(rest);
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Memuat Pembayaran!</span>
+          </div>
+        ),
+        description:
+          "Terjadi kesalahan saat memuat pembayaran, silahkan cek internet terlebih dahulu atau reload halaman",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -172,6 +185,7 @@ export default function IndexPayment() {
           <div className="flex items-center gap-5 w-1/2">
             <div className=" relative w-full ">
               <Input
+                id="inputSearch"
                 placeholder="Cari Pelanggan"
                 type="text"
                 className=" border-primary-green py-6"
