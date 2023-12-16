@@ -1,4 +1,4 @@
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Layout from "../../components/layout";
 import Breadcrumbs from "@/components/breadcrumbs";
 import "../../styles/pelanggan/pelangganDetail.css";
@@ -11,12 +11,7 @@ import {
   getActivity,
   getPelangganDetail,
 } from "@/utils/api/pelanggan/api";
-import {
-  Link,
-  useSearchParams,
-  useParams,
-  useNavigate,
-} from "react-router-dom";
+import { useSearchParams, useParams, useNavigate } from "react-router-dom";
 import { Loading } from "@/components/loading";
 import { useToast } from "@/components/ui/use-toast";
 import { CrossCircledIcon } from "@radix-ui/react-icons";
@@ -227,6 +222,7 @@ function PelangganDetail() {
 
               <div className="flex  justify-end relative mt-4 mr-[15.5%] whitespace-nowrap">
                 <Button
+                  id="button-delete"
                   onClick={() => handleDelete(users.id)}
                   label="Hapus Pelanggan"
                   className="text-white rounded-md bg-black py-3 px-3"
