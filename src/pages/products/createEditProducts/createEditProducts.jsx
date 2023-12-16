@@ -116,7 +116,17 @@ export default function CreateEditProducts() {
         setValue("description", result.data.description);
       }
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Mendapatkan Produk!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsloading(false);
     }
@@ -180,7 +190,17 @@ export default function CreateEditProducts() {
       });
       reset();
     } catch (error) {
-      console.log(error);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Menambahkan Produk!</span>
+          </div>
+        ),
+        description:
+          "Oh, noo! Sepertinya ada kesalahan saat proses penyimpanan perubahan data, nih. Periksa koneksi mu dan coba lagi, yuk!!",
+      });
     } finally {
       setIsloading(false);
     }
@@ -223,7 +243,7 @@ export default function CreateEditProducts() {
         title: (
           <div className="flex items-center">
             <CrossCircledIcon />
-            <span className="ml-2">Gagal Menambahkan Produk!</span>
+            <span className="ml-2">Gagal Mengubah Produk!</span>
           </div>
         ),
         description:
@@ -261,7 +281,6 @@ export default function CreateEditProducts() {
       setValue("image", files);
       const previewURLs = files.map((file) => URL.createObjectURL(file));
       setPreviewImage(previewURLs);
-      console.log(files);
     }
   };
 
@@ -277,7 +296,10 @@ export default function CreateEditProducts() {
           pages={selectedId === 0 ? "Tambah Produk" : "Edit Produk"}
         />
         {isLoading ? (
-          <Loading />
+          <>
+            <Loading />
+            <p className=" text-center">Tunggu sebentar ya :)</p>
+          </>
         ) : (
           <form
             id="formCreateProducts"
