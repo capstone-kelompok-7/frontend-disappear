@@ -266,7 +266,14 @@ export default function DetailOrder() {
                     <p className="font-semibold text-sm text-primary-green">
                       Pelanggan
                     </p>
-                    <FaUserCircle size={45} className="mr-6" />
+                    <img
+                      src={
+                        order.user
+                          ? order.user.photo_profile
+                          : "URL_DEFAULT_JIKA_TIDAK_ADA_PHOTO"
+                      }
+                      className="rounded-full w-16 h-16"
+                    />
                   </div>
                   <div className="flex flex-col gap-3 ml-6">
                     <div className="flex items-center mt-3 ">
