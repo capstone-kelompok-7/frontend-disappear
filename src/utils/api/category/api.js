@@ -65,7 +65,6 @@ export const getDetailCategory = async (id) => {
 };
 
 export const updateCategory = async (id, data) => {
-  // const { id } = data;
   console.log(id);
   try {
     const formData = new FormData();
@@ -74,9 +73,6 @@ export const updateCategory = async (id, data) => {
         formData.append(key, data[key]);
       }
     }
-    // const newData = {
-    //   ...data,
-    // };
 
     const response = await axiosWithConfig.put(
       `api/v1/categories/${id}`,
