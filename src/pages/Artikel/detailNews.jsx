@@ -25,7 +25,10 @@ function DetailNews() {
       const result = await getDetailArtikel(id);
       setArtikel(result.data);
     } catch (error) {
-      console.log(error);
+      toast({
+        title: "GAGAL MEMUAT ARTIKEL!",
+        description: "Konten artikel gagal dimuat!",
+      });
     } finally {
       setIsLoading(false);
     }

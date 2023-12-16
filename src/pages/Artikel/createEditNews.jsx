@@ -22,7 +22,6 @@ import { Loading } from "@/components/loading";
 import Button from "@/components/button";
 
 function CreateEditNews() {
-  const [generatArtikel, setGeneratArtikel] = useState(false);
   const { id } = useParams();
   const [artikel, setArtikel] = useState([]);
   const { toast } = useToast();
@@ -37,14 +36,17 @@ function CreateEditNews() {
     handleSubmit,
     watch,
     formState: { errors },
+     clearErrors,
   } = useForm({
     resolver: zodResolver(artikelSchema),
   });
+
   const isEditMode = id !== undefined;
 
   const handleFileNameChange = (event) => {
     const selectedFile = event.target.files[0];
     if (selectedFile) {
+      clearErrors("photo");
       setFileName(selectedFile.name);
       setValue("photo", [selectedFile]);
     }
@@ -75,7 +77,6 @@ function CreateEditNews() {
       });
       reset();
     } catch (error) {
-      console.log(error);
       toast({
         variant: "destructive",
         title: (
@@ -160,6 +161,14 @@ function CreateEditNews() {
     try {
       setIsLoading(true);
       const titleValue = watch("title");
+      if (!titleValue) {
+        toast({
+          variant: "destructive",
+          title: "Gagal Generate Konten",
+          description: "Judul artikel harus diisi terlebih dahulu.",
+        });
+        return;
+      }
       const result = await generateContent({
         text: titleValue,
       });
@@ -170,7 +179,6 @@ function CreateEditNews() {
         description: "Konten artikel berhasil digenerate.",
       });
     } catch (error) {
-      console.error("Error generating content:", error);
       toast({
         variant: "destructive",
         title: "Gagal Generate Konten",
@@ -180,18 +188,17 @@ function CreateEditNews() {
       setIsLoading(false);
     }
   };
-  const onGenerateArtikelHandler = async () => {
-    setGeneratArtikel(true);
-    const prompt = watch("content");
-    handleGenerateContent(prompt);
-  };
+
   return (
     <Layout>
       <div>
         <Breadcrumbs pages="Artikel" />
       </div>
       {isLoading ? (
-        <Loading />
+        <div>
+          <Loading />
+          <p className="text-center">Sebentar ya data Sedang dimuat</p>
+        </div>
       ) : (
         <form
           onSubmit={handleSubmit(selectedId === 0 ? onSubmit : onSubmitEdit)}
@@ -208,7 +215,9 @@ function CreateEditNews() {
                 <Input
                   id="input-judul"
                   register={register}
-                  className="border rounded-sm border-black p-2 bg-white mt-3"
+                  className={`border-black  ${
+                    errors.title ? "border-red-500" : "border-black"
+                  } rounded-sm p-2 bg-white mt-3`}
                   type="text"
                   name="title"
                   placeholder="Judul Artikel"
@@ -218,15 +227,15 @@ function CreateEditNews() {
               <div className="flex flex-col mb-4 w-full">
                 <label className="text-black font-bold mb-3">Unggah File</label>
                 <div
-                  className={`border p-2 rounded-sm border-black flex ${
-                    errors.image ? "border-red-500" : "border"
+                  className={`p-2 rounded-sm border flex ${
+                    errors.photo ? "border-red-500" : "border-black"
                   }`}
                 >
                   <label
                     htmlFor="gambar-artikel"
-                    className="cursor-pointer flex items-center px-5 bg-[#404040] w-[6.5rem] text-white rounded-md"
+                    className="cursor-pointer flex items-center px-5 bg-[#BFBFBF] w-[6.5rem] text-black rounded-md"
                   >
-                    <p className="my-1 text-xs text-white">Pilih Foto</p>
+                    <p className="my-1 text-xs text-black">Pilih Foto</p>
                   </label>
                   <Input
                     id="gambar-artikel"
@@ -236,6 +245,7 @@ function CreateEditNews() {
                     className="hidden"
                     onChange={handleFileNameChange}
                     accept="image/jpeg, image/jpg, image/png"
+                    errors={errors.photo?.message}
                   />
                   {fileName && (
                     <p className="ml-2 text-sm text-gray-500">{`${fileName}`}</p>
@@ -255,16 +265,12 @@ function CreateEditNews() {
             <div className="mt-6 ml-4">
               <div className="flex justify-between items-center">
                 <label className="text-black font-bold">Konten</label>
-                {isLoading ? (
-                  <Loading />
-                ) : (
-                  <Button
-                    id="generate-konten"
-                    label="Generate content article"
-                    className="bg-secondary-green px-2 py-2 rounded border text-white"
-                    onClick={() => onGenerateArtikelHandler(generatArtikel)}
-                  />
-                )}
+                <Button
+                  id="generate-konten"
+                  label="Generate content article"
+                  className="bg-[#9FDFCA] px-2 py-2 rounded-sm border text-black"
+                  onClick={handleGenerateContent}
+                />
               </div>
               <div className="overflow-auto">
                 <TextEditor
@@ -277,8 +283,13 @@ function CreateEditNews() {
                   }
                 />
               </div>
+              {errors.content && (
+                <p className="text-red-500 text-xs mt-1">
+                  {errors.content.message}
+                </p>
+              )}
             </div>
-            <div className="justify-end mb-7 flex space-x-3">
+            <div className="justify-end mb-7 mt-4 flex space-x-3">
               <button
                 id="button-batal-artikel"
                 type="button"
@@ -290,7 +301,7 @@ function CreateEditNews() {
               <button
                 id="tambah-edit-artikel"
                 type="submit"
-                className="bg-secondary-green text-white px-4 py-2 rounded"
+                className="bg-[#65CDA9] text-white px-4 py-2 rounded"
               >
                 {selectedId === 0 ? "Tambah Artikel" : "Edit Artikel"}
               </button>

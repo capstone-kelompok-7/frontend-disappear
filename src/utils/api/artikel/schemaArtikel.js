@@ -1,10 +1,10 @@
 import * as z from "zod";
 
-const MAX_FILE_SIZE = 200000;
+const MAX_FILE_SIZE = 2000000;
 const ACCEPTED_IMAGE_TYPES = ["image/jpeg", "image/jpg", "image/png"];
 
 export const artikelSchema = z.object({
-  title: z.string().min(1, { message: "Field tidak boleh kosong" }),
+  title: z.string().min(1, { message: "Judul Harus diisi dulu" }),
   photo: z
     .any()
     .refine(
@@ -15,5 +15,5 @@ export const artikelSchema = z.object({
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
       "*format PNG, JPG, JPEG"
     ),
-  content: z.string().min(1, { message: "Field tidak boleh kosong" }),
+  content: z.string({ required_error: "Konten harus diisi." }).nullable(),
 });

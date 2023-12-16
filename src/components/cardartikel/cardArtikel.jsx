@@ -35,7 +35,7 @@ function CardArtikel({ title, content, photo, date, artikelId }) {
   });
   const releaseDate = new Date(date);
 
-  function calculateCountdown({ date }) {
+  function calculateCountdown() {
     const now = new Date();
     const difference = now - releaseDate;
     const daysAgo = Math.floor(difference / (1000 * 60 * 60 * 24));
@@ -60,15 +60,7 @@ function CardArtikel({ title, content, photo, date, artikelId }) {
     }
   }
 
-  const [countdown, setCountdown] = useState(calculateCountdown(date));
-
-  useEffect(() => {
-    const intervalId = setInterval(
-      () => setCountdown(calculateCountdown(date)),
-      1000
-    );
-    return () => clearInterval(intervalId);
-  }, [date]);
+  const [countdown] = useState(calculateCountdown(date));
 
   // Navigate Artikel
   const navigate = useNavigate();
