@@ -42,6 +42,7 @@ export default function DetailOrder() {
 
   const handleCancel = () => {
     reset();
+    navigate("/pesanan");
   };
 
   useEffect(() => {
@@ -207,11 +208,12 @@ export default function DetailOrder() {
                       <div className="flex text-sm font-semibold mb-1 text-left text-primary-green">
                         Detail Pembayaran
                       </div>
-                      <div className="flex px-3.5 py-1.5 rounded bg-secondary-green">
+                      <div className="flex  rounded bg-secondary-green">
                         <Button
+                          id="btn-view"
                           label="View"
-                          className="text-xs font-medium text-white"
-                          onClick={() => navigate("/pembayaran/:id")}
+                          className="text-xs font-medium text-white px-3.5 py-1.5"
+                          onClick={() => navigate(`/pembayaran/${id}`)}
                         />
                       </div>
                     </div>
@@ -264,7 +266,14 @@ export default function DetailOrder() {
                     <p className="font-semibold text-sm text-primary-green">
                       Pelanggan
                     </p>
-                    <FaUserCircle size={45} className="mr-6" />
+                    <img
+                      src={
+                        order.user
+                          ? order.user.photo_profile
+                          : "URL_DEFAULT_JIKA_TIDAK_ADA_PHOTO"
+                      }
+                      className="rounded-full w-16 h-16"
+                    />
                   </div>
                   <div className="flex flex-col gap-3 ml-6">
                     <div className="flex items-center mt-3 ">
@@ -318,6 +327,7 @@ export default function DetailOrder() {
                           Tanggal
                         </label>
                         <Input
+                          id="input-date"
                           type="date"
                           name="orderDate"
                           register={register}
@@ -330,6 +340,7 @@ export default function DetailOrder() {
                           Status Pesanan
                         </label>
                         <Select
+                          id="select-status-order"
                           className="py-1 px-4 mr-6"
                           name="statusOrder"
                           options={[
@@ -337,6 +348,7 @@ export default function DetailOrder() {
                             "Proses",
                             "Menunggu Konfirmasi",
                             "Gagal",
+                            "Selesai",
                           ]}
                           placeholder="Status"
                           register={register}
@@ -348,7 +360,7 @@ export default function DetailOrder() {
                           Ekstra Info
                         </label>
                         <Textarea
-                          id="status-pesanan"
+                          id="extra-info"
                           name="extraInfo"
                           register={register}
                           error={errors.status?.message}
@@ -358,6 +370,7 @@ export default function DetailOrder() {
                       </div>
                       <div className="flex flex-row justify-end gap-5 mr-6">
                         <Button
+                          id="btn-cancel"
                           label="Batal"
                           type="button"
                           onClick={handleCancel}
@@ -369,6 +382,7 @@ export default function DetailOrder() {
                           </div>
                         ) : (
                           <Button
+                            id="btn-submit"
                             label="Kirim"
                             type="submit"
                             className="rounded bg-primary-green text-white py-3 px-3 items-center font-semibold"

@@ -47,7 +47,7 @@ function Order() {
       const result = await getAllOrder({ ...query });
       const { ...rest } = result.meta;
       setOrder(result.data);
-      console.log(result.data);
+      setIsLoading(false);
       setMeta(rest);
     } catch (error) {
       console.log(error.message);
@@ -65,7 +65,6 @@ function Order() {
     setSearchValue(search);
     const newSearchParams = new URLSearchParams(searchParams.toString());
 
-    // Hapus parameter 'search' jika nilai search kosong
     if (search.trim() === "") {
       newSearchParams.delete("search");
     } else {
@@ -159,6 +158,7 @@ function Order() {
             <div className="mt-10">
               <div className="flex items-center relative w-full">
                 <Input
+                  id="input-cari-pelanggan"
                   type="text"
                   placeholder="Cari Pelanggan"
                   className="search-order border-primary-green"
@@ -171,7 +171,10 @@ function Order() {
 
             <div className="ml-6 mt-10">
               <DropdownMenu>
-                <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20">
+                <DropdownMenuTrigger
+                  id="dropdown-filter-status"
+                  className="flex justify-between items-center rounded-md bg-white py-3 px-3 border border-primary-green gap-20"
+                >
                   <p className="text-[#8C8C8C]">{selectedStatus || "Filter"}</p>
                   <svg
                     xmlns="http://www.w3.org/2000/svg"
@@ -189,36 +192,42 @@ function Order() {
 
                 <DropdownMenuContent>
                   <DropdownMenuItem
+                    id="dropdown-tampilkan-semua-status"
                     className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
                     onClick={() => handleShowAllData()}
                   >
                     Tampilkan Semua
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="dropdown-menunggu-konfirmasi"
                     className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                     onClick={() => handleFilterStatus("Menunggu Konfirmasi")}
                   >
                     Menunggu Konfirmasi
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="dropdown-proses"
                     className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                     onClick={() => handleFilterStatus("Proses")}
                   >
                     Proses
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="dropdown-pengiriman"
                     className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                     onClick={() => handleFilterStatus("Pengiriman")}
                   >
                     Pengiriman
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="dropdown-selesai"
                     className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                     onClick={() => handleFilterStatus("Selesai")}
                   >
                     Selesai
                   </DropdownMenuItem>
                   <DropdownMenuItem
+                    id="dropdown-gagal"
                     className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                     onClick={() => handleFilterStatus("Gagal")}
                   >
@@ -232,7 +241,10 @@ function Order() {
             <p className="text-[#8C8C8C]">Data untuk</p>
             <FaRegCalendarAlt />
             <DropdownMenu>
-              <DropdownMenuTrigger className="flex justify-between items-center rounded-md bg-white py-3 gap-5">
+              <DropdownMenuTrigger
+                id="dropdown-filter-date"
+                className="flex justify-between items-center rounded-md bg-white py-3 gap-5"
+              >
                 <p className="text-black font-semibold">{selectedDate || ""}</p>
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
@@ -250,24 +262,28 @@ function Order() {
 
               <DropdownMenuContent>
                 <DropdownMenuItem
+                  id="dropdown-tampilkan-semua-tanggal"
                   className="cursor-pointer text-black hover:bg-secondary-green hover:text-white"
                   onClick={() => handleShowAllDate()}
                 >
                   Tampilkan Semua
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="dropdown-tahun"
                   className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                   onClick={() => handleFilterDate("Tahun Ini")}
                 >
                   Tahun ini
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="dropdown-bulan"
                   className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                   onClick={() => handleFilterDate("Bulan Ini")}
                 >
                   Bulan ini
                 </DropdownMenuItem>
                 <DropdownMenuItem
+                  id="dropdown-minggu"
                   className=" hover:bg-secondary-green hover:text-white cursor-pointer"
                   onClick={() => handleFilterDate("Minggu Ini")}
                 >
@@ -283,13 +299,23 @@ function Order() {
       ) : (
         <div className="w-full mx-auto">
           <div className="tabel-order overflow-x-auto mt-10">
-            <Tabel columns={columns} data={order} />
-            <Pagination
-              meta={meta}
-              onClickPrevious={() => handlePrevNextPage(meta?.current_page - 1)}
-              onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
-              onClickPage={(page) => handlePrevNextPage(page)}
-            />
+            {order && order.length > 0 ? (
+              <>
+                <Tabel columns={columns} data={order} />
+                <Pagination
+                  meta={meta}
+                  onClickPrevious={() =>
+                    handlePrevNextPage(meta?.current_page - 1)
+                  }
+                  onClickNext={() => handlePrevNextPage(meta?.current_page + 1)}
+                  onClickPage={(page) => handlePrevNextPage(page)}
+                />
+              </>
+            ) : (
+              <div className="text-center">
+                <p>Data tidak ditemukan</p>
+              </div>
+            )}
           </div>
         </div>
       )}
