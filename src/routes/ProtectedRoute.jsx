@@ -1,5 +1,6 @@
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { useToken } from "@/utils/context/TokenContext";
+import Swal from "sweetalert2";
 
 const ProtectedRoute = () => {
   const { pathname } = useLocation();
@@ -67,9 +68,11 @@ const ProtectedRoute = () => {
   const role = getUserRole(tokenLocal || tokenSession);
 
   if (role === "customer") {
-    console.log("Tidak memiliki akses!");
-    localStorage.removeItem("accessToken");
-    sessionStorage.removeItem("accessToken");
+    Swal.fire({
+      icon: "error",
+      title: "Login Gagal!",
+      text: error.message,
+    });
     return <Navigate to="/login" />;
   }
 
