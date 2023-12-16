@@ -49,7 +49,9 @@ const schema = z.object({
     .refine(
       (files) => ACCEPTED_IMAGE_TYPES.includes(files?.[0]?.type),
       "*format PNG, JPG, JPEG"
-    ),
+    )
+    .optional()
+    .or(z.literal("")),
 });
 
 export default function CreateEditProducts() {
@@ -79,6 +81,7 @@ export default function CreateEditProducts() {
       gram: 0,
       productsPrice: 0,
       category: [],
+      image: "",
     },
   });
 

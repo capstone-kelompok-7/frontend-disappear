@@ -85,7 +85,17 @@ export default function IndexProducts() {
       setProducts(searchData);
       setMeta(rest);
     } catch (error) {
-      console.log(error.message);
+      toast({
+        variant: "destructive",
+        title: (
+          <div className="flex items-center">
+            <CrossCircledIcon />
+            <span className="ml-2">Gagal Memuat Produk!</span>
+          </div>
+        ),
+        description:
+          "Terjadi kesalahan saat memuat produk, silahkan cek internet terlebih dahulu atau reload halaman",
+      });
     } finally {
       setIsLoading(false);
     }
@@ -185,7 +195,7 @@ export default function IndexProducts() {
             <img
               src={firstPhotoUrl}
               alt="Product"
-              className="w-20 h-28 rounded block m-auto"
+              className=" w-32 h-28 rounded block m-auto object-cover"
             />
           );
         }
