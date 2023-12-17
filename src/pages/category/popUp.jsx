@@ -36,6 +36,9 @@ const PopUp = ({
     formState: { errors },
   } = useForm({
     resolver: zodResolver(categorySchema),
+    defaultValues: {
+      image: "",
+    },
   });
 
   useEffect(() => {
@@ -43,19 +46,15 @@ const PopUp = ({
       (async () => {
         try {
           const response = await getDetailCategory(categoryId);
-          reset({
-            categoryName: response.data.name,
-            image: response.data.photo,
-          });
+          setValue("categoryName", response.data.name);
+          // setValue("image", response.data.photo);
           setPopLoading(false);
         } catch (error) {
           console.error(error);
         }
       })();
     } else {
-      reset({
-        categoryName: "",
-      });
+      setValue("categoryName");
     }
   }, [categoryId, reset]);
 
