@@ -2,7 +2,7 @@ import axios from "axios";
 
 let bearerToken =
   sessionStorage.getItem("accessToken") || localStorage.getItem("accessToken");
-let baseUrl = "https://test.disappear-organization.my.id/";
+let baseUrl = "https://api.disappear-organization.my.id/";
 const axiosWithConfig = axios.create();
 
 export const setAxiosConfig = (token, backendUrl) => {
