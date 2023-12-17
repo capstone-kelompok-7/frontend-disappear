@@ -39,7 +39,7 @@ Selamat datang di profil GitHub "Disappear" 🌎 Kami adalah kelompok dengan mis
 - [Github Repository for the QE team](https://github.com/capstone-kelompok-7/QuallityEngineer-Disappear)
 - [Bug Report](https://docs.google.com/document/d/1qZGVU8PLsQ2G5fe5Rrya36n_u1TIIlBRoVML9dp2H-c/edit)
 
-  ## 🌟 MVP Front-End
+## 🌟 MVP Front-End
 
 - Landing Page
 - Dashboard
@@ -92,75 +92,6 @@ Selamat datang di profil GitHub "Disappear" 🌎 Kami adalah kelompok dengan mis
 - [SwiperJs](https://swiperjs.com/react)
 - [OpenAI](https://www.openai.com/)
 
-## 📁 Folder Structure
-
-```sh
-Weedy
-├─ public
-├─ src
-│  ├─ __tests__
-│  │ ├─ components
-│  │ └─ pages
-│  ├─ assets
-│  ├─ components
-│  │ ├─ Button.jsx
-│  │ ├─ Footer.jsx
-│  │ ├─ Input.jsx
-│  │ ├─ Navbar.jsx
-│  │ ├─ NavbarInvitation.jsx
-│  │ ├─ Sidebar.jsx
-│  │ └─ Table.jsx
-│  ├─ pages
-│  │ ├─ auth
-│  │ │ ├─ Login.jsx
-│  │ │ └─ SignUp.jsx
-│  │ ├─ createInvitation
-│  │ ├─ dashboard
-│  │ ├─ landingPage
-│  │ ├─ notFound
-│  │ ├─ openAI
-│  │ └─ viewInvitation
-│  │   ├─ FloralTheme.jsx
-│  │   ├─ GreenTheme.jsx
-│  │   └─ Index.jsx
-│  ├─ routes
-│  │  └─ Index.jsx
-│  ├─ styles
-│  │  └─ index.css
-│  └─ utils
-│    ├─ apis
-│    │ ├─ auth
-│    │ │ ├─ api.js
-│    │ │ ├─ index.js
-│    │ │ └─ types.js
-│    │ ├─ rsvp
-│    │ │ ├─ api.js
-│    │ │ ├─ index.js
-│    │ │ └─ types.js
-│    │ ├─ weddings
-│    │ │ └─ api.js
-│    │ └─ axiosWithConfig.js
-│    ├─ context
-│    │ └─ token-context.jsx
-│    ├─ firebase
-│    │ └─ config.js
-│    ├─ hooks
-│    │ └─ customHooks.jsx
-│    ├─ localStorageFunction.js
-│    └─ swal.js
-├─ .eslintrc.json
-├─ .gitignore
-├─ index.html
-├─ package-lock.json
-├─ package.json
-├─ postcss.config.js
-├─ tailwind.config.js
-├─ vercel.json
-├─ vite.config.js
-└─ README.md
-
-```
-
 ## 🧙🏻‍♂️ Led of React Team
 
 - Nurhadi Ghifari Ramadhan ([Github](https://github.com/nurhadighi24))
@@ -174,3 +105,202 @@ Weedy
 - Ananda Dwi Rizkyta ([Github](https://github.com/anandadr5))
 - Dian Oktavia Putri ([Github](https://github.com/dianoktaviaa))
 - Faridhotul Nur Azizah ([Github](https://github.com/aizahfn))
+
+## 📁 Folder Structure
+
+```sh
+frontend-disappear
+├─ public
+└─ 📁src
+│   ├─ 📁assets
+│   │    ├─ appstorebutton.png
+│   │    ├─ avatar.png
+│   │    ├─ bgImage.png
+│   │    ├─ ecommerce.png
+│   │    ├─ gogreen.png
+│   │    ├─ grid.png
+│   │    ├─ icon-basket.svg
+│   │    ├─ icon-hero.svg
+│   │    ├─ icon-note.svg
+│   │    ├─ icon-users.svg
+│   │    ├─ icon-wallet.svg
+│   │    ├─ listisempty.png
+│   │    ├─ mothernature.png
+│   │    ├─ pana.png
+│   │    ├─ playstorebutton.png
+│   │    ├─ react.svg
+│   │    ├─ Rectangle292.png
+│   │    └─ truck.png
+|   ├─ 📁components
+│   │    ├─ breadcrumbs.jsx
+│   │    ├─ button.jsx
+│   │    ├─ 📁cardartikel
+│   │    │    └─ cardArtikel.jsx
+│   │    ├─ 📁dashboard
+│   │    │    └─ dashboardIcon.jsx
+│   │    ├─ 📁delete
+│   │    │    └─ delete.jsx
+│   │    ├─ dropdown.jsx
+│   │    ├─ dropzone.jsx
+│   │    ├─ input.jsx
+│   │    ├─ label.jsx
+│   │    ├─ 📁landingpage
+│   │    │    ├─ footer.jsx
+│   │    │    └─ nav.jsx
+│   │    ├─ loading.jsx
+│   │    ├─ pagenation.jsx
+│   │    ├─ 📁review
+│   │    │    └─ star.jsx
+│   │    ├─ 📁sidebar
+│   │    │    ├─ navbar.jsx
+│   │    │    ├─ sidebar.jsx
+│   │    │    └─ sidebarList.jsx
+│   │    ├─ 📁table
+│   │    │    └─ table.jsx
+│   │    ├─ 📁texteditor
+│   │    │    └─ tipTap.jsx
+│   │    ├─ 📁textEditorChallenge
+│   │    │    └─ tipTap.jsx
+│   │    ├─ 📁ui
+│   │    │    ├─ accordion.jsx
+│   │    │    ├─ alert-dialog.jsx
+│   │    │    ├─ button.jsx
+│   │    │    ├─ dropdown-menu.jsx
+│   │    │    ├─ input.jsx
+│   │    │    ├─ select.jsx
+│   │    │    ├─ textarea.jsx
+│   │    │    ├─ toast.jsx
+│   │    │    ├─ toaster.jsx
+│   │    │    └─ use-toast.js
+│   │    ├─ 📁userReview
+│   │    │    └─ Stars.jsx
+|   ├─ 📁lib
+│   │    └─ utils.js
+|   ├─ 📁pages
+│   │    ├─ 📁Artikel
+│   │    │    ├─ createEditNews.jsx
+│   │    │    ├─ detailNews.jsx
+│   │    │    └─ indexNews.jsx
+│   │    ├─ 📁carousel
+│   │    │    ├─ caraoselPage.jsx
+│   │    │    └─ caraouselModal.jsx
+│   │    ├─ 📁category
+│   │    │    ├─ indexCategory.jsx
+│   │    │    └─ popUp.jsx
+│   │    ├─ 📁challenge
+│   │    │    ├─ 📁createEditChallenge
+│   │    │    │    └─ createEditChallenge.jsx
+│   │    │    ├─ 📁detailChallenge
+│   │    │    │    └─ detailChallenge.jsx
+│   │    │    ├─ 📁editParticipantChallenge
+│   │    │    │    └─ editParticipantChallenge.jsx
+│   │    │    ├─ indexChallenge.jsx
+│   │    │    └─ 📁participantChallenge
+│   │    │        └─ participantChallenge.jsx
+│   │    ├─ 📁dashboard
+│   │    │    └─ dashboard.jsx
+│   │    ├─ 📁landingpage
+│   │    │    └─ landingpage.jsx
+│   │    ├─ 📁login
+│   │    │    └─ LoginPage.jsx
+│   │    ├─ 📁order
+│   │    │    ├─ detailOrder.jsx
+│   │    │    └─ order.jsx
+│   │    ├─ 📁payment
+│   │    │    ├─ confirmPayment.jsx
+│   │    │    └─ indexPayment.jsx
+│   │    ├─ 📁pelanggan
+│   │    │    ├─ pelanggan.jsx
+│   │    │    └─ pelangganDetail.jsx
+│   │    ├─ 📁products
+│   │    │    ├─ 📁createEditProducts
+│   │    │    │    └─ createEditProducts.jsx
+│   │    │    ├─ 📁detailProducts
+│   │    │    │    └─ detailProducts.jsx
+│   │    │    └─ indexProducts.jsx
+│   │    ├─ 📁ulasan
+│   │    │    ├─ 📁detailUlasan
+│   │    │    │    └─ detailUlasan.jsx
+│   │    │    └─ indexUlasan.jsx
+│   │    └─ 📁voucherPage
+│   │        ├─ createEditVoucher.jsx
+│   │        └─ voucherIndex.jsx
+|   ├─ 📁styles
+│   │    ├─ 📁challenge
+│   │    │    └─ tiptap.css
+│   │    ├─ delete.css
+│   │    ├─ index.css
+│   │    ├─ 📁landingpage
+│   │    │    └─ landingpage.css
+│   │    ├─ 📁order
+│   │    │    └─ order.css
+│   │    ├─ 📁pelanggan
+│   │    │    ├─ pelanggan.css
+│   │    │    └─ pelangganDetail.css
+│   │    ├─ table.css
+│   │    ├─ tiptapArtikel.css
+│   │    └─ 📁ulasan
+│   │        └─ detail.css
+    ├─ 📁utils
+│   │    ├─ 📁api
+│   │    │    ├─ 📁artikel
+│   │    │    │    ├─ api.js
+│   │    │    │    └─ schemaArtikel.js
+│   │    │    ├─ 📁auth
+│   │    │    │    └─ login.js
+│   │    │    ├─ axiosWithConfig.js
+│   │    │    ├─ 📁carousel
+│   │    │    │    ├─ api.js
+│   │    │    │    └─ schema.js
+│   │    │    ├─ 📁category
+│   │    │    │    ├─ api.js
+│   │    │    │    └─ schema.js
+│   │    │    ├─ 📁challenge
+│   │    │    │    ├─ 📁challenge
+│   │    │    │    │    ├─ api.js
+│   │    │    │    │    └─ schema.js
+│   │    │    │    └─ 📁participantChallenge
+│   │    │    │        ├─ api.js
+│   │    │    │        └─ schema.js
+│   │    │    ├─ 📁dashboard
+│   │    │    │    └─ api.js
+│   │    │    ├─ 📁landingpage
+│   │    │    │    └─ api.js
+│   │    │    ├─ 📁payment
+│   │    │    │    └─ api.js
+│   │    │    ├─ 📁paymentAndOrder
+│   │    │    │    ├─ api.js
+│   │    │    │    └─ schema.js
+│   │    │    ├─ 📁pelanggan
+│   │    │    │    └─ api.js
+│   │    │    ├─ 📁products
+│   │    │    │    ├─ api.js
+│   │    │    │    └─ schema.js
+│   │    │    ├─ 📁ulasan
+│   │    │    │    ├─ api.js
+│   │    │    │    └─ schema.js
+│   │    │    └─ 📁voucher
+│   │    │        └─ api.js
+│   │    ├─ 📁context
+│   │    │    └─ TokenContext.jsx
+│   │    ├─ 📁formatter
+│   │    │    ├─ currencyIdr.js
+│   │    │    ├─ formatStatusColor.js
+│   │    │    └─ formatterpagination.js
+│   │    └─ 📁states
+│   │        └─ sidebarContext.jsx
+|   └─ main.jsx
+├─ .eslintrc.json
+├─ .gitignore
+├─ index.html
+├─ package-lock.json
+├─ package.json
+├─ postcss.config.js
+├─ tailwind.config.js
+├─ vercel.json
+├─ vite.config.js
+└─ README.md
+
+```
+
+
