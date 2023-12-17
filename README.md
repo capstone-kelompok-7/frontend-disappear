@@ -302,5 +302,8 @@ frontend-disappear
 └─ README.md
 
 ```
+© 2023 Kelompok Disappear - Alterra Academy
+
+> Catatan 📢: Project Disappear merupakan judul Capstone kami untuk menyelesaikan Studi di Alterra Academy pada program Kampus Merdeka batch 5 .
 
 
