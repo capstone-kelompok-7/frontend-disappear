@@ -1,10 +1,8 @@
-import axios from "axios";
-
-const BASE_URL = "https://test.disappear-organization.my.id/api/v1/auth";
+import axiosWithConfig from "../axiosWithConfig";
 
 const login = async (email, password) => {
   try {
-    const response = await axios.post(`${BASE_URL}/login`, {
+    const response = await axiosWithConfig.post("/api/v1/auth/login", {
       email,
       password,
     });
