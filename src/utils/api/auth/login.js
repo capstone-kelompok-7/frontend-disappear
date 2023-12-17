@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BASE_URL = "https://test.disappear-organization.my.id/api/v1/auth";
+const BASE_URL = "https://api.disappear-organization.my.id/api/v1/auth";
 
 const login = async (email, password) => {
   try {
