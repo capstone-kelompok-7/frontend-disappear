@@ -270,7 +270,7 @@ function CreateVoucher() {
                 <Select
                   id="voucherFor"
                   name="voucherFor"
-                  options={["bronze", "silver", "gold", "all Customer"]}
+                  options={["bronze", "silver", "gold", "All Customer"]}
                   placeholder="Status"
                   register={register}
                   error={errors.voucherFor?.message}
