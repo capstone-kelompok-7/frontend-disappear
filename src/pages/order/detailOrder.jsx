@@ -132,7 +132,7 @@ export default function DetailOrder() {
                         className="flex items-center justify-between mx-6"
                       >
                         <img
-                          src={detail.product.product_photos.url}
+                          src={detail.product.product_photos?.[0]?.url}
                           className="w-16 h-20 rounded-md"
                         />
                         <div>
