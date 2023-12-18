@@ -104,7 +104,7 @@ Selamat datang di profil GitHub "Disappear" 🌎 Kami adalah kelompok dengan mis
 - Rafi Muhammad Fikri ([Github](https://github.com/Raptor-Rap))
 - Ananda Dwi Rizkyta ([Github](https://github.com/anandadr5))
 - Dian Oktavia Putri ([Github](https://github.com/dianoktaviaa))
-- Faridhotul Nur Azizah ([Github](https://github.com/aizahfn))
+- Faridhotul Nur Aizah ([Github](https://github.com/aizahfn))
 
 ## 📁 Folder Structure
 
