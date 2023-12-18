@@ -156,7 +156,7 @@ export default function ConfirmPayment() {
                   >
                     <div className="flex items-center">
                       <img
-                        src={orderDetail.product.product_photos[0].url}
+                        src={orderDetail.product.product_photos?.[0]?.url}
                         alt="image-product"
                         className=" w-16 h-20 rounded mr-5"
                       />
