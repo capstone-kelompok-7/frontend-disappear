@@ -83,6 +83,7 @@ export default function Carousel() {
       const { ...rest } = result.meta;
       setCarousel(searchData);
       setMeta(rest);
+      setSelectedId(null)
     } catch (error) {
       toast({
         variant: "destructive",
