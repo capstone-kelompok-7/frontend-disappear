@@ -18,6 +18,7 @@ import { CrossCircledIcon } from "@radix-ui/react-icons";
 
 function PelangganDetail() {
   const [users, setUsers] = useState([]);
+  const [addresses, setAddresses] = useState([]);
   const [activity, setActivity] = useState([]);
   const [isLoading, setIsLoading] = useState(false);
   const [searchParams, setSearchParams] = useSearchParams();
@@ -72,6 +73,7 @@ function PelangganDetail() {
       setIsLoading(true);
       const detail = await getPelangganDetail(id);
       setUsers(detail.data);
+      setAddresses(detail.data.addresses);
       const result = await getActivity(id);
       setActivity(result.data);
     } catch (error) {
@@ -180,10 +182,20 @@ function PelangganDetail() {
                       <p className="">Alamat</p>
                     </div>
                     <div className="flex flex-col w-3/4 pl-6 pt-6 gap-8 pb-6">
-                      <p className="">{users.name}</p>
-                      <p className=" break-all">{users.email}</p>
-                      <p className="">{users.phone}</p>
-                      <p className="">{users.address}</p>
+                      <p className="">
+                        {users.name ? users.name : "Tidak ada nama"}
+                      </p>
+                      <p className=" break-all">
+                        {users.email ? users.email : "Tidak ada email"}
+                      </p>
+                      <p className="">
+                        {users.phone ? users.phone : "Tidak ada nomor"}
+                      </p>
+                      <p className="">
+                        {addresses && addresses.length > 0
+                          ? addresses[0].address
+                          : "Tidak ada alamat"}
+                      </p>
                     </div>
                   </div>
                 </div>
