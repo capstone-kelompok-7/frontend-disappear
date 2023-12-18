@@ -67,7 +67,6 @@ function CreateVoucher() {
     try {
       setIsLoading(true);
       const result = await getDetailVoucher(id);
-      console.log("Result.data:", result.data);
       setVouchers(result.data);
 
       if (result.data) {
@@ -270,7 +269,7 @@ function CreateVoucher() {
                 <Select
                   id="voucherFor"
                   name="voucherFor"
-                  options={["bronze", "silver", "gold", "All Customer"]}
+                  options={["bronze", "silver", "gold", "all Customer"]}
                   placeholder="Status"
                   register={register}
                   error={errors.voucherFor?.message}
