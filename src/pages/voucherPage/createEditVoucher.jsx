@@ -67,7 +67,6 @@ function CreateVoucher() {
     try {
       setIsLoading(true);
       const result = await getDetailVoucher(id);
-      console.log("Result.data:", result.data);
       setVouchers(result.data);
 
       if (result.data) {
